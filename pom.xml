@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>3.12.7</version>
+            <version>3.12.10</version>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
@@ -46,77 +46,83 @@
             <version>2.12.1</version>
         </dependency>
         <dependency>
-            <groupId>com.github.texttechnologylab</groupId>
+            <groupId>com.GitHub.texttechnologylab</groupId>
             <artifactId>UIMADatabaseInterface</artifactId>
             <version>3634ac3be3</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-nop</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.texttechnologylab</groupId>
+            <groupId>com.GitHub.texttechnologylab</groupId>
             <artifactId>UIMATypeSystem</artifactId>
             <version>${ttlab.typesystem.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.github.texttechnologylab</groupId>
+            <groupId>com.GitHub.texttechnologylab</groupId>
             <artifactId>textimager-uima</artifactId>
             <version>${ttlab.textimager.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.github.texttechnologylab</groupId>
+                    <groupId>com.GitHub.texttechnologylab</groupId>
                     <artifactId>UIMATypeSystem</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.texttechnologylab.textimager-uima</groupId>
+            <groupId>com.GitHub.texttechnologylab.textimager-uima</groupId>
             <artifactId>textimager-uima-types</artifactId>
             <version>${ttlab.textimager.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.github.texttechnologylab</groupId>
+                    <groupId>com.GitHub.texttechnologylab</groupId>
                     <artifactId>UIMATypeSystem</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.texttechnologylab.textimager-uima</groupId>
+            <groupId>com.GitHub.texttechnologylab.textimager-uima</groupId>
             <artifactId>textimager-uima-io</artifactId>
             <version>${ttlab.textimager.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.github.texttechnologylab</groupId>
+                    <groupId>com.GitHub.texttechnologylab</groupId>
                     <artifactId>UIMATypeSystem</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.texttechnologylab.textimager-uima</groupId>
+            <groupId>com.GitHub.texttechnologylab.textimager-uima</groupId>
             <artifactId>textimager-uima-spacy</artifactId>
             <version>${ttlab.textimager.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.github.texttechnologylab</groupId>
+                    <groupId>com.GitHub.texttechnologylab</groupId>
                     <artifactId>UIMATypeSystem</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.texttechnologylab.textimager-uima</groupId>
+            <groupId>com.GitHub.texttechnologylab.textimager-uima</groupId>
             <artifactId>textimager-uima-gervader</artifactId>
             <version>${ttlab.textimager.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.github.texttechnologylab</groupId>
+                    <groupId>com.GitHub.texttechnologylab</groupId>
                     <artifactId>UIMATypeSystem</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.texttechnologylab.textimager-uima</groupId>
+            <groupId>com.GitHub.texttechnologylab.textimager-uima</groupId>
             <artifactId>textimager-uima-heideltime</artifactId>
             <version>${ttlab.textimager.version}</version>
             <exclusions>
                 <exclusion>
-                    <groupId>com.github.texttechnologylab</groupId>
+                    <groupId>com.GitHub.texttechnologylab</groupId>
                     <artifactId>UIMATypeSystem</artifactId>
                 </exclusion>
             </exclusions>
