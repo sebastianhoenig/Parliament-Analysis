@@ -13,6 +13,12 @@ import org.hucompute.textimager.uima.spacy.SpaCyMultiTagger3;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 
+/**
+ * This Class is analysing text and set up the pipeline.
+ * @author benwerner
+ * @date
+ */
+
 public class NLP {
 
     private AnalysisEngine pAE = null;
