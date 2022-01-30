@@ -26,14 +26,18 @@ public class ProtocolFile_Impl implements Protocol {
         setAgendaItem(doc);
         setLeaders(doc);
         setElectionPeriod(doc);
-        System.out.println("Datum"+pDate);
-        System.out.println("WAHLPERIODE: "+electionPeriod);
-        System.out.println("TITEL: "+ title);
-        System.out.println("STARTPAGE: "+startPageNr);
-        System.out.println("SESSION ID: "+sessionID);
-        System.out.println("LEADERS: "+getLeaders());
+//        System.out.println("Datum"+pDate);
+//        System.out.println("WAHLPERIODE: "+electionPeriod);
+//        System.out.println("TITEL: "+ title);
+//        System.out.println("STARTPAGE: "+startPageNr);
+//        System.out.println("SESSION ID: "+sessionID);
+//        System.out.println("LEADERS: "+getLeaders());
 
 
+    }
+
+    public int getStartPageNr() {
+        return startPageNr;
     }
 
     public void setStartPageNr(Integer startPageNr){
@@ -64,7 +68,7 @@ public class ProtocolFile_Impl implements Protocol {
                 Element eElement = (Element) nNode;
                 String nummer = eElement.getAttribute("top-id");
                 tpunkt.setAgendaItemID(nummer);
-                tpunkt.setAllSpeeches(nNode);
+                tpunkt.setAllSpeeches(nNode, this);
             }
             this.allAgendaItems.add(tpunkt);
         }

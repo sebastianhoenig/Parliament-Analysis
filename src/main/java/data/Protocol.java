@@ -7,6 +7,7 @@ import java.util.ArrayList;
 public interface Protocol {
     void initialize(Document doc);
     void setStartPageNr(Integer startPageNr);
+    int getStartPageNr();
 
     void setDate(String pDate);
     String getDate();

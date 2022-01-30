@@ -14,7 +14,7 @@ public class AgendaItemFile_Impl implements AgendaItem {
 
     public void setAgendaItemID(String id) {
         this.agendaItemID = id;
-        System.out.println("TAGESORDNUNGSPUNKT ID: "+agendaItemID);
+//        System.out.println("TAGESORDNUNGSPUNKT ID: "+agendaItemID);
     }
 
     /**
@@ -29,7 +29,7 @@ public class AgendaItemFile_Impl implements AgendaItem {
      * Die Funktion initialisiert alle Reden und Redner des Tagesordnungspunktes und fügt diese jeweils einer Arrayliste zu.
      * @param nNode Knotenpunkt des jeweiligen Protokolls
      */
-    public void setAllSpeeches(Node nNode) {
+    public void setAllSpeeches(Node nNode, Protocol protocol) {
         NodeList reden = nNode.getChildNodes();
         for (int temp = 0; temp < reden.getLength(); temp++) {
             Node curr_speech = reden.item(temp);
@@ -40,7 +40,7 @@ public class AgendaItemFile_Impl implements AgendaItem {
                     String speechID = eElement.getAttribute("id");
                     speech.setSpeechID(speechID);
                     Node kNode = reden.item(temp);
-                    speech.initialize(kNode);
+                    speech.initialize(kNode, protocol, this);
 
                     Node rednerNode = eElement.getElementsByTagName("redner").item(0);
                     Element rednerElement = (Element) rednerNode;

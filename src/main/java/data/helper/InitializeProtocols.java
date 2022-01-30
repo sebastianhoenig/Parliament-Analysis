@@ -1,21 +1,25 @@
 package data.helper;
 import data.Protocol;
 import data.impl.ProtocolFile_Impl;
+import me.tongfei.progressbar.ProgressBar;
 import org.w3c.dom.Document;
 import java.util.ArrayList;
 
 public class InitializeProtocols {
-    ArrayList<Document> allXmlArrayList = new ArrayList<>();
-    ArrayList<Protocol> allProtocols = new ArrayList<>();
+    public ArrayList<Protocol> allProtocols = new ArrayList<>();
 
     public InitializeProtocols(){
         XMLFileReader xml = new XMLFileReader();
-        allXmlArrayList = xml.getAllFiles();
+        ArrayList<Document> allXmlArrayList = xml.getAllFiles();
 
-        for (int curr_xml = 0; curr_xml < allXmlArrayList.size(); curr_xml++) {
+        ProgressBar pb1 = new ProgressBar("Einlesen der Daten aus den Files", allXmlArrayList.size());
+        for (Document document : allXmlArrayList) {
+            pb1.setExtraMessage("Reading...");
+            pb1.step();
             Protocol protocol = new ProtocolFile_Impl();
-            protocol.initialize(allXmlArrayList.get(curr_xml));
+            protocol.initialize(document);
             allProtocols.add(protocol);
         }
+        pb1.close();
     }
 }

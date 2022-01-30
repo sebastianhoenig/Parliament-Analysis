@@ -10,6 +10,6 @@ public interface AgendaItem {
 
     String getAgendaItemID();
 
-    void setAllSpeeches(Node nNode);
+    void setAllSpeeches(Node nNode, Protocol protocol);
     ArrayList<Speech> getSpeeches();
 }

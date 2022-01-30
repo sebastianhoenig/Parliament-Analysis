@@ -12,8 +12,13 @@ public class SpeechFile_Impl implements Speech {
     String text;
     ArrayList<Comment> allComments = new ArrayList<>();
     String speakerID;
+    private Protocol protocol = null;
+    private AgendaItem agendaItem = null;
 
-    public void initialize(Node kNode){
+    public void initialize(Node kNode, Protocol protocol, AgendaItem agendaItem){
+        setProtocol(protocol);
+        setAgendaItem(agendaItem);
+
         NodeList kommentarNodes = kNode.getChildNodes();
         ArrayList<String> textArrayList = new ArrayList<String>();
         for(int i = 0; i < kommentarNodes.getLength(); i++){
@@ -21,8 +26,9 @@ public class SpeechFile_Impl implements Speech {
             if(kommentarNode.getNodeName().equals("kommentar")) {
                 String commentText = kommentarNode.getTextContent();
                 Comment comment = new CommentFile_Impl();
-                this.allComments.add(comment);
                 comment.setText(commentText);
+                comment.setCommentID(this.speechID + "-" + comment.hashCode());
+                this.allComments.add(comment);
             } else if(kommentarNode.getNodeName().equals("p")){
                 Element p = (Element) kommentarNodes.item(i);
                 if(p.getAttribute("klasse").equals("J")||p.getAttribute("klasse").equals("J_1")||p.getAttribute("klasse").equals("O")){
@@ -31,8 +37,8 @@ public class SpeechFile_Impl implements Speech {
             }
         }
         this.text = textArrayList.toString();
-        System.out.println("REDE ID: "+speechID);
-        System.out.println("REDENTEXT: "+text);
+//        System.out.println("REDE ID: "+speechID);
+//        System.out.println("REDENTEXT: "+text);
     }
 
 
@@ -45,7 +51,7 @@ public class SpeechFile_Impl implements Speech {
     }
 
     public void setSpeakerID(String speakerID){
-        System.out.println("SPEAKER ID: "+speakerID);
+//        System.out.println("SPEAKER ID: "+speakerID);
         this.speakerID = speakerID;
     }
 
@@ -62,5 +68,25 @@ public class SpeechFile_Impl implements Speech {
 
     public ArrayList<Comment> getAllComments(){
         return this.allComments;
+    }
+
+
+    public Protocol getProtocol() {
+        return this.protocol;
+    }
+
+
+    public void setProtocol(Protocol protocol) {
+        this.protocol = protocol;
+    }
+
+
+    public AgendaItem getAgendaItem() {
+        return this.agendaItem;
+    }
+
+
+    public void setAgendaItem(AgendaItem agendaItem) {
+        this.agendaItem = agendaItem;
     }
 }

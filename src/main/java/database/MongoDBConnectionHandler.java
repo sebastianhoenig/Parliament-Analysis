@@ -7,6 +7,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
+import data.AgendaItem;
+import data.Comment;
+import data.Protocol;
+import data.Speech;
+import me.tongfei.progressbar.ProgressBar;
 import org.bson.Document;
 
 import java.util.*;
@@ -143,7 +148,36 @@ public class MongoDBConnectionHandler {
         return resultDoc;
     }
 
-// @Todo: insert für Speaker, Speech, Comment mit überprüfen, ob bereits vorhanden.
+    public void uploadAllProtocols(ArrayList<Protocol> protocolList) {
+
+        int counter = 0;
+        for (Protocol protocol :  protocolList) {
+            for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
+                for (Speech speech : agendaItem.getSpeeches()) {
+                    counter++;
+                    for (Comment comment : speech.getAllComments()) {
+                        counter++;
+                    }
+                }
+            }
+        }
+
+        ProgressBar pb3 = new ProgressBar("upload Data", counter );
+
+        for (Protocol protocol :  protocolList) {
+            for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
+                for (Speech speech : agendaItem.getSpeeches()) {
+                    this.insertSpeech(speech);
+                    pb3.step();
+                    for (Comment comment : speech.getAllComments()) {
+                        this.insertComment(comment);
+                        pb3.step();
+                    }
+                }
+            }
+        }
+        pb3.close();
+    }
 
 //    public void insertSpeaker(Speaker speaker) {
 //
@@ -160,37 +194,37 @@ public class MongoDBConnectionHandler {
 //            System.out.println("Objekt Speaker (" + speaker.getID() + ") can not be uploaded");
 //        }
 //    }
-//
-//    public void insertSpeech(Speech speech) {
-//        Document speechDoc = getDBDocument(speech.getID(), "speech");
-//
-//        if (speechDoc == null) {
-//            speechDoc = BTObjectToMongoDocument.createMongoDocument(speech);
-//        } else {
-//            return;
-//        }
-//        try {
-//            this.getCollection("speech").insertOne(speechDoc);
-//        } catch (Exception e) {
-//            System.out.println("Objekt Speech (" + speech.getID() + ") can not be uploaded");
-//        }
-//    }
-//
-//    public void insertComment(Comment comment) {
-//        Document commentDoc = getDBDocument(comment.getID(), "comment");
-//
-//        if (commentDoc == null) {
-//            commentDoc = BTObjectToMongoDocument.createMongoDocument(comment);
-//        } else {
-//            return;
-//        }
-//        try {
-//            this.getCollection("comment").insertOne(commentDoc);
-//        } catch (Exception e) {
-//            System.out.println("Objekt Comment (" + comment.getID() + ") can not be uploaded");
-//        }
-//    }
-//
+
+    public void insertSpeech(Speech speech) {
+        Document speechDoc = getDBDocument(speech.getSpeechID(), "speech");
+
+        if (speechDoc == null) {
+            speechDoc = BTObjectToMongoDocument.createMongoDocument(speech);
+        } else {
+            return;
+        }
+        try {
+            this.getCollection("speech").insertOne(speechDoc);
+        } catch (Exception e) {
+            System.out.println("Objekt Speech (" + speech.getSpeechID() + ") can not be uploaded");
+        }
+    }
+
+    public void insertComment(Comment comment) {
+        Document commentDoc = getDBDocument(comment.getCommentID(), "comment");
+
+        if (commentDoc == null) {
+            commentDoc = BTObjectToMongoDocument.createMongoDocument(comment);
+        } else {
+            return;
+        }
+        try {
+            this.getCollection("comment").insertOne(commentDoc);
+        } catch (Exception e) {
+            System.out.println("Objekt Comment (" + comment.getCommentID() + ") can not be uploaded");
+        }
+    }
+
 //    public void updateSpeaker(Speaker speaker) {
 //        Document where = new Document().append("_id", speaker.getID());
 //
@@ -201,28 +235,28 @@ public class MongoDBConnectionHandler {
 //            System.out.println("Objekt Speaker (" + speaker.getID() + ") can not be updated");
 //        }
 //    }
-//
-//    public void updateSpeech(Speech speech) {
-//        Document where = new Document().append("_id", speech.getID());
-//
-//        try {
-//            this.getCollection("speech").updateOne(where,
-//                    BTObjectToMongoDocument.createMongoDocument(speech));
-//        } catch (Exception e) {
-//            System.out.println("Objekt Speech (" + speech.getID() + ") can not be updated");
-//        }
-//    }
-//
-//    public void updateComment(Comment comment) {
-//        Document where = new Document().append("_id", comment.getID());
-//
-//        try {
-//            this.getCollection("comment").updateOne(where,
-//                    BTObjectToMongoDocument.createMongoDocument(comment));
-//        } catch (Exception e) {
-//            System.out.println("Objekt Comment (" + comment.getID() + ") can not be updated");
-//        }
-//    }
+
+    public void updateSpeech(Speech speech) {
+        Document where = new Document().append("_id", speech.getSpeechID());
+
+        try {
+            this.getCollection("speech").updateOne(where,
+                    BTObjectToMongoDocument.createMongoDocument(speech));
+        } catch (Exception e) {
+            System.out.println("Objekt Speech (" + speech.getSpeechID() + ") can not be updated");
+        }
+    }
+
+    public void updateComment(Comment comment) {
+        Document where = new Document().append("_id", comment.getCommentID());
+
+        try {
+            this.getCollection("comment").updateOne(where,
+                    BTObjectToMongoDocument.createMongoDocument(comment));
+        } catch (Exception e) {
+            System.out.println("Objekt Comment (" + comment.getCommentID() + ") can not be updated");
+        }
+    }
 
     public void deleteDocumentOnDB(String id, String collectionName) {
         Document where = new Document().append("_id", id);
