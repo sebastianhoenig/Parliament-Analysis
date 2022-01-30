@@ -6,12 +6,12 @@ import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.model.Filters;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
+
+import static com.mongodb.client.model.Aggregates.*;
 
 /**
  * Class for communicate with MongoDB
@@ -143,48 +143,141 @@ public class MongoDBConnectionHandler {
         return resultDoc;
     }
 
+// @Todo: insert für Speaker, Speech, Comment mit überprüfen, ob bereits vorhanden.
 
+//    public void insertSpeaker(Speaker speaker) {
+//
+//        Document speakerDoc = getDBDocument(speaker.getID(), "speaker");
+//
+//        if (speakerDoc == null) {
+//            speakerDoc = BTObjectToMongoDocument.createMongoDocument(speaker);
+//        } else {
+//            return;
+//        }
+//        try {
+//            this.getCollection("speaker").insertOne(speakerDoc);
+//        } catch (Exception e) {
+//            System.out.println("Objekt Speaker (" + speaker.getID() + ") can not be uploaded");
+//        }
+//    }
+//
+//    public void insertSpeech(Speech speech) {
+//        Document speechDoc = getDBDocument(speech.getID(), "speech");
+//
+//        if (speechDoc == null) {
+//            speechDoc = BTObjectToMongoDocument.createMongoDocument(speech);
+//        } else {
+//            return;
+//        }
+//        try {
+//            this.getCollection("speech").insertOne(speechDoc);
+//        } catch (Exception e) {
+//            System.out.println("Objekt Speech (" + speech.getID() + ") can not be uploaded");
+//        }
+//    }
+//
+//    public void insertComment(Comment comment) {
+//        Document commentDoc = getDBDocument(comment.getID(), "comment");
+//
+//        if (commentDoc == null) {
+//            commentDoc = BTObjectToMongoDocument.createMongoDocument(comment);
+//        } else {
+//            return;
+//        }
+//        try {
+//            this.getCollection("comment").insertOne(commentDoc);
+//        } catch (Exception e) {
+//            System.out.println("Objekt Comment (" + comment.getID() + ") can not be uploaded");
+//        }
+//    }
+//
+//    public void updateSpeaker(Speaker speaker) {
+//        Document where = new Document().append("_id", speaker.getID());
+//
+//        try {
+//            this.getCollection("speaker").updateOne(where,
+//                    BTObjectToMongoDocument.createMongoDocument(speaker));
+//        } catch (Exception e) {
+//            System.out.println("Objekt Speaker (" + speaker.getID() + ") can not be updated");
+//        }
+//    }
+//
+//    public void updateSpeech(Speech speech) {
+//        Document where = new Document().append("_id", speech.getID());
+//
+//        try {
+//            this.getCollection("speech").updateOne(where,
+//                    BTObjectToMongoDocument.createMongoDocument(speech));
+//        } catch (Exception e) {
+//            System.out.println("Objekt Speech (" + speech.getID() + ") can not be updated");
+//        }
+//    }
+//
+//    public void updateComment(Comment comment) {
+//        Document where = new Document().append("_id", comment.getID());
+//
+//        try {
+//            this.getCollection("comment").updateOne(where,
+//                    BTObjectToMongoDocument.createMongoDocument(comment));
+//        } catch (Exception e) {
+//            System.out.println("Objekt Comment (" + comment.getID() + ") can not be updated");
+//        }
+//    }
 
-
-
-//    Update, insert von Uebung2 Ben
-
-    /**
-     * Methode to create a doc in collectionName.
-     * @param collectionName
-     * @param doc
-     */
-    public void createDocumentOnDB(String collectionName, Document doc) {
-        this.database.getCollection(collectionName).insertOne(doc);
+    public void deleteDocumentOnDB(String id, String collectionName) {
+        Document where = new Document().append("_id", id);
+        this.getCollection(collectionName).deleteOne(where);
     }
 
-    /**
-     * Methode to pull a document with key from collectionName.
-     * @param collectionName
-     * @param key
-     * @return document from collectionName with key.
-     */
-    public Document getDocumentOnDB(String collectionName, Document key) {
-        return this.database.getCollection(collectionName).find(key).first();
+    public int countQuery(String fieldName, int value, String collectionName) {
+        Document result = (Document) this.getCollection(collectionName).aggregate(Arrays.asList(
+                match(Filters.eq(fieldName, value)),
+                count())).first();
+
+        return (int) result.get("count");
     }
 
-    /**
-     * Methode to update an document on collectionName
-     * @param collectionName
-     * @param doc
-     * @param newDoc
-     */
-    public void updateDocumentOnDB(String collectionName, Document doc, Document newDoc) {
-        this.database.getCollection(collectionName).findOneAndUpdate(doc, new Document().append("$set", newDoc));
+    public int countQuery(String fieldName, String value, String collectionName) {
+        Document result = (Document) this.getCollection(collectionName).aggregate(Arrays.asList(
+                match(Filters.eq(fieldName, value)),
+                count())).first();
+
+        return (int) result.get("count");
     }
 
-    /**
-     * Methode to delete an document on collectionName
-     * @param collectionName
-     * @param key
-     */
-    public void deleteDocumentOnDB(String collectionName, Document key) {
-        this.database.getCollection(collectionName).findOneAndDelete(key);
+    public MongoCursor joinQuery(String collectionName, String from, String localField, String foreignField, String as, String fieldName, String value) {
+        MongoCursor result = this.getCollection(collectionName).aggregate(Arrays.asList(
+                limit(1000),
+                lookup(from, localField, foreignField, as),
+                match(Filters.eq(fieldName, value))
+                )).cursor();
+
+        return  result;
+    }
+
+    public MongoCursor joinQuery(String collectionName, String from, String localField, String foreignField, String as, String fieldName, int value) {
+        MongoCursor result = this.getCollection(collectionName).aggregate(Arrays.asList(
+                limit(1000),
+                lookup(from, localField, foreignField, as),
+                match(Filters.eq(fieldName, value))
+        )).cursor();
+
+        return  result;
+    }
+
+    public MongoCursor joinQuery(String collectionName, String from, String localField, String foreignField, String as) {
+        MongoCursor result = this.getCollection(collectionName).aggregate(Arrays.asList(
+                limit(10),
+                lookup(from, localField, foreignField, as))
+        ).cursor();
+
+        return  result;
+    }
+
+    public void aggregate(String collectionName) {
+        this.getCollection(collectionName).aggregate(Arrays.asList(
+
+        ));
     }
 
 }

@@ -1,11 +1,28 @@
+import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.model.Filters;
 import database.MongoDBConnectionHandler;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import static com.mongodb.client.model.Aggregates.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class test {
-    public static void main(String[] args){
+    public static void main(String[] args) {
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
-//        handler.createDocumentOnDB("test", new Document().append("_id", "1").append("Art", "Vogel").append("Alter", 2));
-        System.out.println(handler.getDBDocument("1", "test"));
+
+//        int count = handler.countQuery("fraction", 1489579010, "speaker");
+//        System.out.println(count);
+
+        MongoCursor cursor = handler.joinQuery("speaker", "speech", "speechList", "id", "speechList");
+        while (cursor.hasNext()) {
+            Document doc = (Document) cursor.next();
+            System.out.println(doc.get("id"));
+        }
         handler.close();
     }
 
