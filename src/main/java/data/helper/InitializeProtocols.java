@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class InitializeProtocols {
     ArrayList<Document> allXmlArrayList = new ArrayList<>();
+    ArrayList<Protocol> allProtocols = new ArrayList<>();
 
     public InitializeProtocols(){
         XMLFileReader xml = new XMLFileReader();
@@ -14,6 +15,7 @@ public class InitializeProtocols {
         for (int curr_xml = 0; curr_xml < allXmlArrayList.size(); curr_xml++) {
             Protocol protocol = new ProtocolFile_Impl();
             protocol.initialize(allXmlArrayList.get(curr_xml));
+            allProtocols.add(protocol);
         }
     }
 }
