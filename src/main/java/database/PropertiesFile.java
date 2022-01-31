@@ -19,7 +19,7 @@ public class PropertiesFile {
     public static Properties readPropertiesFile(){
         Properties prop = new Properties();
         try {
-            InputStream input = new FileInputStream("src/main/resources/dbConnection.properties");
+            InputStream input = new FileInputStream("src/main/resources/PRG_WiSe21_Gruppe_8_4");
             prop.load(input);
         } catch (Exception e) {
             e.printStackTrace();

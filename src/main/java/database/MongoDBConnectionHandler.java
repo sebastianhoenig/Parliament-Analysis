@@ -70,7 +70,7 @@ public class MongoDBConnectionHandler {
         // select database
         database = mongoClient.getDatabase(prop.getProperty("remote_database"));
 
-        // select default connection
+        // select default connection (speeches)
         collection = database.getCollection(prop.getProperty("remote_collection"));
 
         // some debug information
@@ -196,7 +196,7 @@ public class MongoDBConnectionHandler {
 //    }
 
     public void insertSpeech(Speech speech) {
-        Document speechDoc = getDBDocument(speech.getSpeechID(), "speech");
+        Document speechDoc = getDBDocument(speech.getSpeechID(), "speeches");
 
         if (speechDoc == null) {
             speechDoc = BTObjectToMongoDocument.createMongoDocument(speech);
@@ -204,14 +204,14 @@ public class MongoDBConnectionHandler {
             return;
         }
         try {
-            this.getCollection("speech").insertOne(speechDoc);
+            this.getCollection("speeches").insertOne(speechDoc);
         } catch (Exception e) {
             System.out.println("Objekt Speech (" + speech.getSpeechID() + ") can not be uploaded");
         }
     }
 
     public void insertComment(Comment comment) {
-        Document commentDoc = getDBDocument(comment.getCommentID(), "comment");
+        Document commentDoc = getDBDocument(comment.getCommentID(), "comments");
 
         if (commentDoc == null) {
             commentDoc = BTObjectToMongoDocument.createMongoDocument(comment);
@@ -219,7 +219,7 @@ public class MongoDBConnectionHandler {
             return;
         }
         try {
-            this.getCollection("comment").insertOne(commentDoc);
+            this.getCollection("comments").insertOne(commentDoc);
         } catch (Exception e) {
             System.out.println("Objekt Comment (" + comment.getCommentID() + ") can not be uploaded");
         }
@@ -240,7 +240,7 @@ public class MongoDBConnectionHandler {
         Document where = new Document().append("_id", speech.getSpeechID());
 
         try {
-            this.getCollection("speech").updateOne(where,
+            this.getCollection("speeches").updateOne(where,
                     BTObjectToMongoDocument.createMongoDocument(speech));
         } catch (Exception e) {
             System.out.println("Objekt Speech (" + speech.getSpeechID() + ") can not be updated");
@@ -251,7 +251,7 @@ public class MongoDBConnectionHandler {
         Document where = new Document().append("_id", comment.getCommentID());
 
         try {
-            this.getCollection("comment").updateOne(where,
+            this.getCollection("comments").updateOne(where,
                     BTObjectToMongoDocument.createMongoDocument(comment));
         } catch (Exception e) {
             System.out.println("Objekt Comment (" + comment.getCommentID() + ") can not be updated");
