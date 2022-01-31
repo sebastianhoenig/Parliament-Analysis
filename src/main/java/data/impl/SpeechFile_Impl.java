@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class SpeechFile_Impl implements Speech {
     String speechID;
-    String text;
+    String text = "";
     ArrayList<Comment> allComments = new ArrayList<>();
     String speakerID;
     private Protocol protocol = null;
@@ -26,7 +26,7 @@ public class SpeechFile_Impl implements Speech {
             if(kommentarNode.getNodeName().equals("kommentar")) {
                 String commentText = kommentarNode.getTextContent();
                 Comment comment = new CommentFile_Impl();
-                comment.setText(commentText);
+                comment.setText(commentText.substring(1, commentText.length()-1));
                 comment.setCommentID(this.speechID + "-" + comment.hashCode());
                 this.allComments.add(comment);
             } else if(kommentarNode.getNodeName().equals("p")){
@@ -36,7 +36,12 @@ public class SpeechFile_Impl implements Speech {
                 }
             }
         }
-        this.text = textArrayList.toString();
+        NodeList children = kNode.getChildNodes();
+        for (int i = 2; i < children.getLength(); i++) {
+            Node child = children.item(i);
+            this.text += child.getTextContent();
+        }
+
 //        System.out.println("REDE ID: "+speechID);
 //        System.out.println("REDENTEXT: "+text);
     }

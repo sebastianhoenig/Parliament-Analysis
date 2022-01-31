@@ -57,7 +57,7 @@ public class NLP {
         }
     }
 
-    public AnalysisEngine getPipline() {
+    public AnalysisEngine getPipeline() {
         return pAE;
     }
 
@@ -65,7 +65,7 @@ public class NLP {
         JCas jCas = null;
         try {
             jCas = JCasFactory.createText(text, "de");
-            SimplePipeline.runPipeline(jCas, getPipline());
+            SimplePipeline.runPipeline(jCas, getPipeline());
         } catch (UIMAException e) {
             e.printStackTrace();
         }
