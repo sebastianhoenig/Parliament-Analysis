@@ -12,6 +12,8 @@ import data.Comment;
 import data.Protocol;
 import data.Speech;
 import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarBuilder;
+import me.tongfei.progressbar.ProgressBarStyle;
 import org.bson.Document;
 
 import java.util.*;
@@ -162,7 +164,7 @@ public class MongoDBConnectionHandler {
             }
         }
 
-        ProgressBar pb3 = new ProgressBar("upload Data", counter );
+        ProgressBar pb3 = new ProgressBar("upload Data", counter);
 
         for (Protocol protocol :  protocolList) {
             for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {

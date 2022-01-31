@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 
 import me.tongfei.progressbar.ProgressBar;
+import me.tongfei.progressbar.ProgressBarStyle;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 

@@ -21,6 +21,9 @@ public class CommentFile_Impl implements Comment {
     }
 
     public void setCommentID(String id) {
+        if (id.contains("--")) {
+            id = id.replace("--", "-");
+        }
         this.id = id;
     }
 
