@@ -8,7 +8,6 @@
     <artifactId>Abschlussprojekt</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
@@ -126,6 +125,15 @@
             <artifactId>de.tudarmstadt.ukp.dkpro.core.api.lexmorph-asl</artifactId>
             <version>1.10.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.2</version>
+        </dependency>
+
+
+
+
 
     </dependencies>
 
