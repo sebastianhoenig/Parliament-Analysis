@@ -59,6 +59,17 @@ public class XMLFileReader {
         return allXmlArrayList;
     }
 
+    public Document getMetadataXml() {
+        File dir = new File("C:\\Users\\User\\Desktop\\test");
+        File[] files = dir.listFiles();
+        for (File file : files) {
+            if (file.isFile() && file.getName().endsWith(".XML")) {
+                return ProcessFile(file);
+            }
+        }
+        return null;
+    }
+
     /**
      * @param file unverarbeitete xml Datei
      * @return verarbeitete/geparste xml Datei
@@ -75,11 +86,7 @@ public class XMLFileReader {
         try {
             assert dBuilder != null;
             doc = dBuilder.parse(new File(String.valueOf(file)));
-        } catch (SAXException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (OutOfMemoryError e) {
+        } catch (SAXException | IOException | OutOfMemoryError e) {
             e.printStackTrace();
         }
 

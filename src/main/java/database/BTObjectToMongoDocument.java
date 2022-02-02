@@ -2,6 +2,7 @@ package database;
 
 
 import data.Comment;
+import data.Member;
 import data.Speech;
 import data.helper.XMLFileReader;
 import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
@@ -41,6 +42,25 @@ public class BTObjectToMongoDocument {
 //        // @Todo: Andere Attribute müssen ergänzt werden
 //        return speakerDoc;
 //    }
+
+    public static Document createMongoDocument(Member member) {
+        Document memberDoc = new Document();
+        memberDoc.append("_id", member.getId());
+        memberDoc.append("name", member.getName());
+        memberDoc.append("surname", member.getSurname());
+        memberDoc.append("birthDate", member.getBirthDate());
+        memberDoc.append("birthPlace", member.getPlaceOfBirth());
+        memberDoc.append("birthCountry", member.getCountryOfBirth());
+        memberDoc.append("deathDate", member.getDateOfDeath());
+        memberDoc.append("gender", member.getGender());
+        memberDoc.append("maritalStatus", member.getMaritalStatus());
+        memberDoc.append("religion", member.getReligion());
+        memberDoc.append("occupation", member.getOccupation());
+        memberDoc.append("picture", member.getMetaData()[0]);
+        memberDoc.append("pictureMetadata", member.getMetaData()[1]);
+
+        return memberDoc;
+    }
 
     public static Document createMongoDocument(Speech speech) {
         Document speechDoc = new Document();

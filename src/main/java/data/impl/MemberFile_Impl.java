@@ -1,6 +1,7 @@
-package Parliament;
+package data.impl;
 
 import DownloadMetadata.ScrapePictures;
+import data.Member;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -9,7 +10,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Member {
+public class MemberFile_Impl implements Member {
     String name;
     String surname;
     String party;
@@ -25,7 +26,7 @@ public class Member {
     String occupation;
 
 
-    public Member(Node Mdb) {
+    public MemberFile_Impl(Node Mdb) {
         this.name = setName(Mdb);
         this.surname = setSurname(Mdb);
         this.party = setParty(Mdb);
@@ -41,7 +42,7 @@ public class Member {
         this.metaData = setMetaData(name, surname);
     }
 
-    String setName(Node Mdb) {
+    public String setName(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -73,7 +74,7 @@ public class Member {
         return "No name found";
     }
 
-    String setSurname(Node Mdb) {
+    public String setSurname(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -105,7 +106,7 @@ public class Member {
         return "No surname found";
     }
 
-    String setParty(Node Mdb) {
+    public String setParty(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -128,7 +129,7 @@ public class Member {
         return "No party found";
     }
 
-    Date setBirthDate(Node Mdb) {
+    public Date setBirthDate(Node Mdb) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
@@ -158,7 +159,7 @@ public class Member {
         return null;
     }
 
-    String setId(Node Mdb) {
+    public String setId(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -172,7 +173,7 @@ public class Member {
         return "No Id found";
     }
 
-    String setPlaceOfBirth(Node Mdb) {
+    public String setPlaceOfBirth(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -195,7 +196,7 @@ public class Member {
         return "No place of birth found";
     }
 
-    String setCountryOfBirth(Node Mdb) {
+    public String setCountryOfBirth(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -218,7 +219,7 @@ public class Member {
         return "No country of birth found";
     }
 
-    Date setDateOfDeath(Node Mdb) {
+    public Date setDateOfDeath(Node Mdb) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
@@ -247,7 +248,7 @@ public class Member {
         return null;
     }
 
-    String setGender(Node Mdb) {
+    public String setGender(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -270,7 +271,7 @@ public class Member {
         return "No gender found";
     }
 
-    String setMartialStatus(Node Mdb) {
+    public String setMartialStatus(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -293,7 +294,7 @@ public class Member {
         return "No martial status found";
     }
 
-    String setReligion(Node Mdb) {
+    public String setReligion(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -316,7 +317,7 @@ public class Member {
         return "No religion found";
     }
 
-    String setOccupation(Node Mdb) {
+    public String setOccupation(Node Mdb) {
         NodeList memberData = Mdb.getChildNodes();
         for (int i=0; i<memberData.getLength(); i++) {
             Node data = memberData.item(i);
@@ -339,7 +340,7 @@ public class Member {
         return "No occupation found";
     }
 
-    String[] setMetaData(String name, String surname) {
+    public String[] setMetaData(String name, String surname) {
         ScrapePictures scraper = new ScrapePictures(name, surname);
         return scraper.getMetaData();
     }

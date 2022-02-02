@@ -7,10 +7,7 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
-import data.AgendaItem;
-import data.Comment;
-import data.Protocol;
-import data.Speech;
+import data.*;
 import me.tongfei.progressbar.ProgressBar;
 import me.tongfei.progressbar.ProgressBarBuilder;
 import me.tongfei.progressbar.ProgressBarStyle;
@@ -181,21 +178,21 @@ public class MongoDBConnectionHandler {
         pb3.close();
     }
 
-//    public void insertSpeaker(Speaker speaker) {
-//
-//        Document speakerDoc = getDBDocument(speaker.getID(), "speaker");
-//
-//        if (speakerDoc == null) {
-//            speakerDoc = BTObjectToMongoDocument.createMongoDocument(speaker);
-//        } else {
-//            return;
-//        }
-//        try {
-//            this.getCollection("speaker").insertOne(speakerDoc);
-//        } catch (Exception e) {
-//            System.out.println("Objekt Speaker (" + speaker.getID() + ") can not be uploaded");
-//        }
-//    }
+    public void insertMember(Member member) {
+
+        Document memberDoc = getDBDocument(member.getId(), "members");
+
+        if (memberDoc == null) {
+            memberDoc = BTObjectToMongoDocument.createMongoDocument(member);
+        } else {
+            return;
+        }
+        try {
+            this.getCollection("member").insertOne(memberDoc);
+        } catch (Exception e) {
+            System.out.println("Objekt Member (" + member.getId() + ") can not be uploaded");
+        }
+    }
 
     public void insertSpeech(Speech speech) {
         Document speechDoc = getDBDocument(speech.getSpeechID(), "speeches");
