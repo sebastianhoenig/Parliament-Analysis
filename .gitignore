@@ -28,3 +28,4 @@
 *.zip
 *.tar.gz
 *.rar
+/src/main/java/protocolData/old/
