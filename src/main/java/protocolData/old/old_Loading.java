@@ -1,20 +1,15 @@
-package protocolData;
-
-import java.io.File;
-import java.io.IOException;
+package protocolData.old;
 
 // TODO:  (open zip before!)
 // TODO:  Count files then create  "Downloaded ... % of the files"
 
-public class mainLoading {
+/*public class mainLoading {
 
     public static void main(String[] args) {
-
-        // File datei = new File ("src/main/java/protocolData/test/dateiTest.xml");
-        File folder = new File("src/main/java/protocolData/loadedProtocols");
-
-        String link = "https://deutsch.fit/Deutschkurs/Deutschkurs-ABC.pdf";                             // TODO:  just a test doc
-        File out = new File("src/main/java/protocolData/loadedProtocols/test.pdf");
+                                                                                                    // File datei = new File ("src/main/java/protocolData/test/dateiTest.xml");
+        /*File folder = new File("src/main/resources/loadedProtocols");
+        String link = "https://www.google.com/url?sa=t&rct=j&q=&esrc=s&source=web&cd=&cad=rja&uact=8&ved=2ahUKEwjT6aTA09_1AhV7R_EDHXUfAh8QFnoECAMQAQ&url=https%3A%2F%2Fdeutsch.fit%2FDeutschkurs%2FDeutschkurs-ABC.pdf&usg=AOvVaw3L35EfUbUbOTtZzhS6c6Zk";
+        File out = new File("src/main/resources/loadedProtocols/test.pdf");
         new Thread(new protocolLoading(link, out)).start();
 
 
@@ -42,4 +37,4 @@ public class mainLoading {
 
     }
 
-}
+}*/

@@ -1,16 +1,8 @@
-package protocolData;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.net. HttpURLConnection;
-import java.net.URL;
+package protocolData.old;
 
 // TODO: Jede Datei einzeln laden lassen ODER " 3 von 24 Dateien eingelsen" ?
 
-public class protocolLoading implements Runnable {
+/*public class protocolLoading implements Runnable {
 
     String link;
     File out;
@@ -54,4 +46,4 @@ public class protocolLoading implements Runnable {
         }
 
     }
-}
+}*/
