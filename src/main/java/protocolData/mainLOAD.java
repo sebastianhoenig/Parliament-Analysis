@@ -30,17 +30,20 @@ public class mainLOAD {
     public static void main(String[] args) {
 
         pars();             // HttpParsing + link einlesen
+        System.out.println("Test112");
 
     }
 
 //TODO : 1.  HttpParsing
     public static void pars() {
+        System.out.println("Test255");
 
         String [] links = new String[0];
 
         // String finalZip = null;
 
         try {
+            System.out.println("try");
 
             List<String> zipArr = new ArrayList<>();
 
@@ -51,11 +54,13 @@ public class mainLOAD {
                 for (Element rowZip : tableZip.select("tr")) {
                     Elements tdsZip = rowZip.select("td div.bt-documents-description ul.bt-linkliste li a");
                     // System.out.println(tdsZip);
+                    //System.out.println("forfor");
 
                     String zipString = String.valueOf(tdsZip);
                     boolean containsStr = zipString.contains("pp19");
 
                     if (containsStr) {
+                        System.out.println("ifiifif");
                         //System.out.println(containsStr);
                         //System.out.println(tdsZip);
 
@@ -71,7 +76,7 @@ public class mainLOAD {
 
                         //System.out.println(finalZip);
 
-                        // loadd (0,finalZip);
+                        loadd (0,finalZip);
 
 
                         // zipArr.add(zipString);
@@ -147,6 +152,7 @@ public class mainLOAD {
         if  (linkToLoad.equals("https://www.bundestag.de/resource/blob/870686/91b713c492499db98eec5b2f8f142d20/pp19-data.zip")){
             name = "wp19";
             format = "ZIP";
+            System.out.println("Test2");
             out = new File("src/main/resources/loadedProtocols/" + name + "." + format);
         } else {
             // name = "wp20";
@@ -175,8 +181,9 @@ public class mainLOAD {
 
                 String zipString = String.valueOf(out);
                 boolean containsStr = zipString.contains("wp19");
+                System.out.println("wppppp19");
                 if (containsStr) {
-                    UnzipFile.unzip("src/main/resources/loadedProtocols/" + name + "." + format,"src/main/resources/loadedProtocols/" + name + ".XML");
+                    UnzipFile.unzip("src/main/resources/loadedProtocols/wp19.zip","src/main/resources/loadedProtocols/" + name + ".xml");
                 }
             } catch (IOException ex) {
                 ex.printStackTrace(); }
