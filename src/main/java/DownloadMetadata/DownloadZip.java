@@ -6,19 +6,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class DownloadZip {
-    String link;
-    String dir;
 
-    public DownloadZip(String link, String dir) {
-        this.link = link;
-        this.dir = dir;
-    }
-
-    public void run() {
+    public static void download(String link, String dir) {
         try {
             Files.copy(
-                    new URL(this.link).openStream(),
-                    Paths.get(this.dir));
+                    new URL(link).openStream(),
+                    Paths.get(dir));
         }
         catch(IOException ex) {
             ex.printStackTrace();

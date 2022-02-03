@@ -13,17 +13,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 public class UnzipFile {
-    String source;
-    String target;
 
-    public UnzipFile(String source, String target) {
-        this.source = source;
-        this.target = target;
-    }
-
-    public void unzip() {
-        Path mySource = Paths.get(this.source);
-        Path myTarget = Paths.get(this.target);
+    public static void unzip(String source, String target) {
+        Path mySource = Paths.get(source);
+        Path myTarget = Paths.get(target);
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(mySource.toFile()))) {
             ZipEntry zipEntry = zis.getNextEntry();
 
@@ -54,7 +47,7 @@ public class UnzipFile {
         }
     }
 
-    public Path zipSlipProject(ZipEntry zipEntry, Path targetDir)
+    public static Path zipSlipProject(ZipEntry zipEntry, Path targetDir)
             throws IOException {
 
         Path targetDirResolved = targetDir.resolve(zipEntry.getName());

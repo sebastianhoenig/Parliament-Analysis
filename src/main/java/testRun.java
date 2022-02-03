@@ -12,19 +12,17 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 
 public class testRun {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
 
         InitializeProtocols initialize = new InitializeProtocols();
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
         handler.uploadAllProtocols(initialize.allProtocols);
-        /* //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
+        //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
         String dir = "C:\\Users\\User\\Desktop\\test\\MdB-Stammdaten-data.zip";
         String target = "C:\\Users\\User\\Desktop\\test\\";
         String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip";
-        DownloadZip download = new DownloadZip(source, dir); //TODO: STATIC?
-        download.run();
-        UnzipFile unzipManager = new UnzipFile(dir, target); //TODO: STATIC?
-        unzipManager.unzip();
+        DownloadZip.download(source, dir);
+        UnzipFile.unzip(dir, target);
         XMLFileReader xml = new XMLFileReader(); //TODO: STATIC?
         Document doc = xml.getMetadataXml();
         ArrayList<MemberFile_Impl> allMembers = new ArrayList<>();
@@ -39,7 +37,7 @@ public class testRun {
                 allMembers.add(m);
                 System.out.println(m.getFullInfoForTesting());
             }
-        }*/
+        }
     }
 
     private static boolean checkCorrect(Node Mdb) {
