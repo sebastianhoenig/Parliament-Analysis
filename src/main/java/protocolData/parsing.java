@@ -36,7 +36,7 @@ public class parsing {
 
                         finalZip = "https://www.bundestag.de/" + part12;
 
-                        // downloading.loadd (0, finalZip);
+                        downloading.loadd (0, finalZip);
 
                     }
 
