@@ -36,7 +36,7 @@ public class parsing {
 
                         finalZip = "https://www.bundestag.de/" + part12;
 
-                        downloading.loadd (0, finalZip);
+                        // downloading.loadd (0, finalZip);
 
                     }
 
@@ -46,8 +46,8 @@ public class parsing {
             // Parse for the XML files
 
             int xmlname = 1;
-            for (int selectedPage = 0; selectedPage <= 231; selectedPage = selectedPage + 10) {
-                Document xml19 = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/543410-543410?offset=" + selectedPage).get();
+            for (int selectedPage = 0; selectedPage <= 10; selectedPage = selectedPage + 10) {
+                Document xml19 = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/866354-866354?offset=0" + selectedPage).get();
 
                 for (Element tableXML : xml19.select("table")) {
                     for (Element rowXML : tableXML.select("tr")) {
