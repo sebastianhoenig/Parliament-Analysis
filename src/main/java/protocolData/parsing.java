@@ -33,9 +33,9 @@ public class parsing {
                     String url = protocolXML.attr("href");
                     url = "https://www.bundestag.de" + url;
                     if (period.equals("543410-543410")) {
-                        downloading.loadd(xmlName, 19, url);
+                        downloading.load(xmlName, 19, url);
                     } else {
-                        downloading.loadd(xmlName, 20, url);
+                        downloading.load(xmlName, 20, url);
                     }
                     xmlName--;
                 }

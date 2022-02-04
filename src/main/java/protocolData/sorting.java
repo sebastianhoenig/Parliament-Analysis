@@ -48,8 +48,6 @@ public class sorting {
                 bout.close();
                 in.close();
                 System.out.println("Download complete");
-                System.out.println(this.out.getPath());
-
             }
             catch (IOException ex) {
             }
