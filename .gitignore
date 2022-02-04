@@ -29,3 +29,4 @@
 *.tar.gz
 *.rar
 /src/main/java/protocolData/old/
+/src/main/resources/loadedProtocols
