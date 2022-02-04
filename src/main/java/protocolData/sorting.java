@@ -48,16 +48,10 @@ public class sorting {
                 bout.close();
                 in.close();
                 System.out.println("Download complete");
-
-                String zipString = String.valueOf(out);
-                boolean zipStringContain = zipString.contains("wp19");
-                if (zipStringContain) {
-                    UnzipFile.unzip("src/main/resources/loadedProtocols/wp19.zip","src/main/resources/loadedProtocols");
-                }
+                System.out.println(this.out.getPath());
 
             }
             catch (IOException ex) {
-                ex.printStackTrace();
             }
 
         }

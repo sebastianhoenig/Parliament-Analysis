@@ -11,90 +11,36 @@ import java.io.*;
 public class parsing {
 
     public static void pars() {
-
-        try {
-
-            // Parse for the ZIP file
-
-            Document zipFile = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/488214-488214").get();
-            String finalZip = null;
-
-            for (Element tableZip : zipFile.select("table")) {
-                for (Element rowZip : tableZip.select("tr")) {
-                    Elements tdsZip = rowZip.select("td div.bt-documents-description ul.bt-linkliste li a");
-
-                    String zipString = String.valueOf(tdsZip);
-                    boolean containsStrZIP = zipString.contains("pp19");
-
-                    if (containsStrZIP) {
-
-                        String[] parts = zipString.split("href=\"/");
-                        String part1 = parts[1];
-
-                        String[] parts2 = part1.split("\" target=\"_blank\"> ZIP | 51 MB</a>");
-                        String part12 = parts2[0];
-
-                        finalZip = "https://www.bundestag.de/" + part12;
-
-                        downloading.loadd (0, finalZip);
-
+        String[] periods = new String[]{"543410-543410", "866354-866354"};
+        // Parse for the XML files
+        for (String period : periods) {
+            Document xml = null;
+            try {
+                xml = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/" + period +"?offset=" + 0).get();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            int totalProtocols = Integer.parseInt(xml.selectXpath("/html/body/div[1]").first().attr("data-hits"));
+            int xmlName = totalProtocols;
+            for (int selectedPage = 0; selectedPage <= totalProtocols; selectedPage += 10) {
+                try {
+                    xml = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/" + period +"?offset=" + selectedPage).get();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Elements linkDivs = xml.getElementsByAttribute("href");
+                for (Element protocolXML : linkDivs) {
+                    String url = protocolXML.attr("href");
+                    url = "https://www.bundestag.de" + url;
+                    if (period.equals("543410-543410")) {
+                        downloading.loadd(xmlName, 19, url);
+                    } else {
+                        downloading.loadd(xmlName, 20, url);
                     }
-
+                    xmlName--;
                 }
             }
-
-            // Parse for the XML files
-
-            int xmlname = 1;
-            for (int selectedPage = 0; selectedPage <= 10; selectedPage = selectedPage + 10) {
-                Document xml19 = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/866354-866354?offset=0" + selectedPage).get();
-
-                for (Element tableXML : xml19.select("table")) {
-                    for (Element rowXML : tableXML.select("tr")) {
-                        Elements tdsXML = rowXML.select("td div.bt-documents-description ul.bt-linkliste li a");
-
-                        String xmlStrings = String.valueOf(tdsXML);
-                        String[] word = xmlStrings.split("\" href=\"");
-
-                        String xmlString = String.valueOf(tdsXML);
-                        boolean containsStrXML = xmlString.contains("xml");
-
-                        if (containsStrXML) {
-
-                            String[] partsxml = xmlString.split("t\" href=\"");
-                            String partOfLink = partsxml[1];
-
-                            String strArray[] = partOfLink.split(" ");
-                            String nearlyXML = String.valueOf(strArray[0]);
-
-                            int index = 0;
-                            String newXML = "";
-                            char[] chars = nearlyXML.toCharArray();
-                            for (char ch : chars) {
-                                if(index >= 69) {
-                                    continue;
-                                } else {
-                                    newXML = newXML + ch;
-                                }
-                                index ++;
-                            }
-
-                            String finalXML = "https://www.bundestag.de" + newXML;
-
-                            downloading.loadd (xmlname, finalXML);
-                            xmlname ++;
-
-                        }
-
-                    }
-                }
-
-            }
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
         }
-
     }
 
 }
