@@ -28,4 +28,20 @@ public class DownloadXml {
         }
     }
 
+    public static void loadDTD() {
+        String link = "https://www.bundestag.de/resource/blob/575720/70d7f2af6e4bebd9a550d9dc4bc03900/dbtplenarprotokoll-data.dtd";
+        for (String period : new String[] {"19", "20"}) {
+            File dtd = new File("src/main/resources/" + period + "/" + "dbtplenarprotokoll.dtd");
+            if (!dtd.exists()) {
+                try {
+                    if (dtd.createNewFile()) {
+                        Thread t = new Thread(new Sort.protocolLoading(link, dtd));
+                        t.start();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 }

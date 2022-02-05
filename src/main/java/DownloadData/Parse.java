@@ -42,6 +42,6 @@ public class Parse {
                 }
             }
         }
+        DownloadXml.loadDTD();
     }
-
 }

@@ -147,7 +147,7 @@ public class MongoDBConnectionHandler {
         return resultDoc;
     }
 
-    public void uploadAllProtocols(ArrayList<Protocol> protocolList) {
+    public void uploadAll(ArrayList<Protocol> protocolList, ArrayList<Member> memberList) {
 
         int counter = 0;
         for (Protocol protocol :  protocolList) {
@@ -161,8 +161,15 @@ public class MongoDBConnectionHandler {
             }
         }
 
-        ProgressBar pb3 = new ProgressBar("upload Data", counter);
+        int counterM = memberList.size();
+        ProgressBar pb4 = new ProgressBar("upload Member", counterM);
+        for (Member member : memberList) {
+            insertMember(member);
+            pb4.step();
+        }
 
+
+        ProgressBar pb3 = new ProgressBar("upload Data", counter);
         for (Protocol protocol :  protocolList) {
             for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
                 for (Speech speech : agendaItem.getSpeeches()) {
@@ -188,7 +195,7 @@ public class MongoDBConnectionHandler {
             return;
         }
         try {
-            this.getCollection("member").insertOne(memberDoc);
+            this.getCollection("members").insertOne(memberDoc);
         } catch (Exception e) {
             System.out.println("Objekt Member (" + member.getId() + ") can not be uploaded");
         }

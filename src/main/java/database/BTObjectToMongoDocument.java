@@ -49,6 +49,7 @@ public class BTObjectToMongoDocument {
         memberDoc.append("_id", member.getId());
         memberDoc.append("name", member.getName());
         memberDoc.append("surname", member.getSurname());
+        memberDoc.append("party", member.getParty());
         memberDoc.append("birthDate", member.getBirthDate());
         memberDoc.append("birthPlace", member.getPlaceOfBirth());
         memberDoc.append("birthCountry", member.getCountryOfBirth());

@@ -1,5 +1,6 @@
 import DownloadData.DownloadZip;
 import DownloadData.UnzipFile;
+import data.Member;
 import data.helper.InitializeProtocols;
 import data.helper.XMLFileReader;
 import data.impl.MemberFile_Impl;
@@ -15,28 +16,33 @@ import java.util.ArrayList;
 public class testRun {
     public static void main(String[] args) throws InterruptedException {
         Parse.pars();
-        String dir = "C:\\Users\\User\\Desktop\\test\\MdB-Stammdaten-data.zip";
+        String dir = "src/main/resources/MdB-Stammdaten-data.zip";
         String target = "src/main/resources";
         String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
         DownloadZip.download(source, dir);
         UnzipFile.unzip(dir, target);
         Document doc = XMLFileReader.getMetadataXml();
-        ArrayList<MemberFile_Impl> allMembers = new ArrayList<>();
+        ArrayList<Member> allMembers = new ArrayList<>();
         assert doc != null;
         NodeList MdbList = doc.getElementsByTagName("MDB");
+        int counter = 0;
         for (int i = 0; i < MdbList.getLength(); i++) {
-            Thread.sleep(500);
             Node Mdb = MdbList.item(i);
             if (checkCorrect(Mdb)) {
+                Thread.sleep(500);
                 MemberFile_Impl m = new MemberFile_Impl(Mdb);
                 allMembers.add(m);
-                System.out.println(m.getFullInfoForTesting());
+//                System.out.println(m.getFullInfoForTesting());
+                counter ++;
+            }
+            if (counter == 2) {
+                break;
             }
         }
         InitializeProtocols initialize = new InitializeProtocols();
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
         //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
-        handler.uploadAllProtocols(initialize.getAllProtocols());
+        handler.uploadAll(initialize.getAllProtocols(), allMembers);
     }
 
     private static boolean checkCorrect(Node Mdb) {
@@ -53,7 +59,7 @@ public class testRun {
                             Element electionElement = (Element) electionAttribute;
                             if (electionElement.getTagName().equalsIgnoreCase("WAHLPERIODE")) {
                                 NodeList singleElectionAttributes = electionElement.getChildNodes();
-                                for (int k=0; j< singleElectionAttributes.getLength(); k++) {
+                                for (int k=0; k < singleElectionAttributes.getLength(); k++) {
                                     Node singleElectionAttribute = singleElectionAttributes.item(k);
                                     if (singleElectionAttribute.getNodeType() == Node.ELEMENT_NODE) {
                                         Element singleElectionElement = (Element) singleElectionAttribute;

@@ -237,7 +237,7 @@ public class MemberFile_Impl implements Member {
                                     return formatter.parse(biographyElement.getTextContent());
                                 }
                                 catch (ParseException e) {
-                                    e.printStackTrace();
+//                                    e.printStackTrace();
                                 }
                             }
                         }
