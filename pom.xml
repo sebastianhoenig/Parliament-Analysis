@@ -33,7 +33,7 @@
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
-            <version>1.13.1</version>
+            <version>1.14.3</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
@@ -148,3 +148,4 @@
 
 
 </project>
+

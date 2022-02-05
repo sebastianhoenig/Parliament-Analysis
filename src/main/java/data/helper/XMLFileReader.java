@@ -15,18 +15,18 @@ import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
 public class XMLFileReader {
-    ArrayList<Document> allXmlArrayList = new ArrayList<Document>();
 
     /**
      * Die Funktion getAllFiles() benötigt den genauen Adresspfad des Ordners, in welchem die xml-Dateien liegen.
      * @return Arrayliste mit den geparsten xml Dateien
      */
-    public ArrayList<Document> getAllFiles() {
-        File folder = new File("/Users/benwerner/Qsync/Uni/4. Semester/Programierpraktikum/Übung 1/Bundestag_19/");
+    public static ArrayList<Document> getAllFiles(String link) {
+        ArrayList<Document> allXmlArrayList = new ArrayList<Document>();
+        File folder = new File(link);
         File[] files = folder.listFiles();
         assert files != null;
 
-        // sorting the Files
+        // sorting the Files //TODO: Warum machen wir das?
         Arrays.sort(files, new Comparator<File>() {
             public int compare(File f1, File f2) {
                 String nameF1 = f1.getName().substring(0, f1.getName().length() - 4);
@@ -49,7 +49,7 @@ public class XMLFileReader {
                 if (file.getName().startsWith("2")) {
                     break;
                 }
-//                System.out.println("File: " + file.getName());
+                //System.out.println("File: " + file.getName());
                 try{allXmlArrayList.add(ProcessFile(file));}
                 catch (NullPointerException e){e.printStackTrace();
                 }
@@ -59,8 +59,8 @@ public class XMLFileReader {
         return allXmlArrayList;
     }
 
-    public Document getMetadataXml() {
-        File dir = new File("C:\\Users\\User\\Desktop\\test");
+    static public Document getMetadataXml() {
+        File dir = new File("src/main/resources");
         File[] files = dir.listFiles();
         for (File file : files) {
             if (file.isFile() && file.getName().endsWith(".XML")) {
@@ -74,7 +74,7 @@ public class XMLFileReader {
      * @param file unverarbeitete xml Datei
      * @return verarbeitete/geparste xml Datei
      */
-    Document ProcessFile(File file) {
+    static Document ProcessFile(File file) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder dBuilder = null;
         try {

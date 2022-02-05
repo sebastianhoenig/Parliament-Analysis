@@ -1,6 +1,6 @@
 package data.impl;
 
-import DownloadMetadata.ScrapePictures;
+import DownloadData.ScrapePictures;
 import data.Member;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

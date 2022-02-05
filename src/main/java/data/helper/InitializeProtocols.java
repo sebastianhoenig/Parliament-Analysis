@@ -9,8 +9,9 @@ public class InitializeProtocols {
     public ArrayList<Protocol> allProtocols = new ArrayList<>();
 
     public InitializeProtocols(){
-        XMLFileReader xml = new XMLFileReader();
-        ArrayList<Document> allXmlArrayList = xml.getAllFiles();
+        ArrayList<Document> allXmlArrayList = XMLFileReader.getAllFiles("src/main/resources/19");
+        ArrayList<Document> all20XmlArrayList = XMLFileReader.getAllFiles("src/main/resources/20");
+        allXmlArrayList.addAll(all20XmlArrayList);
 
         ProgressBar pb1 = new ProgressBar("Einlesen der Daten aus den Files", allXmlArrayList.size());
         for (Document document : allXmlArrayList) {

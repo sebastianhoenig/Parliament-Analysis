@@ -1,5 +1,5 @@
-import DownloadMetadata.DownloadZip;
-import DownloadMetadata.UnzipFile;
+import DownloadData.DownloadZip;
+import DownloadData.UnzipFile;
 import data.helper.InitializeProtocols;
 import data.helper.XMLFileReader;
 import data.impl.MemberFile_Impl;
@@ -8,24 +8,24 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import DownloadData.Parse;
 
 import java.util.ArrayList;
 
 public class testRun {
     public static void main(String[] args) throws InterruptedException {
-
+        Parse.pars();
         InitializeProtocols initialize = new InitializeProtocols();
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
-        handler.uploadAllProtocols(initialize.allProtocols);
         //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
         String dir = "C:\\Users\\User\\Desktop\\test\\MdB-Stammdaten-data.zip";
-        String target = "C:\\Users\\User\\Desktop\\test\\";
-        String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip";
+        String target = "src/main/resources";
+        String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
         DownloadZip.download(source, dir);
         UnzipFile.unzip(dir, target);
-        XMLFileReader xml = new XMLFileReader(); //TODO: STATIC?
-        Document doc = xml.getMetadataXml();
+        Document doc = XMLFileReader.getMetadataXml();
         ArrayList<MemberFile_Impl> allMembers = new ArrayList<>();
+        assert doc != null;
         NodeList MdbList = doc.getElementsByTagName("MDB");
         System.out.println(MdbList);
         System.out.println(MdbList.getLength());
@@ -38,6 +38,7 @@ public class testRun {
                 System.out.println(m.getFullInfoForTesting());
             }
         }
+        handler.uploadAllProtocols(initialize.allProtocols);
     }
 
     private static boolean checkCorrect(Node Mdb) {

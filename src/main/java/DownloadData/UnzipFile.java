@@ -1,6 +1,4 @@
-package DownloadMetadata;
-
-import org.apache.tools.ant.taskdefs.Zip;
+package DownloadData;
 
 import java.io.File;
 import java.io.FileInputStream;

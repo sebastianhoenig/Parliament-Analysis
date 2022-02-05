@@ -28,3 +28,6 @@
 *.zip
 *.tar.gz
 *.rar
+/src/main/java/protocolData/old/
+/src/main/resources/19/
+/src/main/resources/20/
