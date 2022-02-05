@@ -3,7 +3,7 @@ package data;
 
 import org.w3c.dom.Node;
 import java.util.Date;
-
+//TODO: Add Javadoc
 public interface Member {
     String setName(Node Mdb);
 

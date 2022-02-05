@@ -16,36 +16,28 @@ public class ProtocolFile_Impl implements Protocol {
     ArrayList<AgendaItem> allAgendaItems = new ArrayList<>();
     ArrayList<String> leaders = new ArrayList<String>();
 
-    public void initialize(Document doc){
+    public ProtocolFile_Impl(Document doc) {
         Element root = doc.getDocumentElement();
-        setDate(root.getAttribute("sitzung-datum"));
-        setStartPageNr(Integer.parseInt(root.getAttribute("start-seitennr")));
         Element elKopfData = (Element) root.getElementsByTagName("vorspann").item(0).getChildNodes().item(1);
-        setTitle(elKopfData.getElementsByTagName("sitzungstitel").item(0).getTextContent());
-        setSessionID(Integer.parseInt(root.getAttribute("sitzung-nr")));
-        setAgendaItem(doc);
-        setLeaders(doc);
-        setElectionPeriod(doc);
-//        System.out.println("Datum"+pDate);
-//        System.out.println("WAHLPERIODE: "+electionPeriod);
-//        System.out.println("TITEL: "+ title);
-//        System.out.println("STARTPAGE: "+startPageNr);
-//        System.out.println("SESSION ID: "+sessionID);
-//        System.out.println("LEADERS: "+getLeaders());
-
-
+        this.pDate = setDate(root.getAttribute("sitzung-datum"));
+        this.electionPeriod = setElectionPeriod(doc);
+        this.sessionID = setSessionID(Integer.parseInt(root.getAttribute("sitzung-nr")));
+        this.title = setTitle(elKopfData.getElementsByTagName("sitzungstitel").item(0).getTextContent());
+        this.startPageNr = setStartPageNr(Integer.parseInt(root.getAttribute("start-seitennr")));
+        this.allAgendaItems = setAgendaItem(doc);
+        this.leaders = setLeaders(doc);
     }
 
     public int getStartPageNr() {
         return startPageNr;
     }
 
-    public void setStartPageNr(Integer startPageNr){
-        this.startPageNr = startPageNr;
+    public int setStartPageNr(Integer startPageNr){
+        return startPageNr;
     }
 
-    public void setDate(String pDate) {
-        this.pDate = pDate;
+    public String setDate(String pDate) {
+        return pDate;
     }
 
     /**
@@ -59,7 +51,8 @@ public class ProtocolFile_Impl implements Protocol {
      * Diese Funktion initialisiert die Tagesordnungspunkte eines Plenarprotokolls und fügt diese einer Arrayliste hinzu.
      * @param doc geparste xml Datei eines Plenarprotokolls.
      */
-    public void setAgendaItem(Document doc) {
+    public ArrayList<AgendaItem> setAgendaItem(Document doc) {
+        ArrayList<AgendaItem> allAgendaItems = new ArrayList<>();
         NodeList tagesordnungspunkt = doc.getElementsByTagName("tagesordnungspunkt");
         for (int temp = 0; temp < tagesordnungspunkt.getLength(); temp++) {
             AgendaItem tpunkt = new AgendaItemFile_Impl();
@@ -70,8 +63,9 @@ public class ProtocolFile_Impl implements Protocol {
                 tpunkt.setAgendaItemID(nummer);
                 tpunkt.setAllSpeeches(nNode, this);
             }
-            this.allAgendaItems.add(tpunkt);
+            allAgendaItems.add(tpunkt);
         }
+        return allAgendaItems;
     }
 
     /**
@@ -82,8 +76,8 @@ public class ProtocolFile_Impl implements Protocol {
     }
 
 
-    public void setSessionID(Integer sessionID) {
-        this.sessionID = sessionID;
+    public int setSessionID(Integer sessionID) {
+        return sessionID;
     }
 
     /**
@@ -97,7 +91,8 @@ public class ProtocolFile_Impl implements Protocol {
      * Diese Funktion setzt die Sitzungsleiter einer Plenarsitzung.
      * @param doc geparste xml Datei eines Plenarprotokolls.
      */
-    public void setLeaders (Document doc){
+    public ArrayList<String> setLeaders (Document doc){
+        ArrayList<String> leaders = new ArrayList<>();
         NodeList speechNodes = doc.getElementsByTagName("rede");
         for (int speakerNode = 0; speakerNode < speechNodes.getLength(); speakerNode++) {
             Node currentSpeech = speechNodes.item(speakerNode);
@@ -113,8 +108,8 @@ public class ProtocolFile_Impl implements Protocol {
                     }
                 }
             }
-
         }
+        return leaders;
     }
 
     /**
@@ -127,15 +122,16 @@ public class ProtocolFile_Impl implements Protocol {
     /**
      * @param doc geparste xml Datei eines Plenarprotokolls.
      */
-    public void setElectionPeriod (Document doc) {
+    public int setElectionPeriod (Document doc) {
         NodeList plenarprotokoll_nummer = doc.getElementsByTagName("plenarprotokoll-nummer");
         for (int temp = 0; temp < plenarprotokoll_nummer.getLength(); temp++) {
             Node nNode = plenarprotokoll_nummer.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
-                this.electionPeriod = Integer.valueOf(eElement.getElementsByTagName("wahlperiode").item(0).getTextContent());
+                return Integer.valueOf(eElement.getElementsByTagName("wahlperiode").item(0).getTextContent());
             }
         }
+        return Integer.parseInt(null);
     }
 
 
@@ -147,8 +143,8 @@ public class ProtocolFile_Impl implements Protocol {
     }
 
 
-    public void setTitle(String title) {
-        this.title = title;
+    public String setTitle(String title) {
+        return title;
     }
 
     /**

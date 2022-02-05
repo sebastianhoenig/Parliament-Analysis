@@ -2,7 +2,7 @@ package data;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
-
+//TODO: Add Javadoc and refactor
 public interface Speech {
     void setSpeechID(String speechID);
     void initialize(Node kNode, Protocol protocol, AgendaItem agendaItem);

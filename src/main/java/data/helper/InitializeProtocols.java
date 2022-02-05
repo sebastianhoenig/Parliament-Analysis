@@ -6,9 +6,14 @@ import org.w3c.dom.Document;
 import java.util.ArrayList;
 
 public class InitializeProtocols {
-    public ArrayList<Protocol> allProtocols = new ArrayList<>();
+    ArrayList<Protocol> allProtocols = new ArrayList<>();
 
     public InitializeProtocols(){
+        this.allProtocols = setProtocols();
+    }
+
+    ArrayList<Protocol> setProtocols() {
+        ArrayList<Protocol> myProtocols = new ArrayList<>();
         ArrayList<Document> allXmlArrayList = XMLFileReader.getAllFiles("src/main/resources/19");
         ArrayList<Document> all20XmlArrayList = XMLFileReader.getAllFiles("src/main/resources/20");
         allXmlArrayList.addAll(all20XmlArrayList);
@@ -17,10 +22,14 @@ public class InitializeProtocols {
         for (Document document : allXmlArrayList) {
             pb1.setExtraMessage("Reading...");
             pb1.step();
-            Protocol protocol = new ProtocolFile_Impl();
-            protocol.initialize(document);
-            allProtocols.add(protocol);
+            Protocol protocol = new ProtocolFile_Impl(document);
+            myProtocols.add(protocol);
         }
         pb1.close();
+        return myProtocols;
+    }
+
+    public ArrayList<Protocol> getAllProtocols() {
+        return this.allProtocols;
     }
 }

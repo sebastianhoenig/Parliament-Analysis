@@ -2,24 +2,24 @@ package data;
 
 import org.w3c.dom.Document;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-
+//TODO: Add Javadoc
 public interface Protocol {
-    void initialize(Document doc);
-    void setStartPageNr(Integer startPageNr);
+    int setStartPageNr(Integer startPageNr);
     int getStartPageNr();
 
-    void setDate(String pDate);
+    String setDate(String pDate);
     String getDate();
-    void setAgendaItem(Document doc);
+    ArrayList<AgendaItem> setAgendaItem(Document doc);
     ArrayList<AgendaItem> getAllAgendaItems();
-    void setSessionID(Integer sessionID);
+    int setSessionID(Integer sessionID);
     Integer getSessionID();
-    void setLeaders (Document doc);
+    ArrayList<String> setLeaders (Document doc);
     ArrayList<String> getLeaders();
-    void setElectionPeriod (Document doc);
+    int setElectionPeriod (Document doc);
     Integer getElectionPeriod();
-    void setTitle(String title);
+    String setTitle(String title);
     String getTitle();
 
 }

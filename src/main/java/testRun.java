@@ -15,9 +15,6 @@ import java.util.ArrayList;
 public class testRun {
     public static void main(String[] args) throws InterruptedException {
         Parse.pars();
-        InitializeProtocols initialize = new InitializeProtocols();
-        MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
-        //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
         String dir = "C:\\Users\\User\\Desktop\\test\\MdB-Stammdaten-data.zip";
         String target = "src/main/resources";
         String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
@@ -27,8 +24,6 @@ public class testRun {
         ArrayList<MemberFile_Impl> allMembers = new ArrayList<>();
         assert doc != null;
         NodeList MdbList = doc.getElementsByTagName("MDB");
-        System.out.println(MdbList);
-        System.out.println(MdbList.getLength());
         for (int i = 0; i < MdbList.getLength(); i++) {
             Thread.sleep(500);
             Node Mdb = MdbList.item(i);
@@ -38,7 +33,10 @@ public class testRun {
                 System.out.println(m.getFullInfoForTesting());
             }
         }
-        handler.uploadAllProtocols(initialize.allProtocols);
+        InitializeProtocols initialize = new InitializeProtocols();
+        MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
+        //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
+        handler.uploadAllProtocols(initialize.getAllProtocols());
     }
 
     private static boolean checkCorrect(Node Mdb) {

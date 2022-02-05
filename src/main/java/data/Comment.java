@@ -1,5 +1,5 @@
 package data;
-
+//TODO: Add Javadoc and refactor
 public interface Comment {
 
     String getCommentID();
