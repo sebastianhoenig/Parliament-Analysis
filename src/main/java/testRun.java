@@ -5,6 +5,7 @@ import data.helper.InitializeProtocols;
 import data.helper.XMLFileReader;
 import data.impl.MemberFile_Impl;
 import database.MongoDBConnectionHandler;
+import me.tongfei.progressbar.ProgressBar;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -16,16 +17,26 @@ import java.util.ArrayList;
 public class testRun {
     public static void main(String[] args) throws InterruptedException {
         Parse.pars();
-        String dir = "src/main/resources/MdB-Stammdaten-data.zip";
-        String target = "src/main/resources";
-        String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
-        DownloadZip.download(source, dir);
-        UnzipFile.unzip(dir, target);
+//        String dir = "src/main/resources/MdB-Stammdaten-data.zip";
+//        String target = "src/main/resources";
+//        String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
+//        DownloadZip.download(source, dir);
+//        UnzipFile.unzip(dir, target);
         Document doc = XMLFileReader.getMetadataXml();
         ArrayList<Member> allMembers = new ArrayList<>();
         assert doc != null;
         NodeList MdbList = doc.getElementsByTagName("MDB");
+
+        // Count total members for Progressbar
         int counter = 0;
+        for (int i = 0; i < MdbList.getLength(); i++) {
+            Node Mdb = MdbList.item(i);
+            if (checkCorrect(Mdb)) {
+                counter++;
+            }
+        }
+
+        ProgressBar progressBar = new ProgressBar("Einlesen der Member Files: ", counter);
         for (int i = 0; i < MdbList.getLength(); i++) {
             Node Mdb = MdbList.item(i);
             if (checkCorrect(Mdb)) {
@@ -33,10 +44,7 @@ public class testRun {
                 MemberFile_Impl m = new MemberFile_Impl(Mdb);
                 allMembers.add(m);
 //                System.out.println(m.getFullInfoForTesting());
-                counter ++;
-            }
-            if (counter == 2) {
-                break;
+                progressBar.step();
             }
         }
         InitializeProtocols initialize = new InitializeProtocols();
@@ -46,34 +54,19 @@ public class testRun {
     }
 
     private static boolean checkCorrect(Node Mdb) {
-        NodeList memberData = Mdb.getChildNodes();
-        for (int i=0; i<memberData.getLength(); i++) {
-            Node data = memberData.item(i);
-            if (data.getNodeType() == Node.ELEMENT_NODE) {
-                Element dataElement = (Element) data;
-                if (dataElement.getTagName().equalsIgnoreCase("WAHLPERIODEN")) {
-                    NodeList electionAttributes = dataElement.getChildNodes();
-                    for (int j=0; j<electionAttributes.getLength(); j++) {
-                        Node electionAttribute = electionAttributes.item(j);
-                        if (electionAttribute.getNodeType() == Node.ELEMENT_NODE) {
-                            Element electionElement = (Element) electionAttribute;
-                            if (electionElement.getTagName().equalsIgnoreCase("WAHLPERIODE")) {
-                                NodeList singleElectionAttributes = electionElement.getChildNodes();
-                                for (int k=0; k < singleElectionAttributes.getLength(); k++) {
-                                    Node singleElectionAttribute = singleElectionAttributes.item(k);
-                                    if (singleElectionAttribute.getNodeType() == Node.ELEMENT_NODE) {
-                                        Element singleElectionElement = (Element) singleElectionAttribute;
-                                        if (singleElectionElement.getTagName().equalsIgnoreCase("WP")) {
-                                            if (singleElectionElement.getTextContent().equalsIgnoreCase("19")
-                                                    || singleElectionElement.getTextContent().equalsIgnoreCase("20")) {
-                                                return true;
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
+        Element MdbElement = (Element) Mdb;
+        NodeList periodList = MdbElement.getElementsByTagName("WAHLPERIODEN").item(0).getChildNodes();
+
+        for (int i = 0; i < periodList.getLength(); i++) {
+            if (periodList.item(i).getNodeName().equals("#text")) {
+                continue;
+            } else {
+                Element period = (Element) periodList.item(i);
+                String wp = period.getElementsByTagName("WP").item(0).getTextContent();
+                if (wp.equals("19") || wp.equals("20")) {
+                    return true;
+                } else {
+                    continue;
                 }
             }
         }
