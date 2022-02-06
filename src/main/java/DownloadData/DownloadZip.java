@@ -9,9 +9,12 @@ public class DownloadZip {
 
     public static void download(String link, String dir) {
         try {
-            Files.copy(
-                    new URL(link).openStream(),
-                    Paths.get(dir));
+            File file = new File("src/main/resources/MdB-Stammdaten-data.zip");
+            if (!file.exists()) {
+                Files.copy(
+                        new URL(link).openStream(),
+                        Paths.get(dir));
+            }
         }
         catch(IOException ex) {
             ex.printStackTrace();

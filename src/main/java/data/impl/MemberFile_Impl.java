@@ -405,4 +405,8 @@ public class MemberFile_Impl implements Member {
         this.allSpeeches.add(speechID);
     }
 
+    public ArrayList<String> getallSpeeches() {
+        return this.allSpeeches;
+    }
+
 }
