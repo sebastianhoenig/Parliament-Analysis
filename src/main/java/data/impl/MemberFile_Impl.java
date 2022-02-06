@@ -8,6 +8,7 @@ import org.w3c.dom.NodeList;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class MemberFile_Impl implements Member {
@@ -24,6 +25,7 @@ public class MemberFile_Impl implements Member {
     String maritalStatus;
     String religion;
     String occupation;
+    ArrayList<String> allSpeeches;
 
 
     public MemberFile_Impl(Node Mdb) {
@@ -397,6 +399,10 @@ public class MemberFile_Impl implements Member {
                 "Deathdate: %8s, Gender: %9s, martial:%10s, religion:%11s, occupation: %12s, picture: %13s, text: %14s",
                 name, surname, party, birthDate, id, placeOfBirth, countryOfBirth, dateOfDeath, gender, maritalStatus, religion, occupation, metaData[0], metaData[1]);
         return final_;
+    }
+
+    public void addSpeech(String speechID) {
+        this.allSpeeches.add(speechID);
     }
 
 }

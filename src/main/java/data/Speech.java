@@ -2,19 +2,21 @@ package data;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
-//TODO: Add Javadoc and refactor
+import java.util.HashMap;
+
+//TODO: Add Javadoc
 public interface Speech {
-    void setSpeechID(String speechID);
-    void initialize(Node kNode, Protocol protocol, AgendaItem agendaItem);
+    String setSpeechID(String speechID);
     String getSpeechID();
     String getSpeakerID();
-    void setSpeakerID(String speakerID);
+    String setSpeakerID(String speakerID);
     String getText();
     ArrayList<Comment> getAllComments();
 
     Protocol getProtocol();
-    void setProtocol(Protocol protocol);
+    Protocol setProtocol(Protocol protocol);
 
     AgendaItem getAgendaItem();
-    void setAgendaItem(AgendaItem agendaItem);
+    AgendaItem setAgendaItem(AgendaItem agendaItem);
+    public void updateMemberWithSpeech(String speakerID, HashMap<String, Member> allMembers, String speechID);
 }

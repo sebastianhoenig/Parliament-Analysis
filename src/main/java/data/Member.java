@@ -58,4 +58,6 @@ public interface Member {
     public String[] getMetaData();
 
     public String getFullInfoForTesting();
+
+    public void addSpeech(String speechID);
 }

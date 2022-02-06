@@ -1,18 +1,20 @@
 package data.helper;
+import data.Member;
 import data.Protocol;
 import data.impl.ProtocolFile_Impl;
 import me.tongfei.progressbar.ProgressBar;
 import org.w3c.dom.Document;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class InitializeProtocols {
     ArrayList<Protocol> allProtocols = new ArrayList<>();
 
-    public InitializeProtocols(){
-        this.allProtocols = setProtocols();
+    public InitializeProtocols(HashMap<String, Member> allMembers){
+        this.allProtocols = setProtocols(allMembers);
     }
 
-    ArrayList<Protocol> setProtocols() {
+    ArrayList<Protocol> setProtocols(HashMap<String, Member> allMembers) {
         ArrayList<Protocol> myProtocols = new ArrayList<>();
         ArrayList<Document> allXmlArrayList = XMLFileReader.getAllFiles("src/main/resources/19");
         ArrayList<Document> all20XmlArrayList = XMLFileReader.getAllFiles("src/main/resources/20");
@@ -22,7 +24,7 @@ public class InitializeProtocols {
         for (Document document : allXmlArrayList) {
             pb1.setExtraMessage("Reading...");
             pb1.step();
-            Protocol protocol = new ProtocolFile_Impl(document);
+            Protocol protocol = new ProtocolFile_Impl(document, allMembers);
             myProtocols.add(protocol);
         }
         pb1.close();

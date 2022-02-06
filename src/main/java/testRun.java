@@ -12,10 +12,13 @@ import org.w3c.dom.NodeList;
 import DownloadData.Parse;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class testRun {
     public static void main(String[] args) throws InterruptedException {
         Parse.pars();
+        HashMap<String, Member> hashedMembers = new HashMap<>();
+        //TODO: Auslagern in eigene Methode
         String dir = "src/main/resources/MdB-Stammdaten-data.zip";
         String target = "src/main/resources";
         String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
@@ -34,12 +37,13 @@ public class testRun {
                 allMembers.add(m);
 //                System.out.println(m.getFullInfoForTesting());
                 counter ++;
+                hashedMembers.put(m.getId(), m);
             }
             if (counter == 2) {
                 break;
             }
         }
-        InitializeProtocols initialize = new InitializeProtocols();
+        InitializeProtocols initialize = new InitializeProtocols(hashedMembers);
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
         //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
         handler.uploadAll(initialize.getAllProtocols(), allMembers);

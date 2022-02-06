@@ -3,13 +3,15 @@ package data;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
-//TODO: Add Javadoc and refactor
+import java.util.HashMap;
+
+//TODO: Add Javadoc
 public interface AgendaItem {
 
-    void setAgendaItemID(String id);
+    String setAgendaItemID(String id);
 
     String getAgendaItemID();
 
-    void setAllSpeeches(Node nNode, Protocol protocol);
+    ArrayList<Speech> setAllSpeeches(Node nNode, Protocol protocol, HashMap<String, Member> allMembers);
     ArrayList<Speech> getSpeeches();
 }
