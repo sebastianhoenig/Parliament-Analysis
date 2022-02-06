@@ -28,3 +28,11 @@
 *.zip
 *.tar.gz
 *.rar
+
+/src/main/java/protocolData/old/
+/src/main/resources/19/
+/src/main/resources/20/
+/src/main/resources/MdB-Stammdaten-data.zip
+/src/main/resources/MDB_STAMMDATEN.DTD
+/src/main/resources/MDB_STAMMDATEN.XML
+/src/main/resources/.DS_Store
