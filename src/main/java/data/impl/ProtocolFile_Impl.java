@@ -1,11 +1,13 @@
 package data.impl;
 import data.AgendaItem;
+import data.Member;
 import data.Protocol;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProtocolFile_Impl implements Protocol {
     String pDate;
@@ -16,7 +18,7 @@ public class ProtocolFile_Impl implements Protocol {
     ArrayList<AgendaItem> allAgendaItems = new ArrayList<>();
     ArrayList<String> leaders = new ArrayList<String>();
 
-    public ProtocolFile_Impl(Document doc) {
+    public ProtocolFile_Impl(Document doc, HashMap<String, Member> allMembers) {
         Element root = doc.getDocumentElement();
         Element elKopfData = (Element) root.getElementsByTagName("vorspann").item(0).getChildNodes().item(1);
         this.pDate = setDate(root.getAttribute("sitzung-datum"));
@@ -24,7 +26,7 @@ public class ProtocolFile_Impl implements Protocol {
         this.sessionID = setSessionID(Integer.parseInt(root.getAttribute("sitzung-nr")));
         this.title = setTitle(elKopfData.getElementsByTagName("sitzungstitel").item(0).getTextContent());
         this.startPageNr = setStartPageNr(Integer.parseInt(root.getAttribute("start-seitennr")));
-        this.allAgendaItems = setAgendaItem(doc);
+        this.allAgendaItems = setAgendaItem(doc, allMembers);
         this.leaders = setLeaders(doc);
     }
 
@@ -51,19 +53,17 @@ public class ProtocolFile_Impl implements Protocol {
      * Diese Funktion initialisiert die Tagesordnungspunkte eines Plenarprotokolls und fügt diese einer Arrayliste hinzu.
      * @param doc geparste xml Datei eines Plenarprotokolls.
      */
-    public ArrayList<AgendaItem> setAgendaItem(Document doc) {
+    public ArrayList<AgendaItem> setAgendaItem(Document doc, HashMap<String, Member> allMembers) {
         ArrayList<AgendaItem> allAgendaItems = new ArrayList<>();
         NodeList tagesordnungspunkt = doc.getElementsByTagName("tagesordnungspunkt");
         for (int temp = 0; temp < tagesordnungspunkt.getLength(); temp++) {
-            AgendaItem tpunkt = new AgendaItemFile_Impl();
             Node nNode = tagesordnungspunkt.item(temp);
             if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                 Element eElement = (Element) nNode;
                 String nummer = eElement.getAttribute("top-id");
-                tpunkt.setAgendaItemID(nummer);
-                tpunkt.setAllSpeeches(nNode, this);
+                AgendaItem tpunkt = new AgendaItemFile_Impl(nummer, nNode, this, allMembers);
+                allAgendaItems.add(tpunkt);
             }
-            allAgendaItems.add(tpunkt);
         }
         return allAgendaItems;
     }

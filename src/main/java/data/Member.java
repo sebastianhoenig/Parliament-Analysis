@@ -2,6 +2,8 @@ package data;
 
 
 import org.w3c.dom.Node;
+
+import java.util.ArrayList;
 import java.util.Date;
 //TODO: Add Javadoc
 public interface Member {
@@ -58,4 +60,8 @@ public interface Member {
     public String[] getMetaData();
 
     public String getFullInfoForTesting();
+
+    public void addSpeech(String speechID);
+
+    public ArrayList<String> getallSpeeches();
 }

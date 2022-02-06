@@ -1,26 +1,45 @@
 package data.impl;
 
 import data.*;
-import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SpeechFile_Impl implements Speech {
     String speechID;
-    String text = "";
+    String text;
     ArrayList<Comment> allComments = new ArrayList<>();
     String speakerID;
-    private Protocol protocol = null;
-    private AgendaItem agendaItem = null;
+    Protocol protocol;
+    AgendaItem agendaItem;
 
-    public void initialize(Node kNode, Protocol protocol, AgendaItem agendaItem){
-        setProtocol(protocol);
-        setAgendaItem(agendaItem);
 
+    public SpeechFile_Impl(String speechID, Node kNode, Protocol protocol, AgendaItem agendaItem,
+                           String speakerID, HashMap<String, Member> allMembers) {
+        this.protocol = setProtocol(protocol);
+        this.agendaItem = setAgendaItem(agendaItem);
+        this.speechID = setSpeechID(speechID);
+        this.speakerID = setSpeakerID(speakerID);
+        this.text = setText(kNode, protocol, agendaItem);
+        this.allComments = setAllComments(kNode, protocol, agendaItem);
+        updateMemberWithSpeech(speakerID, allMembers, speechID);
+    }
+
+    String setText(Node kNode, Protocol protocol, AgendaItem agendaItem) {
+        String text = "";
+        NodeList children = kNode.getChildNodes();
+        for (int i = 2; i < children.getLength(); i++) {
+            Node child = children.item(i);
+            text += child.getTextContent();
+        }
+        return text;
+    }
+
+    ArrayList<Comment> setAllComments(Node kNode, Protocol protocol, AgendaItem agendaItem) {
+        ArrayList<Comment> allComments = new ArrayList<>();
         NodeList kommentarNodes = kNode.getChildNodes();
-        ArrayList<String> textArrayList = new ArrayList<String>();
         for(int i = 0; i < kommentarNodes.getLength(); i++){
             Node kommentarNode = kommentarNodes.item(i);
             if(kommentarNode.getNodeName().equals("kommentar")) {
@@ -28,36 +47,23 @@ public class SpeechFile_Impl implements Speech {
                 Comment comment = new CommentFile_Impl();
                 comment.setText(commentText.substring(1, commentText.length()-1));
                 comment.setCommentID(this.speechID + "-" + comment.hashCode());
-                this.allComments.add(comment);
-            } else if(kommentarNode.getNodeName().equals("p")){
-                Element p = (Element) kommentarNodes.item(i);
-                if(p.getAttribute("klasse").equals("J")||p.getAttribute("klasse").equals("J_1")||p.getAttribute("klasse").equals("O")){
-                    textArrayList.add(kommentarNode.getTextContent());
-                }
+                allComments.add(comment);
             }
         }
-        NodeList children = kNode.getChildNodes();
-        for (int i = 2; i < children.getLength(); i++) {
-            Node child = children.item(i);
-            this.text += child.getTextContent();
-        }
-
-//        System.out.println("REDE ID: "+speechID);
-//        System.out.println("REDENTEXT: "+text);
+        return allComments;
     }
 
 
-    public void setSpeechID(String speechID){
-        this.speechID = speechID;
+    public String setSpeechID(String speechID){
+        return speechID;
     }
 
     public String getSpeechID(){
         return this.speechID;
     }
 
-    public void setSpeakerID(String speakerID){
-//        System.out.println("SPEAKER ID: "+speakerID);
-        this.speakerID = speakerID;
+    public String setSpeakerID(String speakerID){
+        return speakerID;
     }
 
     /**
@@ -81,8 +87,8 @@ public class SpeechFile_Impl implements Speech {
     }
 
 
-    public void setProtocol(Protocol protocol) {
-        this.protocol = protocol;
+    public Protocol setProtocol(Protocol protocol) {
+        return protocol;
     }
 
 
@@ -90,8 +96,13 @@ public class SpeechFile_Impl implements Speech {
         return this.agendaItem;
     }
 
+    public AgendaItem setAgendaItem(AgendaItem agendaItem) {
+        return agendaItem;
+    }
 
-    public void setAgendaItem(AgendaItem agendaItem) {
-        this.agendaItem = agendaItem;
+    public void updateMemberWithSpeech(String speakerID, HashMap<String, Member> allMembers, String speechID) {
+        if (allMembers.get(speakerID) != null) {
+            allMembers.get(speakerID).addSpeech(speechID);
+        }
     }
 }

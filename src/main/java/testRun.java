@@ -13,15 +13,18 @@ import org.w3c.dom.NodeList;
 import DownloadData.Parse;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class testRun {
     public static void main(String[] args) throws InterruptedException {
         Parse.pars();
-//        String dir = "src/main/resources/MdB-Stammdaten-data.zip";
-//        String target = "src/main/resources";
-//        String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
-//        DownloadZip.download(source, dir);
-//        UnzipFile.unzip(dir, target);
+        HashMap<String, Member> hashedMembers = new HashMap<>();
+        //TODO: Auslagern in eigene Methode
+        String dir = "src/main/resources/MdB-Stammdaten-data.zip";
+        String target = "src/main/resources";
+        String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
+        DownloadZip.download(source, dir);
+        UnzipFile.unzip(dir, target);
         Document doc = XMLFileReader.getMetadataXml();
         ArrayList<Member> allMembers = new ArrayList<>();
         assert doc != null;
@@ -36,6 +39,7 @@ public class testRun {
             }
         }
 
+        int counterS = 0;
         ProgressBar progressBar = new ProgressBar("Einlesen der Member Files: ", counter);
         for (int i = 0; i < MdbList.getLength(); i++) {
             Node Mdb = MdbList.item(i);
@@ -45,9 +49,14 @@ public class testRun {
                 allMembers.add(m);
 //                System.out.println(m.getFullInfoForTesting());
                 progressBar.step();
+                counterS ++;
+                hashedMembers.put(m.getId(), m);
+            }
+            if (counterS == 50) {
+                break;
             }
         }
-        InitializeProtocols initialize = new InitializeProtocols();
+        InitializeProtocols initialize = new InitializeProtocols(hashedMembers);
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
         //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
         handler.uploadAll(initialize.getAllProtocols(), allMembers);

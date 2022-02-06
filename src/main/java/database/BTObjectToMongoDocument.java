@@ -60,6 +60,7 @@ public class BTObjectToMongoDocument {
         memberDoc.append("occupation", member.getOccupation());
         memberDoc.append("picture", member.getMetaData()[0]);
         memberDoc.append("pictureMetadata", member.getMetaData()[1]);
+        memberDoc.append("allSpeeches", member.getallSpeeches());
 
         return memberDoc;
     }

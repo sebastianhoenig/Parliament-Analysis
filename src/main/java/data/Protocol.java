@@ -4,6 +4,8 @@ import org.w3c.dom.Document;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 //TODO: Add Javadoc
 public interface Protocol {
     int setStartPageNr(Integer startPageNr);
@@ -11,7 +13,7 @@ public interface Protocol {
 
     String setDate(String pDate);
     String getDate();
-    ArrayList<AgendaItem> setAgendaItem(Document doc);
+    ArrayList<AgendaItem> setAgendaItem(Document doc, HashMap<String, Member> allMembers);
     ArrayList<AgendaItem> getAllAgendaItems();
     int setSessionID(Integer sessionID);
     Integer getSessionID();
