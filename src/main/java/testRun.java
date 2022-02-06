@@ -39,7 +39,7 @@ public class testRun {
                 counter ++;
                 hashedMembers.put(m.getId(), m);
             }
-            if (counter == 2) {
+            if (counter == 50) {
                 break;
             }
         }

@@ -25,7 +25,7 @@ public class MemberFile_Impl implements Member {
     String maritalStatus;
     String religion;
     String occupation;
-    ArrayList<String> allSpeeches;
+    ArrayList<String> allSpeeches = new ArrayList<String>();
 
 
     public MemberFile_Impl(Node Mdb) {
