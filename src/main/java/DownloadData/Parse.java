@@ -1,13 +1,11 @@
 package DownloadData;
 
-import DownloadData.DownloadXml;
 import org.jsoup.Jsoup;
-
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import java.io.*;
+import java.io.IOException;
 
 public class Parse {
 

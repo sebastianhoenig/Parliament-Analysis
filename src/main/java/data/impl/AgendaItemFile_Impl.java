@@ -1,6 +1,9 @@
 package data.impl;
 
-import data.*;
+import data.AgendaItem;
+import data.Member;
+import data.Protocol;
+import data.Speech;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;

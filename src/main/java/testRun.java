@@ -1,4 +1,5 @@
 import DownloadData.DownloadZip;
+import DownloadData.Parse;
 import DownloadData.UnzipFile;
 import data.Member;
 import data.helper.InitializeProtocols;
@@ -10,7 +11,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import DownloadData.Parse;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +39,6 @@ public class testRun {
             }
         }
 
-        int counterS = 0;
         ProgressBar progressBar = new ProgressBar("Einlesen der Member Files: ", counter);
         for (int i = 0; i < MdbList.getLength(); i++) {
             Node Mdb = MdbList.item(i);
@@ -47,15 +46,12 @@ public class testRun {
                 Thread.sleep(500);
                 MemberFile_Impl m = new MemberFile_Impl(Mdb);
                 allMembers.add(m);
-//                System.out.println(m.getFullInfoForTesting());
                 progressBar.step();
-                counterS ++;
                 hashedMembers.put(m.getId(), m);
             }
-            if (counterS == 50) {
-                break;
-            }
         }
+        progressBar.close();
+
         InitializeProtocols initialize = new InitializeProtocols(hashedMembers);
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
         //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP

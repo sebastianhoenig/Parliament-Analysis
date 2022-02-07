@@ -1,9 +1,11 @@
 package data.helper;
+
 import data.Member;
 import data.Protocol;
 import data.impl.ProtocolFile_Impl;
 import me.tongfei.progressbar.ProgressBar;
 import org.w3c.dom.Document;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

@@ -1,5 +1,9 @@
 package data.helper;
 
+import me.tongfei.progressbar.ProgressBar;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -8,11 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarStyle;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 public class XMLFileReader {
 
