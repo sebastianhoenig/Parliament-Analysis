@@ -45,9 +45,6 @@ public class XMLFileReader {
             pb2.setExtraMessage("Reading...");
             if (file.isFile() && file.getName().endsWith(".xml")) {
                 pb2.step();
-                if (file.getName().startsWith("2")) {
-                    break;
-                }
                 //System.out.println("File: " + file.getName());
                 try{allXmlArrayList.add(ProcessFile(file));}
                 catch (NullPointerException e){e.printStackTrace();
