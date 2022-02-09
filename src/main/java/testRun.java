@@ -18,8 +18,7 @@ import java.util.HashMap;
 
 public class testRun {
     public static void main(String[] args) throws InterruptedException {
-        ApiConnection.runApi();
-        /*Parse.pars();
+        Parse.pars();
         HashMap<String, Member> hashedMembers = new HashMap<>();
         //TODO: Auslagern in eigene Methode
         String dir = "src/main/resources/MdB-Stammdaten-data.zip";
@@ -60,7 +59,7 @@ public class testRun {
         }
         InitializeProtocols initialize = new InitializeProtocols(hashedMembers);
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
-        handler.uploadAll(initialize.getAllProtocols(), allMembers);*/
+        handler.uploadAll(initialize.getAllProtocols(), allMembers);
     }
 
     private static boolean checkCorrect(Node Mdb) {

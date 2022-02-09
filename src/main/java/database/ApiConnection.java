@@ -14,7 +14,7 @@ import static spark.Spark.*;
 
 public class ApiConnection {
 
-    public static void runApi() {
+    public static void main (String[] args) {
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
 
         get("/speeches/:id", (request, response) -> {
@@ -60,11 +60,6 @@ public class ApiConnection {
             }
             JSONObject json = new JSONObject(partyMembers);
             return json.toJSONString();
-        });
-
-
-        get("/api/test", (request, response) -> {
-            return "Hallo Welt !";
         });
 
         get("/api/close", (request, response) -> {
