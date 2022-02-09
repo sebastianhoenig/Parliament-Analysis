@@ -4,6 +4,7 @@ import data.Member;
 import data.helper.InitializeProtocols;
 import data.helper.XMLFileReader;
 import data.impl.MemberFile_Impl;
+import database.ApiConnection;
 import database.MongoDBConnectionHandler;
 import me.tongfei.progressbar.ProgressBar;
 import org.w3c.dom.Document;
@@ -17,7 +18,8 @@ import java.util.HashMap;
 
 public class testRun {
     public static void main(String[] args) throws InterruptedException {
-        Parse.pars();
+        ApiConnection.runApi();
+        /*Parse.pars();
         HashMap<String, Member> hashedMembers = new HashMap<>();
         //TODO: Auslagern in eigene Methode
         String dir = "src/main/resources/MdB-Stammdaten-data.zip";
@@ -58,8 +60,7 @@ public class testRun {
         }
         InitializeProtocols initialize = new InitializeProtocols(hashedMembers);
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
-        //TODO: GET PATHS CORRECTLY FOR SAVING DATA IN PROJECT RATHER THAN ON LOCAL LAPTOP
-        handler.uploadAll(initialize.getAllProtocols(), allMembers);
+        handler.uploadAll(initialize.getAllProtocols(), allMembers);*/
     }
 
     private static boolean checkCorrect(Node Mdb) {
