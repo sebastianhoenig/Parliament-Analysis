@@ -149,6 +149,7 @@ public class MongoDBConnectionHandler {
     public void uploadAll(ArrayList<Protocol> protocolList, ArrayList<Member> memberList) {
         BTObjectToMongoDocument.createDCCMap();
         BTObjectToMongoDocument.createPOSMap();
+        initializeStatus();
 
         int speechCounter = 0;
         int CommentCounter = 0;
@@ -195,6 +196,29 @@ public class MongoDBConnectionHandler {
             }
         }
         commentP.close();
+    }
+
+    public void initializeStatus() {
+        Document statusSpeech = getDBDocument("speech", "status");
+        statusSpeech.put("protocolNumber", 0);
+        statusSpeech.put("speech", "");
+        statusSpeech.put("countSpeech", 0);
+        statusSpeech.put("error", new ArrayList<String>());
+
+        Document statusComment = getDBDocument("comment", "status");
+        statusComment.put("protocolNumber", 0);
+        statusComment.put("comment", "");
+        statusComment.put("countComment", 0);
+        statusComment.put("error", new ArrayList<String>());
+
+        try {
+            this.getCollection("status").updateOne(new Document().append("_id", "speech"),
+                    new Document().append("$set", statusSpeech));
+            this.getCollection("status").updateOne(new Document().append("_id", "comment"),
+                    new Document().append("$set", statusComment));
+        } catch (Exception e) {
+            System.out.println("Status couldn't be updated");
+        }
     }
 
     public void updateStatus(Protocol protocol, Speech speech) {
@@ -255,6 +279,16 @@ public class MongoDBConnectionHandler {
             this.getCollection("speeches").insertOne(speechDoc);
         } catch (Exception e) {
             System.out.println("Objekt Speech (" + speech.getSpeechID() + ") can not be uploaded");
+            Document statusSpeech = getDBDocument("speech", "status");
+            ArrayList<String> errorList = (ArrayList<String>) statusSpeech.get("error");
+            errorList.add(speech.getSpeechID());
+            statusSpeech.put("error", errorList);
+            try {
+                this.getCollection("status").updateOne(new Document().append("_id", "speech"),
+                        new Document().append("$set", statusSpeech));
+            } catch (Exception ex) {
+                System.out.println("Status couldn't be updated");
+            }
         }
     }
 
@@ -270,6 +304,16 @@ public class MongoDBConnectionHandler {
             this.getCollection("comments").insertOne(commentDoc);
         } catch (Exception e) {
             System.out.println("Objekt Comment (" + comment.getCommentID() + ") can not be uploaded");
+            Document statusComment = getDBDocument("comment", "status");
+            ArrayList<String> errorList = (ArrayList<String>) statusComment.get("error");
+            errorList.add(comment.getCommentID());
+            statusComment.put("error", errorList);
+            try {
+                this.getCollection("status").updateOne(new Document().append("_id", "comment"),
+                        new Document().append("$set", statusComment));
+            } catch (Exception ex) {
+                System.out.println("Status couldn't be updated");
+            }
         }
     }
 
