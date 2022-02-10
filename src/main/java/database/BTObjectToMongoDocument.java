@@ -113,7 +113,7 @@ public class BTObjectToMongoDocument {
 
         // Todo: update some Attributes
         Document protocolDoc = new Document();
-        protocolDoc.append("date", speech.getProtocol().getDate()); //Todo: convert to realy Date ?
+        protocolDoc.append("date", speech.getProtocol().getDate());
         protocolDoc.append("electionPeriod", speech.getProtocol().getElectionPeriod());
         protocolDoc.append("sessionID", speech.getProtocol().getSessionID());
         protocolDoc.append("title", speech.getProtocol().getTitle()); //Todo: update
@@ -123,7 +123,7 @@ public class BTObjectToMongoDocument {
 
         speechDoc.append("agendaItem", speech.getAgendaItem().getAgendaItemID());
 
-        // @Todo: NLP
+
         // NLP größten teils aus der Musterlösung aus Aufgabe 2.
         JCas jCas = nlp.analyse(speech.getText());
 
@@ -186,11 +186,13 @@ public class BTObjectToMongoDocument {
             posList.add(posMap.get(posC));
         }
 
+        Document topicDoc = new Document();
         List<Document> topicList = new ArrayList<>(0);
         for (CategoryCoveredTagged category : JCasUtil.select(jCas, CategoryCoveredTagged.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
             String num = category.getValue().replace("__label_ddc__", "");
-            Document topicDoc = new Document().append(dcc.get(num), category.getScore());
-            topicList.add(topicDoc);
+            if (category.getScore() >= 0.01){
+                topicDoc.append(dcc.get(num), category.getScore());
+            }
         }
 
         speechDoc.append("sentences", sentencesList);
@@ -202,7 +204,7 @@ public class BTObjectToMongoDocument {
         speechDoc.append("persons", personsList);
         speechDoc.append("locations", locationsList);
         speechDoc.append("organisations", organisationsList);
-        speechDoc.append("category", topicList);
+        speechDoc.append("category", topicDoc);
 
         String xml = nlp.getXml(jCas);
         if (xml.getBytes().length <= (16000000 - speechDoc.size())){
@@ -282,11 +284,13 @@ public class BTObjectToMongoDocument {
             posList.add(posMap.get(posC));
         }
 
+        Document topicDoc = new Document();
         List<Document> topicList = new ArrayList<>(0);
         for (CategoryCoveredTagged category : JCasUtil.select(jCas, CategoryCoveredTagged.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
             String num = category.getValue().replace("__label_ddc__", "");
-            Document topicDoc = new Document().append(dcc.get(num), category.getScore());
-            topicList.add(topicDoc);
+            if (category.getScore() >= 0.01){
+                topicDoc.append(dcc.get(num), category.getScore());
+            }
         }
 
         commentDoc.append("sentences", sentencesList);
@@ -298,7 +302,7 @@ public class BTObjectToMongoDocument {
         commentDoc.append("persons", personsList);
         commentDoc.append("locations", locationsList);
         commentDoc.append("organisations", organisationsList);
-        commentDoc.append("category", topicList);
+        commentDoc.append("category", topicDoc);
 
         String xml = nlp.getXml(jCas);
         if (xml.getBytes().length <= (16000000 - commentDoc.size())){

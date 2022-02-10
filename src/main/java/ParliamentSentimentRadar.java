@@ -21,6 +21,7 @@ public class ParliamentSentimentRadar{
         Download();
 
         InitializeProtocols initialize = new InitializeProtocols(50, 59);
+
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
         handler.uploadAll(initialize.getAllProtocols(), initialize.allMembers);
     }
