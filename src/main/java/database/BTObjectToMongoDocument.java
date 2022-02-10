@@ -152,12 +152,6 @@ public class BTObjectToMongoDocument {
             }
         }
 
-        List<String> tokenList = new ArrayList<>(0);
-        for (Token token : JCasUtil.select(jCas, Token.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-            tokenList.add(token.getCoveredText());
-        }
-
-
         List<String> sentencesList = new ArrayList<>(0);
         for (Sentence sentence : JCasUtil.select(jCas, Sentence.class).stream().collect(Collectors.toList())) {
             sentencesList.add(sentence.getCoveredText());
@@ -174,21 +168,18 @@ public class BTObjectToMongoDocument {
         }
         sentiment /= sentimentList.size();
 
-//        List<String> lemmaList = new ArrayList<>(0);
-//        for (Lemma lemma : JCasUtil.select(jCas, Lemma.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-//            System.out.println(lemma);
-//            lemmaList.add(lemma.getCoveredText());
-//        }
-
         List<String> posList = new ArrayList<>(0);
-        for (POS pos : JCasUtil.select(jCas, POS.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-            String posC = pos.getPosValue();
+        List<String> lemmaList = new ArrayList<>(0);
+        List<String> tokenList = new ArrayList<>(0);
+        for (Token token : JCasUtil.select(jCas, Token.class).stream().collect(Collectors.toList())) {
+            tokenList.add(token.getCoveredText());
+            lemmaList.add(token.getLemmaValue());
+            String posC = token.getPosValue();
             posList.add(posMap.get(posC));
         }
 
         Document topicDoc = new Document();
-        List<Document> topicList = new ArrayList<>(0);
-        for (CategoryCoveredTagged category : JCasUtil.select(jCas, CategoryCoveredTagged.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
+        for (CategoryCoveredTagged category : JCasUtil.select(jCas, CategoryCoveredTagged.class).stream().collect(Collectors.toList())) {
             String num = category.getValue().replace("__label_ddc__", "");
             if (category.getScore() >= 0.01){
                 topicDoc.append(dcc.get(num), category.getScore());
@@ -196,10 +187,10 @@ public class BTObjectToMongoDocument {
         }
 
         speechDoc.append("sentences", sentencesList);
-        speechDoc.append("token", tokenList);
         speechDoc.append("sentiment", sentiment);
         speechDoc.append("sentimentList", sentimentList);
-        //speechDoc.append("lemma", lemmaList);
+        speechDoc.append("token", tokenList);
+        speechDoc.append("lemma", lemmaList);
         speechDoc.append("pos", posList);
         speechDoc.append("persons", personsList);
         speechDoc.append("locations", locationsList);
@@ -250,11 +241,6 @@ public class BTObjectToMongoDocument {
             }
         }
 
-        List<String> tokenList = new ArrayList<>(0);
-        for (Token token : JCasUtil.select(jCas, Token.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-            tokenList.add(token.getCoveredText());
-        }
-
 
         List<String> sentencesList = new ArrayList<>(0);
         for (Sentence sentence : JCasUtil.select(jCas, Sentence.class).stream().collect(Collectors.toList())) {
@@ -272,15 +258,13 @@ public class BTObjectToMongoDocument {
         }
         sentiment /= sentimentList.size();
 
-        //List<String> lemmaList = new ArrayList<>(0);
-        //for (Lemma lemma : JCasUtil.select(jCas, Lemma.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-        //    lemmaList.add(lemma.getCoveredText());
-        //}
-
-
         List<String> posList = new ArrayList<>(0);
-        for (POS pos : JCasUtil.select(jCas, POS.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-            String posC = pos.getPosValue();
+        List<String> lemmaList = new ArrayList<>(0);
+        List<String> tokenList = new ArrayList<>(0);
+        for (Token token : JCasUtil.select(jCas, Token.class).stream().collect(Collectors.toList())) {
+            tokenList.add(token.getCoveredText());
+            lemmaList.add(token.getLemmaValue());
+            String posC = token.getPosValue();
             posList.add(posMap.get(posC));
         }
 
@@ -294,10 +278,10 @@ public class BTObjectToMongoDocument {
         }
 
         commentDoc.append("sentences", sentencesList);
-        commentDoc.append("token", tokenList);
         commentDoc.append("sentiment", sentiment);
         commentDoc.append("sentimentList", sentimentList);
-        //commentDoc.append("lemma", lemmaList);
+        commentDoc.append("token", tokenList);
+        commentDoc.append("lemma", lemmaList);
         commentDoc.append("pos", posList);
         commentDoc.append("persons", personsList);
         commentDoc.append("locations", locationsList);

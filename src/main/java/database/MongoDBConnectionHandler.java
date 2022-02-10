@@ -175,6 +175,7 @@ public class MongoDBConnectionHandler {
             for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
                 for (Speech speech : agendaItem.getSpeeches()) {
                     this.insertSpeech(speech);
+                    updateStatus(protocol, speech);
                     speechP.step();
                 }
             }
@@ -187,6 +188,7 @@ public class MongoDBConnectionHandler {
                 for (Speech speech : agendaItem.getSpeeches()) {
                     for (Comment comment : speech.getAllComments()) {
                         this.insertComment(comment);
+                        updateStatus(protocol, comment);
                         commentP.step();
                     }
                 }
@@ -194,6 +196,36 @@ public class MongoDBConnectionHandler {
         }
         commentP.close();
     }
+
+    public void updateStatus(Protocol protocol, Speech speech) {
+        Document statusSpeech = getDBDocument("speech", "status");
+        statusSpeech.put("protocolNumber", protocol.getSessionID());
+        statusSpeech.put("speech", speech.getSpeechID());
+        statusSpeech.put("countSpeech", (int) statusSpeech.get("countSpeech") + 1);
+
+        try {
+            this.getCollection("status").updateOne(new Document().append("_id", "speech"),
+                    new Document().append("$set", statusSpeech));
+        } catch (Exception e) {
+            System.out.println("Status couldn't be updated");
+        }
+    }
+
+    public void updateStatus(Protocol protocol, Comment comment) {
+        Document statusComment = getDBDocument("comment", "status");
+        statusComment.put("protocolNumber", protocol.getSessionID());
+        statusComment.put("comment", comment.getCommentID());
+        statusComment.put("countComment", (int) statusComment.get("countComment") + 1);
+
+        try {
+            this.getCollection("status").updateOne(new Document().append("_id", "comment"),
+                    new Document().append("$set", statusComment));
+        } catch (Exception e) {
+            System.out.println("Status couldn't be updated");
+        }
+    }
+
+
 
     public void insertMember(Member member) {
 

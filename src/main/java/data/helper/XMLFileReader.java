@@ -19,7 +19,7 @@ public class XMLFileReader {
      * Die Funktion getAllFiles() benötigt den genauen Adresspfad des Ordners, in welchem die xml-Dateien liegen.
      * @return Arrayliste mit den geparsten xml Dateien
      */
-    public static ArrayList<Document> getAllFiles(String link, int xmlStart, int xmlEnd) {
+    public static ArrayList<Document> getAllFiles(String link) {
         ArrayList<Document> allXmlArrayList = new ArrayList<Document>();
         File folder = new File(link);
         File[] files = folder.listFiles();
@@ -40,18 +40,19 @@ public class XMLFileReader {
             }
         });
 
-        ProgressBar pb2 = new ProgressBar("Einlesen der .xml Files", files.length - 1);
+        ProgressBar pb2 = new ProgressBar("Reading XML-Files: ", files.length - 1);
         for(File file : files) {
-            pb2.setExtraMessage("Reading...");
             if (file.isFile() && file.getName().endsWith(".xml")) {
-                int num = Integer.parseInt(file.getName().replace(".xml", ""));
 
-                if ( xmlStart > num || num > xmlEnd ) {
-                    continue;
-                }
-                //System.out.println("File: " + file.getName());
-                try{allXmlArrayList.add(ProcessFile(file));}
-                catch (NullPointerException e){e.printStackTrace();
+//                int num = Integer.parseInt(file.getName().replace(".xml", ""));
+//                if ( xmlStart > num || num > xmlEnd ) {
+//                    continue;
+//                }
+
+                try {
+                    allXmlArrayList.add(ProcessFile(file));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
                 }
                 pb2.step();
             }}
@@ -86,11 +87,11 @@ public class XMLFileReader {
         Document doc = null;
         try {
             assert dBuilder != null;
-            doc = dBuilder.parse(new File(String.valueOf(file)));
+            doc = dBuilder.parse(file);
         } catch (SAXException | IOException | OutOfMemoryError e) {
+            System.out.println(file.getName());
             e.printStackTrace();
         }
-
         try{
             assert doc != null;
             doc.getDocumentElement().normalize();}

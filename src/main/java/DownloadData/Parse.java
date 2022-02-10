@@ -1,5 +1,6 @@
 package DownloadData;
 
+import me.tongfei.progressbar.ProgressBar;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -21,6 +22,7 @@ public class Parse {
             }
             int totalProtocols = Integer.parseInt(xml.selectXpath("/html/body/div[1]").first().attr("data-hits"));
             int xmlName = totalProtocols;
+            ProgressBar progressBar = new ProgressBar("Downloading XML-Files :", totalProtocols);
             for (int selectedPage = 0; selectedPage <= totalProtocols; selectedPage += 10) {
                 try {
                     xml = Jsoup.connect("https://www.bundestag.de/ajax/filterlist/de/services/opendata/" + period +"?offset=" + selectedPage).get();
@@ -37,8 +39,10 @@ public class Parse {
                         DownloadXml.load(xmlName, 20, url);
                     }
                     xmlName--;
+                    progressBar.step();
                 }
             }
+            progressBar.close();
         }
         DownloadXml.loadDTD();
     }

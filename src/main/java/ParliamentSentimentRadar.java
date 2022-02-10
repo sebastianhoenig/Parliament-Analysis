@@ -18,9 +18,9 @@ import java.util.HashMap;
 public class ParliamentSentimentRadar{
 
     public static void main(String[] args) {
-        Download();
+//        Download();
 
-        InitializeProtocols initialize = new InitializeProtocols(50, 59);
+        InitializeProtocols initialize = new InitializeProtocols();
 
         MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
         handler.uploadAll(initialize.getAllProtocols(), initialize.allMembers);
@@ -30,7 +30,7 @@ public class ParliamentSentimentRadar{
         Parse.pars();
         String dir = "src/main/resources/MdB-Stammdaten-data.zip";
         String target = "src/main/resources";
-        String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip"; //TODO: Parse Link (Sebastian)
+        String source = "https://www.bundestag.de/resource/blob/472878/d5743e6ffabe14af60d0c9ddd9a3a516/MdB-Stammdaten-data.zip";
         DownloadZip.download(source, dir);
         UnzipFile.unzip(dir, target);
     }

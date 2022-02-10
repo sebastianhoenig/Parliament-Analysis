@@ -17,28 +17,25 @@ public class InitializeProtocols {
     ArrayList<Protocol> allProtocols = new ArrayList<>();
     HashMap<String, Member> hashedMembers = new HashMap<>();
     public ArrayList<Member> allMembers = new ArrayList<>();
-    int xmlStart;
-    int xmlEnd;
+//    int xmlStart;
+//    int xmlEnd;
 
-    public InitializeProtocols(int xmlStart, int xmlEnd){
-        this.xmlStart = xmlStart;
-        this.xmlEnd = xmlEnd;
+    public InitializeProtocols(){
         setMembers();
         this.allProtocols = setProtocols();
     }
 
     private ArrayList<Protocol> setProtocols() {
         ArrayList<Protocol> myProtocols = new ArrayList<>();
-        ArrayList<Document> allXmlArrayList = XMLFileReader.getAllFiles("src/main/resources/19", xmlStart, xmlEnd);
-//        ArrayList<Document> all20XmlArrayList = XMLFileReader.getAllFiles("src/main/resources/20", xmlStart, xmlEnd);
-//        allXmlArrayList.addAll(all20XmlArrayList);
+        ArrayList<Document> allXmlArrayList = XMLFileReader.getAllFiles("src/main/resources/19");
+        ArrayList<Document> all20XmlArrayList = XMLFileReader.getAllFiles("src/main/resources/20");
+        allXmlArrayList.addAll(all20XmlArrayList);
 
-        ProgressBar pb1 = new ProgressBar("Einlesen der Daten aus den Files", allXmlArrayList.size());
+        ProgressBar pb1 = new ProgressBar("Creating data structure: ", allXmlArrayList.size());
         for (Document document : allXmlArrayList) {
             Protocol protocol = new ProtocolFile_Impl(document, hashedMembers);
             myProtocols.add(protocol);
             pb1.step();
-            pb1.setExtraMessage("Reading...");
         }
         pb1.close();
         return myProtocols;
@@ -57,15 +54,15 @@ public class InitializeProtocols {
                 counter++;
             }
         }
-        ProgressBar progressBar = new ProgressBar("Einlesen der Member Files: ", counter);
+        ProgressBar progressBar = new ProgressBar("Reading Member-Files: ", counter);
         for (int i = 0; i < MdbList.getLength(); i++) {
             Node Mdb = MdbList.item(i);
             if (checkCorrect(Mdb)) {
 //                Thread.sleep(500);
                 MemberFile_Impl m = new MemberFile_Impl(Mdb);
                 allMembers.add(m);
-                progressBar.step();
                 hashedMembers.put(m.getId(), m);
+                progressBar.step();
             }
         }
         progressBar.close();
