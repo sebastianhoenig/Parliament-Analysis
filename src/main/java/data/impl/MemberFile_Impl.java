@@ -343,8 +343,9 @@ public class MemberFile_Impl implements Member {
     }
 
     public String[] setMetaData(String name, String surname) {
-        ScrapePictures scraper = new ScrapePictures(name, surname);
-        return scraper.getMetaData();
+//        ScrapePictures scraper = new ScrapePictures(name, surname);
+//        return scraper.getMetaData();
+        return new String[]{name, surname};
     }
 
     public String getName() {

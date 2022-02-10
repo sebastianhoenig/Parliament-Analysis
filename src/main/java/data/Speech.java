@@ -10,6 +10,7 @@ public interface Speech {
     String getSpeakerID();
     String setSpeakerID(String speakerID);
     String getText();
+    String getPlainText();
     ArrayList<Comment> getAllComments();
 
     Protocol getProtocol();

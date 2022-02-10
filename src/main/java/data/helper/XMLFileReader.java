@@ -19,13 +19,13 @@ public class XMLFileReader {
      * Die Funktion getAllFiles() benötigt den genauen Adresspfad des Ordners, in welchem die xml-Dateien liegen.
      * @return Arrayliste mit den geparsten xml Dateien
      */
-    public static ArrayList<Document> getAllFiles(String link) {
+    public static ArrayList<Document> getAllFiles(String link, int xmlStart, int xmlEnd) {
         ArrayList<Document> allXmlArrayList = new ArrayList<Document>();
         File folder = new File(link);
         File[] files = folder.listFiles();
         assert files != null;
 
-        // sorting the Files //TODO: Warum machen wir das?
+        // sorting the Files
         Arrays.sort(files, new Comparator<File>() {
             public int compare(File f1, File f2) {
                 String nameF1 = f1.getName().substring(0, f1.getName().length() - 4);
@@ -44,11 +44,16 @@ public class XMLFileReader {
         for(File file : files) {
             pb2.setExtraMessage("Reading...");
             if (file.isFile() && file.getName().endsWith(".xml")) {
-                pb2.step();
+                int num = Integer.parseInt(file.getName().replace(".xml", ""));
+
+                if ( xmlStart > num || num > xmlEnd ) {
+                    continue;
+                }
                 //System.out.println("File: " + file.getName());
                 try{allXmlArrayList.add(ProcessFile(file));}
                 catch (NullPointerException e){e.printStackTrace();
                 }
+                pb2.step();
             }}
         pb2.close();
 

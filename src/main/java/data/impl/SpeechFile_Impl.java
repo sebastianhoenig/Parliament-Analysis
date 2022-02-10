@@ -14,6 +14,7 @@ public class SpeechFile_Impl implements Speech {
     String speakerID;
     Protocol protocol;
     AgendaItem agendaItem;
+    String plainText = "";
 
 
     public SpeechFile_Impl(String speechID, Node kNode, Protocol protocol, AgendaItem agendaItem,
@@ -22,17 +23,30 @@ public class SpeechFile_Impl implements Speech {
         this.agendaItem = setAgendaItem(agendaItem);
         this.speechID = setSpeechID(speechID);
         this.speakerID = setSpeakerID(speakerID);
-        this.text = setText(kNode, protocol, agendaItem);
+        this.text = setText(kNode);
         this.allComments = setAllComments(kNode, protocol, agendaItem);
         updateMemberWithSpeech(speakerID, allMembers, speechID);
     }
 
-    String setText(Node kNode, Protocol protocol, AgendaItem agendaItem) {
+    String setText(Node kNode) {
         String text = "";
         NodeList children = kNode.getChildNodes();
         for (int i = 2; i < children.getLength(); i++) {
             Node child = children.item(i);
-            text += child.getTextContent();
+            String t = child.getTextContent().trim();
+
+            if (child.getNodeName().equals("kommentar")){
+                text += " ";
+                plainText += " " + t + " ";
+                continue;
+            } else {
+                t = child.getTextContent().trim();
+                if (t.endsWith(".") || t.endsWith(":")){
+                    t += " ";
+                }
+            }
+            text += t;
+            plainText += t;
         }
         return text;
     }
@@ -75,6 +89,10 @@ public class SpeechFile_Impl implements Speech {
 
     public String getText(){
         return this.text;
+    }
+
+    public String getPlainText(){
+        return this.plainText;
     }
 
     public ArrayList<Comment> getAllComments(){

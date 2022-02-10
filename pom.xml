@@ -177,7 +177,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>libs/</classpathPrefix>
-                            <mainClass>testRun</mainClass>
+                            <mainClass>ParliamentSentimentRadar</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

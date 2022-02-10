@@ -10,10 +10,9 @@ import data.*;
 import me.tongfei.progressbar.ProgressBar;
 import org.bson.Document;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Properties;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static com.mongodb.client.model.Aggregates.*;
 
@@ -148,41 +147,52 @@ public class MongoDBConnectionHandler {
     }
 
     public void uploadAll(ArrayList<Protocol> protocolList, ArrayList<Member> memberList) {
+        BTObjectToMongoDocument.createDCCMap();
+        BTObjectToMongoDocument.createPOSMap();
 
-        int counter = 0;
+        int speechCounter = 0;
+        int CommentCounter = 0;
         for (Protocol protocol :  protocolList) {
             for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
                 for (Speech speech : agendaItem.getSpeeches()) {
-                    counter++;
+                    speechCounter++;
                     for (Comment comment : speech.getAllComments()) {
-                        counter++;
+                        CommentCounter++;
                     }
                 }
             }
         }
 
-        int counterM = memberList.size();
-        ProgressBar pb4 = new ProgressBar("upload Member", counterM);
-        for (Member member : memberList) {
-            insertMember(member);
-            pb4.step();
-        }
+//        int counterM = memberList.size();
+//        ProgressBar pb4 = new ProgressBar("upload Member", counterM);
+//        for (Member member : memberList) {
+//            insertMember(member);
+//            pb4.step();
+//        }
 
-
-        ProgressBar pb3 = new ProgressBar("upload Data", counter);
+        ProgressBar speechP = new ProgressBar("upload Speeches", speechCounter);
         for (Protocol protocol :  protocolList) {
             for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
                 for (Speech speech : agendaItem.getSpeeches()) {
                     this.insertSpeech(speech);
-                    pb3.step();
+                    speechP.step();
+                }
+            }
+        }
+        speechP.close();
+
+        ProgressBar commentP = new ProgressBar("upload Comments", CommentCounter);
+        for (Protocol protocol :  protocolList) {
+            for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
+                for (Speech speech : agendaItem.getSpeeches()) {
                     for (Comment comment : speech.getAllComments()) {
                         this.insertComment(comment);
-                        pb3.step();
+                        commentP.step();
                     }
                 }
             }
         }
-        pb3.close();
+        commentP.close();
     }
 
     public void insertMember(Member member) {
@@ -231,26 +241,27 @@ public class MongoDBConnectionHandler {
         }
     }
 
-//    public void updateSpeaker(Speaker speaker) {
-//        Document where = new Document().append("_id", speaker.getID());
-//
-//        try {
-//            this.getCollection("speaker").updateOne(where,
-//                    BTObjectToMongoDocument.createMongoDocument(speaker));
-//        } catch (Exception e) {
-//            System.out.println("Objekt Speaker (" + speaker.getID() + ") can not be updated");
-//        }
-//    }
+    public void updateSpeaker(Member member) {
+        Document where = new Document().append("_id", member.getId());
+
+        try {
+            this.getCollection("members").updateOne(where,
+                    BTObjectToMongoDocument.createMongoDocument(member));
+        } catch (Exception e) {
+            System.out.println("Objekt Speaker (" + member.getId() + ") can not be updated");
+        }
+    }
 
     public void updateSpeech(Speech speech) {
         Document where = new Document().append("_id", speech.getSpeechID());
 
         try {
             this.getCollection("speeches").updateOne(where,
-                    BTObjectToMongoDocument.createMongoDocument(speech));
+                    new Document().append("$set", BTObjectToMongoDocument.createMongoDocument(speech)));
         } catch (Exception e) {
             System.out.println("Objekt Speech (" + speech.getSpeechID() + ") can not be updated");
         }
+
     }
 
     public void updateComment(Comment comment) {

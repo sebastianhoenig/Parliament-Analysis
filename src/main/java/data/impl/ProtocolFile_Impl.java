@@ -8,11 +8,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class ProtocolFile_Impl implements Protocol {
-    String pDate;
+    Date pDate;
     Integer electionPeriod;
     Integer sessionID;
     String title;
@@ -40,14 +43,22 @@ public class ProtocolFile_Impl implements Protocol {
         return startPageNr;
     }
 
-    public String setDate(String pDate) {
-        return pDate;
+    public Date setDate(String pDate) {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+        try {
+            Date date = formatter.parse(pDate);
+            return date;
+        }
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
      * @return Datum des Protokolls
      */
-    public String getDate(){
+    public Date getDate(){
         return this.pDate;
     }
 
