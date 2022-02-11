@@ -79,8 +79,14 @@ public class ApiConnection {
 
             String speakerID = request.queryMap().get("speakerID").value();
             String party = request.queryMap().get("party").value();
+            String beginDate = request.queryMap().get("beginDate").value();
+            String endDate = request.queryMap().get("endDate").value();
+            if (beginDate == null || endDate == null) {
+                beginDate = "2017-10-26";
+                endDate = "2022-02-11";
+            }
 
-            ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response);
+            ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response, beginDate, endDate);
             if (resultList == null) {
                 return response;
             } else {
@@ -97,8 +103,14 @@ public class ApiConnection {
 
             String speakerID = request.queryMap().get("speakerID").value();
             String party = request.queryMap().get("party").value();
+            String beginDate = request.queryMap().get("beginDate").value();
+            String endDate = request.queryMap().get("endDate").value();
+            if (beginDate == null || endDate == null) {
+                beginDate = "2017-10-26";
+                endDate = "2022-02-11";
+            }
 
-            ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response);
+            ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response, beginDate, endDate);
             if (resultList == null) {
                 return response;
             } else {
@@ -115,8 +127,14 @@ public class ApiConnection {
 
             String speakerID = request.queryMap().get("speakerID").value();
             String party = request.queryMap().get("party").value();
+            String beginDate = request.queryMap().get("beginDate").value();
+            String endDate = request.queryMap().get("endDate").value();
+            if (beginDate == null || endDate == null) {
+                beginDate = "2017-10-26";
+                endDate = "2022-02-11";
+            }
 
-            ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response);
+            ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response, beginDate, endDate);
             if (resultList == null) {
                 return response;
             } else {
@@ -133,17 +151,23 @@ public class ApiConnection {
             String speakerID = request.queryMap().get("speakerID").value();
             String party = request.queryMap().get("party").value();
             String entities = request.queryMap().get("entities").value();
+            String beginDate = request.queryMap().get("beginDate").value();
+            String endDate = request.queryMap().get("endDate").value();
+            if (beginDate == null || endDate == null) {
+                beginDate = "2017-10-26";
+                endDate = "2022-02-11";
+            }
 
             ArrayList resultList;
             if (entities == null) {
                 return errorMessage(response, "Use Attribute entities");
             } else if (entities.equals("persons")) {
                 System.out.println("test");
-                resultList = prozessQuery("persons", speakerID, party, request, response);
+                resultList = prozessQuery("persons", speakerID, party, request, response, beginDate, endDate);
             } else if (entities.equals("locations")) {
-                resultList = prozessQuery("locations", speakerID, party, request, response);
+                resultList = prozessQuery("locations", speakerID, party, request, response, beginDate, endDate);
             } else if (entities.equals("organisations")) {
-                resultList = prozessQuery("organisations", speakerID, party, request, response);
+                resultList = prozessQuery("organisations", speakerID, party, request, response, beginDate, endDate);
             } else {
                 return errorMessage(response, String.format("No namedEntities with name '%s' found", entities));
             }
@@ -164,6 +188,13 @@ public class ApiConnection {
 
             String speakerID = request.queryMap().get("speakerID").value();
             String party = request.queryMap().get("party").value();
+            String beginDate = request.queryMap().get("beginDate").value();
+            String endDate = request.queryMap().get("endDate").value();
+            if (beginDate == null || endDate == null) {
+                beginDate = "2017-10-26";
+                endDate = "2022-02-11";
+            }
+
             MongoCursor cursor;
             Document match;
             Document group = Document.parse("{$group: {_id:\"$speaker\", sentiment: {$push: \"$sentiment\"}}}");
@@ -224,7 +255,8 @@ public class ApiConnection {
      * @param response
      * @return
      */
-    private static ArrayList prozessQuery(String attribute, String speakerID, String party, Request request, Response response) {
+    private static ArrayList prozessQuery(String attribute, String speakerID, String party, Request request, Response response,
+                                          String beginDate, String endDate) {
         MongoCursor cursor;
         if (! request.queryMap().hasKeys() || (request.queryMap().get("entities").value() != null && speakerID == null && party == null)) {
             // Alle pos
@@ -233,7 +265,7 @@ public class ApiConnection {
         } else if (speakerID != null && party == null) {
             // pos pro Speaker
             if (handler.getDBDocument(speakerID, "amembers") != null) {
-                cursor = getSpeechAttributeSpeaker(attribute, speakerID);
+                cursor = getSpeechAttributeSpeaker(attribute, speakerID, beginDate, endDate);
             } else {
                 response.body(errorMessage(response, String.format("No user with id '%s' found", speakerID)));
                 return null;
@@ -241,7 +273,7 @@ public class ApiConnection {
         } else if (speakerID == null && party != null) {
             // pos pro Party
             if (allParties.contains(party)) {
-                cursor = getSpeechAttributeParty(attribute, party);
+                cursor = getSpeechAttributeParty(attribute, party, beginDate, endDate);
             } else {
                 response.body(errorMessage(response, String.format("No party with name '%s' found", party)));
                 return null;
@@ -284,9 +316,9 @@ public class ApiConnection {
      * @param speakerID
      * @return
      */
-    private static MongoCursor getSpeechAttributeSpeaker(String attribute, String speakerID) {
+    private static MongoCursor getSpeechAttributeSpeaker(String attribute, String speakerID, String beginDate, String endDate) {
 
-        Document match = Document.parse("{$match : {\"speaker\" : \"" + speakerID +"\" }}");
+        Document match = Document.parse("{$match : {\"speaker\" : \"" + speakerID +"\", \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}");
         Document group = Document.parse("{$group: {_id : \"$speaker\", all" + attribute + " : {$push : \"$" + attribute + "\"}}}");
         Document project = Document.parse("{$project : {" +
                 "_id : \"$_id\"," +
@@ -306,7 +338,7 @@ public class ApiConnection {
      * @param party
      * @return
      */
-    private static MongoCursor getSpeechAttributeParty(String attribute, String party) {
+    private static MongoCursor getSpeechAttributeParty(String attribute, String party, String beginDate, String endDate) {
         Document doc = (Document) handler.getCollection("amembers").aggregate(Arrays.asList(
                         Document.parse("{$match: {\"party\" : \"" + party + "\"}}"),
                         Document.parse("{$group:{_id: \"$party\", ids: { $push:  \"$_id\" }}}"))).first();
@@ -316,7 +348,7 @@ public class ApiConnection {
         idList = idList.stream().map((String id) -> id = "\"" + id + "\"").collect(Collectors.toList());
 
         return handler.getCollection("aspeeches").aggregate(Arrays.asList(
-                        Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}}}"),
+                        Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}, \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
                         Document.parse("{$project : {_id: \"all\", " + attribute + " : \"$" + attribute + "\"}}"))).cursor();
     }
 
