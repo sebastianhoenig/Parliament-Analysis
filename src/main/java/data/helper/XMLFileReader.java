@@ -43,12 +43,6 @@ public class XMLFileReader {
         ProgressBar pb2 = new ProgressBar("Reading XML-Files: ", files.length - 1);
         for(File file : files) {
             if (file.isFile() && file.getName().endsWith(".xml")) {
-
-//                int num = Integer.parseInt(file.getName().replace(".xml", ""));
-//                if ( xmlStart > num || num > xmlEnd ) {
-//                    continue;
-//                }
-
                 try {
                     allXmlArrayList.add(ProcessFile(file));
                 } catch (NullPointerException e) {
@@ -89,7 +83,6 @@ public class XMLFileReader {
             assert dBuilder != null;
             doc = dBuilder.parse(file);
         } catch (SAXException | IOException | OutOfMemoryError e) {
-            System.out.println(file.getName());
             e.printStackTrace();
         }
         try{

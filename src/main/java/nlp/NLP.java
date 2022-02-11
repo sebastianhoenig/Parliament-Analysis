@@ -1,6 +1,5 @@
 package nlp;
 
-import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngine;
 import org.apache.uima.cas.CAS;
 import org.apache.uima.cas.impl.XCASSerializer;
@@ -9,7 +8,6 @@ import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.fit.pipeline.SimplePipeline;
 import org.apache.uima.jcas.JCas;
 import org.apache.uima.resource.ResourceInitializationException;
-import org.apache.uima.util.Level;
 import org.hucompute.textimager.fasttext.labelannotator.LabelAnnotatorDocker;
 import org.hucompute.textimager.uima.gervader.GerVaderSentiment;
 import org.hucompute.textimager.uima.spacy.SpaCyMultiTagger3;
@@ -59,9 +57,6 @@ public class NLP {
 
             // create an AnalysisEngine for running the Pipeline.
             pAE = pipeline.createAggregate();
-            pAE.getLogger().setLevel(Level.OFF);
-            pAE.getUimaContext().getLogger().setLevel(Level.OFF);
-            pAE.getUimaContextAdmin().getLogger().setLevel(Level.OFF);
         } catch (ResourceInitializationException e) {
             e.printStackTrace();
         }
@@ -77,7 +72,7 @@ public class NLP {
             jCas = JCasFactory.createText(text, "de");
             SimplePipeline.runPipeline(jCas, getPipeline());
         } catch (Exception e) {
-            //e.printStackTrace();
+            e.printStackTrace();
         }
         return jCas;
     }

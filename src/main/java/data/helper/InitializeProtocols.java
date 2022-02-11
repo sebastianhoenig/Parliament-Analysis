@@ -17,8 +17,6 @@ public class InitializeProtocols {
     ArrayList<Protocol> allProtocols = new ArrayList<>();
     HashMap<String, Member> hashedMembers = new HashMap<>();
     public ArrayList<Member> allMembers = new ArrayList<>();
-//    int xmlStart;
-//    int xmlEnd;
 
     public InitializeProtocols(){
         setMembers();
@@ -58,7 +56,11 @@ public class InitializeProtocols {
         for (int i = 0; i < MdbList.getLength(); i++) {
             Node Mdb = MdbList.item(i);
             if (checkCorrect(Mdb)) {
-//                Thread.sleep(500);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 MemberFile_Impl m = new MemberFile_Impl(Mdb);
                 allMembers.add(m);
                 hashedMembers.put(m.getId(), m);

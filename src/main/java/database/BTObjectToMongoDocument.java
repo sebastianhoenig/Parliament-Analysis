@@ -3,31 +3,26 @@ package database;
 import data.Comment;
 import data.Member;
 import data.Speech;
-import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
-import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import nlp.NLP;
-import org.apache.uima.cas.CAS;
-import org.apache.uima.cas.impl.XCASSerializer;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.bson.Document;
 import org.hucompute.textimager.uima.type.Sentiment;
 import org.hucompute.textimager.uima.type.category.CategoryCoveredTagged;
-import org.texttechnologylab.annotation.AnnotationComment;
 import org.texttechnologylab.uimadb.wrapper.mongo.MongoSerialization;
 import org.texttechnologylab.uimadb.wrapper.mongo.serilization.exceptions.CasSerializationException;
 import org.texttechnologylab.uimadb.wrapper.mongo.serilization.exceptions.SerializerInitializationException;
 import org.texttechnologylab.uimadb.wrapper.mongo.serilization.exceptions.UnknownFactoryException;
-import org.xml.sax.SAXException;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 /**
@@ -111,13 +106,11 @@ public class BTObjectToMongoDocument {
         }
         speechDoc.append("comment", commentIDs);
 
-        // Todo: update some Attributes
         Document protocolDoc = new Document();
         protocolDoc.append("date", speech.getProtocol().getDate());
         protocolDoc.append("electionPeriod", speech.getProtocol().getElectionPeriod());
         protocolDoc.append("sessionID", speech.getProtocol().getSessionID());
-        protocolDoc.append("title", speech.getProtocol().getTitle()); //Todo: update
-        //protocolDoc.append("startPageNr", speech.getProtocol().getStartPageNr());
+        protocolDoc.append("title", speech.getProtocol().getTitle());
 
         speechDoc.append("protocol", protocolDoc);
 

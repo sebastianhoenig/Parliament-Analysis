@@ -10,9 +10,10 @@ import data.*;
 import me.tongfei.progressbar.ProgressBar;
 import org.bson.Document;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import static com.mongodb.client.model.Aggregates.*;
 
@@ -164,12 +165,12 @@ public class MongoDBConnectionHandler {
             }
         }
 
-//        int counterM = memberList.size();
-//        ProgressBar pb4 = new ProgressBar("upload Member", counterM);
-//        for (Member member : memberList) {
-//            insertMember(member);
-//            pb4.step();
-//        }
+        int counterM = memberList.size();
+        ProgressBar pb4 = new ProgressBar("upload Member", counterM);
+        for (Member member : memberList) {
+            insertMember(member);
+            pb4.step();
+        }
 
         ProgressBar speechP = new ProgressBar("upload Speeches", speechCounter);
         for (Protocol protocol :  protocolList) {
@@ -401,10 +402,8 @@ public class MongoDBConnectionHandler {
         return  result;
     }
 
-    public void aggregate(String collectionName) {
-        this.getCollection(collectionName).aggregate(Arrays.asList(
-
-        ));
+    public void aggregate(String collectionName, String query) {
+        this.getCollection(collectionName).aggregate(Arrays.asList(query));
     }
 
 }

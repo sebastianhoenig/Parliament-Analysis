@@ -1,24 +1,13 @@
 import DownloadData.DownloadZip;
 import DownloadData.Parse;
 import DownloadData.UnzipFile;
-import data.Member;
 import data.helper.InitializeProtocols;
-import data.helper.XMLFileReader;
-import data.impl.MemberFile_Impl;
 import database.MongoDBConnectionHandler;
-import me.tongfei.progressbar.ProgressBar;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class ParliamentSentimentRadar{
 
     public static void main(String[] args) {
-//        Download();
+        Download();
 
         InitializeProtocols initialize = new InitializeProtocols();
 
