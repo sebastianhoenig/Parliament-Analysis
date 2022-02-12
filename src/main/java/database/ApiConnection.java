@@ -88,7 +88,7 @@ public class ApiConnection {
 
             ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response, beginDate, endDate);
             if (resultList == null) {
-                return response;
+                return response.body();
             } else {
                 JSONObject result = new JSONObject();
                 result.put("result", resultList);
@@ -112,7 +112,7 @@ public class ApiConnection {
 
             ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response, beginDate, endDate);
             if (resultList == null) {
-                return response;
+                return response.body();
             } else {
                 JSONObject result = new JSONObject();
                 result.put("result", resultList);
@@ -136,7 +136,7 @@ public class ApiConnection {
 
             ArrayList resultList = prozessQuery(attribute, speakerID, party, request, response, beginDate, endDate);
             if (resultList == null) {
-                return response;
+                return response.body();
             } else {
                 JSONObject result = new JSONObject();
                 result.put("result", resultList);
