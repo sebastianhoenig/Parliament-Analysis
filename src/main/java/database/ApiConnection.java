@@ -22,14 +22,17 @@ public class ApiConnection {
 
     public static void main (String[] args) {
 
-        get("/speeches/:id", (request, response) -> {
-            Document doc = handler.getDBDocument(request.params(":id"), "aspeeches");
+        get("/speeches", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            String id = request.queryMap().get("id").value();
+            Document doc = handler.getDBDocument(request.params(id), "aspeeches");
             String json = com.mongodb.util.JSON.serialize(doc);
             return json;
         });
 
-        get("/comments/:id", (request, response) -> {
-            String id = request.params(":id") + "-";
+        get("/comments", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            String id = request.queryMap().get("id").value() + "-";
             Document match = Document.parse("{$match:{_id: /" + id + "/i}}");
             MongoCursor cursor = handler.getCollection("acomments").aggregate(Arrays.asList(match)).cursor();
             String json;
@@ -42,13 +45,16 @@ public class ApiConnection {
             return finalJson.toString();
         });
 
-        get("/speaker/:id", (request, response) -> {
-            Document doc = handler.getDBDocument(request.params(":id"), "amembers");
+        get("/speaker", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            String id = request.queryMap().get("id").value();
+            Document doc = handler.getDBDocument(request.params(id), "amembers");
             String json = com.mongodb.util.JSON.serialize(doc);
             return json;
         });
 
         get("/party", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
             HashMap<String, String> partyMembers = new HashMap<>();
             for (int i = 0; i < allParties.size(); i++) {
@@ -74,6 +80,7 @@ public class ApiConnection {
 
         // TODO: beginDaten and endDate
         get("/token", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
             String attribute = "token";
 
@@ -98,6 +105,7 @@ public class ApiConnection {
         });
 
         get("/pos", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
             String attribute = "pos";
 
@@ -122,6 +130,7 @@ public class ApiConnection {
         });
 
         get("/lemma", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
             String attribute = "lemma";
 
@@ -146,6 +155,7 @@ public class ApiConnection {
         });
 
         get("/namedEntities", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
 
             String speakerID = request.queryMap().get("speakerID").value();
@@ -215,7 +225,7 @@ public class ApiConnection {
                 // pos pro Party
                 if (allParties.contains(party)) {
                     Document doc = (Document) handler.getCollection("amembers").aggregate(Arrays.asList(
-                            Document.parse("{$match: {\"party\" : \"" + party + "\"}}"),
+                            Document.parse("{$match: {\"party\" : \"" + party + "\", \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
                             Document.parse("{$group:{_id: \"$party\", ids: { $push:  \"$_id\" }}}"))).first();
 
                     List<String> idList = (ArrayList<String>) doc.get("ids");
