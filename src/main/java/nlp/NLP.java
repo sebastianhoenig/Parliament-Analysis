@@ -1,7 +1,8 @@
 package nlp;
 
-import org.apache.uima.UIMAException;
 import org.apache.uima.analysis_engine.AnalysisEngine;
+import org.apache.uima.cas.CAS;
+import org.apache.uima.cas.impl.XCASSerializer;
 import org.apache.uima.fit.factory.AggregateBuilder;
 import org.apache.uima.fit.factory.JCasFactory;
 import org.apache.uima.fit.pipeline.SimplePipeline;
@@ -10,6 +11,10 @@ import org.apache.uima.resource.ResourceInitializationException;
 import org.hucompute.textimager.fasttext.labelannotator.LabelAnnotatorDocker;
 import org.hucompute.textimager.uima.gervader.GerVaderSentiment;
 import org.hucompute.textimager.uima.spacy.SpaCyMultiTagger3;
+import org.xml.sax.SAXException;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDescription;
 
@@ -66,9 +71,26 @@ public class NLP {
         try {
             jCas = JCasFactory.createText(text, "de");
             SimplePipeline.runPipeline(jCas, getPipeline());
-        } catch (UIMAException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return jCas;
+    }
+
+    /**
+     * Methode that convert an jCas to an xml.
+     * @param jCas
+     * @return xml
+     */
+    public static String getXml(JCas jCas) {
+        CAS cas = jCas.getCas();
+        ByteArrayOutputStream outTmp = new ByteArrayOutputStream();
+        try {
+            XCASSerializer.serialize(cas, outTmp);
+        } catch (SAXException | IOException e) {
+            e.printStackTrace();
+        }
+        String xml = outTmp.toString();
+        return xml;
     }
 }

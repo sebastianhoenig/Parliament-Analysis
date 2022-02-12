@@ -2,18 +2,18 @@ package database;
 
 
 import com.mongodb.*;
-import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import data.*;
 import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarBuilder;
-import me.tongfei.progressbar.ProgressBarStyle;
 import org.bson.Document;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Properties;
 
 import static com.mongodb.client.model.Aggregates.*;
 
@@ -148,14 +148,18 @@ public class MongoDBConnectionHandler {
     }
 
     public void uploadAll(ArrayList<Protocol> protocolList, ArrayList<Member> memberList) {
+        BTObjectToMongoDocument.createDCCMap();
+        BTObjectToMongoDocument.createPOSMap();
+        initializeStatus();
 
-        int counter = 0;
+        int speechCounter = 0;
+        int CommentCounter = 0;
         for (Protocol protocol :  protocolList) {
             for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
                 for (Speech speech : agendaItem.getSpeeches()) {
-                    counter++;
+                    speechCounter++;
                     for (Comment comment : speech.getAllComments()) {
-                        counter++;
+                        CommentCounter++;
                     }
                 }
             }
@@ -168,22 +172,85 @@ public class MongoDBConnectionHandler {
             pb4.step();
         }
 
-
-        ProgressBar pb3 = new ProgressBar("upload Data", counter);
+        ProgressBar speechP = new ProgressBar("upload Speeches", speechCounter);
         for (Protocol protocol :  protocolList) {
             for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
                 for (Speech speech : agendaItem.getSpeeches()) {
                     this.insertSpeech(speech);
-                    pb3.step();
+                    updateStatus(protocol, speech);
+                    speechP.step();
+                }
+            }
+        }
+        speechP.close();
+
+        ProgressBar commentP = new ProgressBar("upload Comments", CommentCounter);
+        for (Protocol protocol :  protocolList) {
+            for (AgendaItem agendaItem : protocol.getAllAgendaItems()) {
+                for (Speech speech : agendaItem.getSpeeches()) {
                     for (Comment comment : speech.getAllComments()) {
                         this.insertComment(comment);
-                        pb3.step();
+                        updateStatus(protocol, comment);
+                        commentP.step();
                     }
                 }
             }
         }
-        pb3.close();
+        commentP.close();
     }
+
+    public void initializeStatus() {
+        Document statusSpeech = getDBDocument("speech", "status");
+        statusSpeech.put("protocolNumber", 0);
+        statusSpeech.put("speech", "");
+        statusSpeech.put("countSpeech", 0);
+        statusSpeech.put("error", new ArrayList<String>());
+
+        Document statusComment = getDBDocument("comment", "status");
+        statusComment.put("protocolNumber", 0);
+        statusComment.put("comment", "");
+        statusComment.put("countComment", 0);
+        statusComment.put("error", new ArrayList<String>());
+
+        try {
+            this.getCollection("status").updateOne(new Document().append("_id", "speech"),
+                    new Document().append("$set", statusSpeech));
+            this.getCollection("status").updateOne(new Document().append("_id", "comment"),
+                    new Document().append("$set", statusComment));
+        } catch (Exception e) {
+            System.out.println("Status couldn't be updated");
+        }
+    }
+
+    public void updateStatus(Protocol protocol, Speech speech) {
+        Document statusSpeech = getDBDocument("speech", "status");
+        statusSpeech.put("protocolNumber", protocol.getSessionID());
+        statusSpeech.put("speech", speech.getSpeechID());
+        statusSpeech.put("countSpeech", (int) statusSpeech.get("countSpeech") + 1);
+
+        try {
+            this.getCollection("status").updateOne(new Document().append("_id", "speech"),
+                    new Document().append("$set", statusSpeech));
+        } catch (Exception e) {
+            System.out.println("Status couldn't be updated");
+        }
+    }
+
+    public void updateStatus(Protocol protocol, Comment comment) {
+        Document statusComment = getDBDocument("comment", "status");
+        statusComment.put("protocolNumber", protocol.getSessionID());
+        statusComment.put("comment", comment.getCommentID());
+        statusComment.put("countComment", (int) statusComment.get("countComment") + 1);
+
+        try {
+            this.getCollection("status").updateOne(new Document().append("_id", "comment"),
+                    new Document().append("$set", statusComment));
+        } catch (Exception e) {
+            System.out.println("Status couldn't be updated");
+        }
+    }
+
+
 
     public void insertMember(Member member) {
 
@@ -213,6 +280,16 @@ public class MongoDBConnectionHandler {
             this.getCollection("speeches").insertOne(speechDoc);
         } catch (Exception e) {
             System.out.println("Objekt Speech (" + speech.getSpeechID() + ") can not be uploaded");
+            Document statusSpeech = getDBDocument("speech", "status");
+            ArrayList<String> errorList = (ArrayList<String>) statusSpeech.get("error");
+            errorList.add(speech.getSpeechID());
+            statusSpeech.put("error", errorList);
+            try {
+                this.getCollection("status").updateOne(new Document().append("_id", "speech"),
+                        new Document().append("$set", statusSpeech));
+            } catch (Exception ex) {
+                System.out.println("Status couldn't be updated");
+            }
         }
     }
 
@@ -228,29 +305,40 @@ public class MongoDBConnectionHandler {
             this.getCollection("comments").insertOne(commentDoc);
         } catch (Exception e) {
             System.out.println("Objekt Comment (" + comment.getCommentID() + ") can not be uploaded");
+            Document statusComment = getDBDocument("comment", "status");
+            ArrayList<String> errorList = (ArrayList<String>) statusComment.get("error");
+            errorList.add(comment.getCommentID());
+            statusComment.put("error", errorList);
+            try {
+                this.getCollection("status").updateOne(new Document().append("_id", "comment"),
+                        new Document().append("$set", statusComment));
+            } catch (Exception ex) {
+                System.out.println("Status couldn't be updated");
+            }
         }
     }
 
-//    public void updateSpeaker(Speaker speaker) {
-//        Document where = new Document().append("_id", speaker.getID());
-//
-//        try {
-//            this.getCollection("speaker").updateOne(where,
-//                    BTObjectToMongoDocument.createMongoDocument(speaker));
-//        } catch (Exception e) {
-//            System.out.println("Objekt Speaker (" + speaker.getID() + ") can not be updated");
-//        }
-//    }
+    public void updateSpeaker(Member member) {
+        Document where = new Document().append("_id", member.getId());
+
+        try {
+            this.getCollection("members").updateOne(where,
+                    BTObjectToMongoDocument.createMongoDocument(member));
+        } catch (Exception e) {
+            System.out.println("Objekt Speaker (" + member.getId() + ") can not be updated");
+        }
+    }
 
     public void updateSpeech(Speech speech) {
         Document where = new Document().append("_id", speech.getSpeechID());
 
         try {
             this.getCollection("speeches").updateOne(where,
-                    BTObjectToMongoDocument.createMongoDocument(speech));
+                    new Document().append("$set", BTObjectToMongoDocument.createMongoDocument(speech)));
         } catch (Exception e) {
             System.out.println("Objekt Speech (" + speech.getSpeechID() + ") can not be updated");
         }
+
     }
 
     public void updateComment(Comment comment) {
@@ -314,10 +402,8 @@ public class MongoDBConnectionHandler {
         return  result;
     }
 
-    public void aggregate(String collectionName) {
-        this.getCollection(collectionName).aggregate(Arrays.asList(
-
-        ));
+    public void aggregate(String collectionName, String query) {
+        this.getCollection(collectionName).aggregate(Arrays.asList(query));
     }
 
 }

@@ -1,5 +1,9 @@
 package data.helper;
 
+import me.tongfei.progressbar.ProgressBar;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -8,11 +12,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import me.tongfei.progressbar.ProgressBar;
-import me.tongfei.progressbar.ProgressBarStyle;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
 
 public class XMLFileReader {
 
@@ -26,7 +25,7 @@ public class XMLFileReader {
         File[] files = folder.listFiles();
         assert files != null;
 
-        // sorting the Files //TODO: Warum machen wir das?
+        // sorting the Files
         Arrays.sort(files, new Comparator<File>() {
             public int compare(File f1, File f2) {
                 String nameF1 = f1.getName().substring(0, f1.getName().length() - 4);
@@ -41,18 +40,15 @@ public class XMLFileReader {
             }
         });
 
-        ProgressBar pb2 = new ProgressBar("Einlesen der .xml Files", files.length - 1);
+        ProgressBar pb2 = new ProgressBar("Reading XML-Files: ", files.length - 1);
         for(File file : files) {
-            pb2.setExtraMessage("Reading...");
             if (file.isFile() && file.getName().endsWith(".xml")) {
+                try {
+                    allXmlArrayList.add(ProcessFile(file));
+                } catch (NullPointerException e) {
+                    e.printStackTrace();
+                }
                 pb2.step();
-                if (file.getName().startsWith("2")) {
-                    break;
-                }
-                //System.out.println("File: " + file.getName());
-                try{allXmlArrayList.add(ProcessFile(file));}
-                catch (NullPointerException e){e.printStackTrace();
-                }
             }}
         pb2.close();
 
@@ -85,11 +81,10 @@ public class XMLFileReader {
         Document doc = null;
         try {
             assert dBuilder != null;
-            doc = dBuilder.parse(new File(String.valueOf(file)));
+            doc = dBuilder.parse(file);
         } catch (SAXException | IOException | OutOfMemoryError e) {
             e.printStackTrace();
         }
-
         try{
             assert doc != null;
             doc.getDocumentElement().normalize();}

@@ -1,31 +1,28 @@
 package database;
 
-
 import data.Comment;
 import data.Member;
 import data.Speech;
-import data.helper.XMLFileReader;
-import de.tudarmstadt.ukp.dkpro.core.api.lexmorph.type.pos.POS;
 import de.tudarmstadt.ukp.dkpro.core.api.ner.type.NamedEntity;
-import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Lemma;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Sentence;
 import de.tudarmstadt.ukp.dkpro.core.api.segmentation.type.Token;
 import nlp.NLP;
-import org.apache.uima.UIMAException;
 import org.apache.uima.fit.util.JCasUtil;
 import org.apache.uima.jcas.JCas;
 import org.bson.Document;
 import org.hucompute.textimager.uima.type.Sentiment;
-import org.texttechnologylab.annotation.AnnotationComment;
-
+import org.hucompute.textimager.uima.type.category.CategoryCoveredTagged;
 import org.texttechnologylab.uimadb.wrapper.mongo.MongoSerialization;
 import org.texttechnologylab.uimadb.wrapper.mongo.serilization.exceptions.CasSerializationException;
 import org.texttechnologylab.uimadb.wrapper.mongo.serilization.exceptions.SerializerInitializationException;
 import org.texttechnologylab.uimadb.wrapper.mongo.serilization.exceptions.UnknownFactoryException;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Scanner;
 import java.util.stream.Collectors;
 
 /**
@@ -36,13 +33,44 @@ import java.util.stream.Collectors;
 public class BTObjectToMongoDocument {
 
     private static NLP nlp = new NLP();
+    private static HashMap<String, String> dcc = new HashMap();
+    private static HashMap<String, String> posMap = new HashMap();
 
-//    public static Document createMongoDocument(Speaker speaker) {
-//        Document speakerDoc = new Document();
-//        speakerDoc.append("_id", speaker.getID());
-//        // @Todo: Andere Attribute müssen ergänzt werden
-//        return speakerDoc;
-//    }
+    public static void createDCCMap() {
+        String file = "src/main/resources/ddc3-names-de.csv";
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+            if (line.length() > 0) {
+                String[] splitLine = line.split("\t");
+                dcc.put(splitLine[0], splitLine[1]);
+            }
+        }
+        scanner.close();
+    }
+
+    public static void createPOSMap() {
+        String file = "src/main/resources/am_posmap.txt";
+        Scanner scanner = null;
+        try {
+            scanner = new Scanner(new File(file));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        while (scanner.hasNext()) {
+            String line = scanner.nextLine();
+            if (line.length() > 0) {
+                String[] splitLine = line.split("\t");
+                posMap.put(splitLine[0], splitLine[1]);
+            }
+        }
+        scanner.close();
+    }
 
     public static Document createMongoDocument(Member member) {
         Document memberDoc = new Document();
@@ -69,6 +97,7 @@ public class BTObjectToMongoDocument {
         Document speechDoc = new Document();
         speechDoc.append("_id", speech.getSpeechID());
         speechDoc.append("text", speech.getText());
+        speechDoc.append("plainText", speech.getPlainText());
         speechDoc.append("speaker", speech.getSpeakerID());
 
         ArrayList<String> commentIDs = new ArrayList<String>();
@@ -77,19 +106,17 @@ public class BTObjectToMongoDocument {
         }
         speechDoc.append("comment", commentIDs);
 
-        // Todo: update some Attributes
         Document protocolDoc = new Document();
-        protocolDoc.append("date", speech.getProtocol().getDate()); //Todo: convert to realy Date ?
+        protocolDoc.append("date", speech.getProtocol().getDate());
         protocolDoc.append("electionPeriod", speech.getProtocol().getElectionPeriod());
         protocolDoc.append("sessionID", speech.getProtocol().getSessionID());
-        protocolDoc.append("title", speech.getProtocol().getTitle()); //Todo: update
-        //protocolDoc.append("startPageNr", speech.getProtocol().getStartPageNr());
+        protocolDoc.append("title", speech.getProtocol().getTitle());
 
         speechDoc.append("protocol", protocolDoc);
 
         speechDoc.append("agendaItem", speech.getAgendaItem().getAgendaItemID());
 
-        // @Todo: NLP
+
         // NLP größten teils aus der Musterlösung aus Aufgabe 2.
         JCas jCas = nlp.analyse(speech.getText());
 
@@ -102,6 +129,7 @@ public class BTObjectToMongoDocument {
         } catch (CasSerializationException e) {
             e.printStackTrace();
         }
+
 
         List<String> personsList = new ArrayList<>(0);
         List<String> locationsList = new ArrayList<>(0);
@@ -117,44 +145,57 @@ public class BTObjectToMongoDocument {
             }
         }
 
-        List<String> tokenList = new ArrayList<>(0);
-        for (Token token : JCasUtil.select(jCas, Token.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-            tokenList.add(token.getCoveredText());
-        }
-
-
         List<String> sentencesList = new ArrayList<>(0);
-        for (Sentence sentence : JCasUtil.select(jCas, Sentence.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
+        for (Sentence sentence : JCasUtil.select(jCas, Sentence.class).stream().collect(Collectors.toList())) {
             sentencesList.add(sentence.getCoveredText());
         }
 
-        Double sentimentList = 0.0;
-        if (getDocumentSentiment(jCas) != null) {
-            sentimentList = getDocumentSentiment(jCas).getSentiment();
-        } else {
-            sentimentList = JCasUtil.select(jCas, Sentiment.class).stream().mapToDouble(sentiment -> sentiment.getSentiment()).sum();
+        Double sentiment = 0.0;
+        List<Double> sentimentList = new ArrayList<>(0);
+        for (Sentiment sent : JCasUtil.select(jCas, Sentiment.class).stream().collect(Collectors.toList())) {
+            if (sent.getBegin() == 0 && sent.getEnd() == speech.getText().length()) {
+                continue;
+            }
+            sentiment += sent.getSentiment();
+            sentimentList.add(sent.getSentiment());
         }
-
-        //List<String> lemmaList = new ArrayList<>(0);
-        //for (Lemma lemma : JCasUtil.select(jCas, Lemma.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-        //    lemmaList.add(lemma.getCoveredText());
-        //}
-
+        sentiment /= sentimentList.size();
 
         List<String> posList = new ArrayList<>(0);
-        for (POS pos : JCasUtil.select(jCas, POS.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-            posList.add(pos.getPosValue());
+        List<String> lemmaList = new ArrayList<>(0);
+        List<String> tokenList = new ArrayList<>(0);
+        for (Token token : JCasUtil.select(jCas, Token.class).stream().collect(Collectors.toList())) {
+            tokenList.add(token.getCoveredText());
+            lemmaList.add(token.getLemmaValue());
+            String posC = token.getPosValue();
+            posList.add(posMap.get(posC));
+        }
+
+        Document topicDoc = new Document();
+        for (CategoryCoveredTagged category : JCasUtil.select(jCas, CategoryCoveredTagged.class).stream().collect(Collectors.toList())) {
+            String num = category.getValue().replace("__label_ddc__", "");
+            if (category.getScore() >= 0.01){
+                topicDoc.append(dcc.get(num), category.getScore());
+            }
         }
 
         speechDoc.append("sentences", sentencesList);
+        speechDoc.append("sentiment", sentiment);
+        speechDoc.append("sentimentList", sentimentList);
         speechDoc.append("token", tokenList);
-        speechDoc.append("sentiment", sentimentList);
-        //speechDoc.append("lemma", lemmaList);
+        speechDoc.append("lemma", lemmaList);
         speechDoc.append("pos", posList);
         speechDoc.append("persons", personsList);
         speechDoc.append("locations", locationsList);
         speechDoc.append("organisations", organisationsList);
+        speechDoc.append("category", topicDoc);
 
+        String xml = nlp.getXml(jCas);
+        if (xml.getBytes().length <= (16000000 - speechDoc.size())){
+            speechDoc.append("uima", xml);
+        } else {
+            speechDoc.append("uima", null);
+        }
 
         return speechDoc;
     }
@@ -193,66 +234,60 @@ public class BTObjectToMongoDocument {
             }
         }
 
-        List<String> tokenList = new ArrayList<>(0);
-        for (Token token : JCasUtil.select(jCas, Token.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-            tokenList.add(token.getCoveredText());
-        }
-
 
         List<String> sentencesList = new ArrayList<>(0);
-        for (Sentence sentence : JCasUtil.select(jCas, Sentence.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
+        for (Sentence sentence : JCasUtil.select(jCas, Sentence.class).stream().collect(Collectors.toList())) {
             sentencesList.add(sentence.getCoveredText());
         }
 
-        Double sentimentList = 0.0;
-        if (getDocumentSentiment(jCas) != null) {
-            sentimentList = getDocumentSentiment(jCas).getSentiment();
-        } else {
-            sentimentList = JCasUtil.select(jCas, Sentiment.class).stream().mapToDouble(sentiment -> sentiment.getSentiment()).sum();
+        Double sentiment = 0.0;
+        List<Double> sentimentList = new ArrayList<>(0);
+        for (Sentiment sent : JCasUtil.select(jCas, Sentiment.class).stream().collect(Collectors.toList())) {
+            if (sent.getBegin() == 0 && sent.getEnd() == comment.getText().length()) {
+                continue;
+            }
+            sentiment += sent.getSentiment();
+            sentimentList.add(sent.getSentiment());
         }
-
-        //List<String> lemmaList = new ArrayList<>(0);
-        //for (Lemma lemma : JCasUtil.select(jCas, Lemma.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-        //    lemmaList.add(lemma.getCoveredText());
-        //}
-
+        sentiment /= sentimentList.size();
 
         List<String> posList = new ArrayList<>(0);
-        for (POS pos : JCasUtil.select(jCas, POS.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
-            posList.add(pos.getPosValue());
+        List<String> lemmaList = new ArrayList<>(0);
+        List<String> tokenList = new ArrayList<>(0);
+        for (Token token : JCasUtil.select(jCas, Token.class).stream().collect(Collectors.toList())) {
+            tokenList.add(token.getCoveredText());
+            lemmaList.add(token.getLemmaValue());
+            String posC = token.getPosValue();
+            posList.add(posMap.get(posC));
+        }
+
+        Document topicDoc = new Document();
+        List<Document> topicList = new ArrayList<>(0);
+        for (CategoryCoveredTagged category : JCasUtil.select(jCas, CategoryCoveredTagged.class).stream().collect(Collectors.toSet()).stream().collect(Collectors.toList())) {
+            String num = category.getValue().replace("__label_ddc__", "");
+            if (category.getScore() >= 0.01){
+                topicDoc.append(dcc.get(num), category.getScore());
+            }
         }
 
         commentDoc.append("sentences", sentencesList);
+        commentDoc.append("sentiment", sentiment);
+        commentDoc.append("sentimentList", sentimentList);
         commentDoc.append("token", tokenList);
-        commentDoc.append("sentiment", sentimentList);
-        //commentDoc.append("lemma", lemmaList);
+        commentDoc.append("lemma", lemmaList);
         commentDoc.append("pos", posList);
         commentDoc.append("persons", personsList);
         commentDoc.append("locations", locationsList);
         commentDoc.append("organisations", organisationsList);
+        commentDoc.append("category", topicDoc);
 
-        return commentDoc;
-    }
-
-    /**
-     * Copied by Musterlösung aus Übung2
-     * @param jCas
-     * @return
-     */
-    public static Sentiment getDocumentSentiment(JCas jCas) {
-        List<AnnotationComment> annoComments = JCasUtil.select(jCas, AnnotationComment.class).stream().filter(d->{
-
-            if(d.getReference() instanceof Sentiment){
-                return d.getValue().equalsIgnoreCase("text");
-            }
-            return false;
-
-        }).collect(Collectors.toList());
-
-        if(annoComments.size()>=1){
-            return (Sentiment)annoComments.get(0).getReference();
+        String xml = nlp.getXml(jCas);
+        if (xml.getBytes().length <= (16000000 - commentDoc.size())){
+            commentDoc.append("uima", xml);
+        } else {
+            commentDoc.append("uima", null);
         }
 
-        return null;
+        return commentDoc;
     }
 }
