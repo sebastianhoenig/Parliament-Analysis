@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Übersicht</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="css/sb-admin-2.min.css" rel="stylesheet">
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+                <div class="sidebar-brand-icon rotate-n-15">
+                    <i class="fas fa-laugh-wink"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Übersicht</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider my-0">
+
+            <!-- Nav Item - Dashboard -->
+            <li class="nav-item active">
+                <a class="nav-link" href="index.html">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Übersicht</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="topbar bg-white mb-5" style="height: 200px">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <div class="text">
+                        <br>
+                        <div class="d-sm-flex align-items-center justify-content-between mb-3">
+                            <h1 class="h2 mb-0 text-info mb-2 text-center w-100">Suche</h1>
+                        </div>
+                    </div>
+                    <div class="row" style="height: 150px">
+                        <div class="col-6 col-6">
+                            <div class="col-12">
+                                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for Speaker..."
+                                               aria-label="Search" aria-describedby="basic-addon2" list="SpeakerName">
+                                        <datalist class="dropdown-menu dropdown-menu-right shadow animated--fade-in" id="SpeakerName">
+                                        </datalist>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <br>
+                            <div class="col-12">
+                                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
+                                    <div class="input-group">
+                                        <input type="text" class="form-control bg-light border-0 small" placeholder="Search for Party..."
+                                               aria-label="Search" aria-describedby="basic-addon2" list="PartyName">
+                                        <datalist class="dropdown-menu dropdown-menu-right shadow animated--fade-in" id="PartyName">
+                                        </datalist>
+                                        <div class="input-group-append">
+                                            <button class="btn btn-primary" type="button">
+                                                <i class="fas fa-search fa-sm"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-6 col-6" >
+                            <div id="pickerContainer">
+                                <div class="inputsWrapper">
+                                    <input id="startDate" autocomplete="off" class="inputEl" type="text" value="" placeholder="Check in">
+                                    <input id="endDate" autocomplete="off" class="inputEl" style="margin-left:10px" type="text" value="" placeholder="Check out">
+                                </div>
+                                <div id="picker">
+                                    <div id="chartDiv" style="max-width: 300px;height: 300px;margin: 0px auto">
+                                    </div>
+                                </div>
+                                <div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                    <!-- Page Divider (Übersicht) -->
+                    <hr class="my-3 border">
+
+                    <div class="d-sm-flex align-items-center justify-content-between mb-3">
+                        <h1 class="h2 mb-0 text-info mb-2 text-center w-100">Übersicht</h1>
+                    </div>
+
+
+
+
+
+                    <!-- Content Row Tokens -->
+                    <div class="row">
+
+                        <!-- Pie Chart Sprecher*innen -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Searchbar and datalist for all others Charts-->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-3 font-weight-bold text-info">Token</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class=" text-info text-center w-100" id="SpeakerNameInSentiment">Laden...</div>
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="myPieChart Speaker"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pie Chart Fraktionen -->
+                        <div class="col-xl-6 col-lg-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - Searchbar and datalist for all others Charts -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-3 font-weight-bold text-info">POS</h6>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class=" text-info text-center w-100" id="FractionNameInSentiment">Laden...</div>
+                                    <div class="chart-pie pt-4 pb-2">
+                                        <canvas id="myPieChart Fraction"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row POS -->
+                    <div class="row">
+
+                        <!-- Area Chart POS Speaker -->
+                        <div class="col-6 col-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - with Searchbar -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-danger">Sentiment</h6>
+                                    <div class="form-inline">
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class=" text-danger text-center w-100" id="POS Speaker Name">Laden...</div>
+                                    <div class="fa-chart-area">
+                                        <canvas id="myAreaChart POS Speaker"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Area Chart POS Fraction -->
+                        <div class="col-6 col-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - with Searchbar -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-danger">Speaker Verteilung</h6>
+                                    <div class="form-inline">
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class=" text-danger text-center w-100" id="POS Fraction Name">Laden...</div>
+                                    <div class="fa-chart-area">
+                                        <canvas id="myAreaChart POS Fraction"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Row Token -->
+                    <div class="row">
+
+                        <!-- Area Chart Token Speaker -->
+                        <div class="col-12 col-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - with Searchbar -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-primary">NamedEntities</h6>
+                                    <div class="form-inline">
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class=" text-primary text-center w-100" id="Token Speaker Name">Laden...</div>
+                                    <div class="fa-chart-area">
+                                        <canvas id="myAreaChart Token Speaker"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Page Divider (Named Entities) -->
+                    <hr class="my-5 border">
+
+                    <div class="d-sm-flex align-items-center justify-content-between mb-3">
+                        <h1 class="h2 mb-0 text-warning mb-2 text-center w-100">Volltext Suche</h1>
+                    </div>
+
+
+                    <!-- Content Row Named Entities -->
+                    <div class="row">
+
+                        <!-- Area Chart Named Entities Speaker -->
+                        <div class="col-12 col-12">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - with Searchbar -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-warning">Häufigkeitsverteilung der Named Entities pro Sprecher*in</h6>
+                                    <div class="form-inline">
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class=" text-warning text-center w-100" id="NamedEntities Speaker Name">Laden...</div>
+                                    <div class="fa-chart-area">
+                                        <canvas id="myAreaChart NamedEntities Speaker"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Gruppe_8_4 2022</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="vendor/jquery/jquery.min.js"></script>
+    <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="js/sb-admin-2.min.js"></script>
+
+    <!-- Page level plugins -->
+    <script src="vendor/chart.js/Chart.min.js"></script>
+
+
+
+
+<!--    &lt;!&ndash; Eigene Scripts&ndash;&gt;-->
+<!--    &lt;!&ndash;main&ndash;&gt;-->
+<!--    <script src="scripts/main.js"></script>-->
+
+<!--    &lt;!&ndash;3a&ndash;&gt;-->
+<!--    <script src="scripts/3a.js"></script>-->
+
+<!--    &lt;!&ndash;3b1&ndash;&gt;-->
+<!--    <script src="scripts/3b1PerSpeaker.js"></script>-->
+<!--    <script src="scripts/3b1PerFraction.js"></script>-->
+<!--    <script src="scripts/3b1All.js"></script>-->
+
+<!--    &lt;!&ndash;3b2&ndash;&gt;-->
+<!--    <script src="scripts/3b2PerSpeaker.js"></script>-->
+<!--    <script src="scripts/3b2PerFraction.js"></script>-->
+<!--    <script src="scripts/3b2All.js"></script>-->
+
+<!--    &lt;!&ndash;3b3&ndash;&gt;-->
+<!--    <script src="scripts/3b3PerSpeaker.js"></script>-->
+<!--    <script src="scripts/3b3PerFraction.js"></script>-->
+<!--    <script src="scripts/3b3All.js"></script>-->
+
+<!--    &lt;!&ndash;3b4&ndash;&gt;-->
+<!--    <script src="scripts/3b4PerSpeaker.js"></script>-->
+<!--    <script src="scripts/3b4PerFraction.js"></script>-->
+
+
+</body>
+
+</html>
