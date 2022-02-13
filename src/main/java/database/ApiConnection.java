@@ -24,21 +24,25 @@ public class ApiConnection {
 
         get("/speeches", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
+            response.type("application/json;charset=UTF-8");
             String id = request.queryMap().get("id").value();
-            Document doc = handler.getDBDocument(id, "aspeeches");
+            Document doc = handler.getDBDocument(id, "speeches");
+            doc.remove("uima");
             String json = com.mongodb.util.JSON.serialize(doc);
             return json;
         });
 
         get("/comments", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
+            response.type("application/json;charset=UTF-8");
             String id = request.queryMap().get("id").value() + "-";
             Document match = Document.parse("{$match:{_id: /" + id + "/i}}");
-            MongoCursor cursor = handler.getCollection("acomments").aggregate(Arrays.asList(match)).cursor();
+            MongoCursor cursor = handler.getCollection("comments").aggregate(Arrays.asList(match)).cursor();
             String json;
             StringBuilder finalJson = new StringBuilder();
             while (cursor.hasNext()) {
                 Document doc = (Document) cursor.next();
+                doc.remove("uima");
                 json = com.mongodb.util.JSON.serialize(doc);
                 finalJson.append(json);
             }
@@ -47,8 +51,9 @@ public class ApiConnection {
 
         get("/speaker", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
+            response.type("application/json;charset=UTF-8");
             String id = request.queryMap().get("id").value();
-            Document doc = handler.getDBDocument(id, "amembers");
+            Document doc = handler.getDBDocument(id, "members");
             String json = com.mongodb.util.JSON.serialize(doc);
             return json;
         });
@@ -60,7 +65,7 @@ public class ApiConnection {
             for (int i = 0; i < allParties.size(); i++) {
                 String currentParty = allParties.get(i);
                 Document match = Document.parse("{$match:{party: \"" + currentParty + "\"}}");
-                MongoCursor cursor = handler.getCollection("amembers").aggregate(Arrays.asList(match)).cursor();
+                MongoCursor cursor = handler.getCollection("members").aggregate(Arrays.asList(match)).cursor();
                 int counter = 0;
                 while (cursor.hasNext()) {
                     counter += 1;
@@ -212,19 +217,19 @@ public class ApiConnection {
 
             if (! request.queryMap().hasKeys()) {
                 // Alle pos
-                cursor = handler.getCollection("aspeeches").aggregate(Arrays.asList(group, project)).cursor();
+                cursor = handler.getCollection("speeches").aggregate(Arrays.asList(group, project)).cursor();
             } else if (speakerID != null && party == null) {
                 // pos pro Speaker
-                if (handler.getDBDocument(speakerID, "amembers") != null) {
+                if (handler.getDBDocument(speakerID, "members") != null) {
                     match = Document.parse("{$match: {speaker:\"" + speakerID + "\"}}");
-                    cursor = handler.getCollection("aspeeches").aggregate(Arrays.asList(match, group, project)).cursor();
+                    cursor = handler.getCollection("speeches").aggregate(Arrays.asList(match, group, project)).cursor();
                 } else {
                     return errorMessage(response, String.format("No user with id '%s' found", speakerID));
                 }
             } else if (speakerID == null && party != null) {
                 // pos pro Party
                 if (allParties.contains(party)) {
-                    Document doc = (Document) handler.getCollection("amembers").aggregate(Arrays.asList(
+                    Document doc = (Document) handler.getCollection("members").aggregate(Arrays.asList(
                             Document.parse("{$match: {\"party\" : \"" + party + "\", \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
                             Document.parse("{$group:{_id: \"$party\", ids: { $push:  \"$_id\" }}}"))).first();
 
@@ -232,7 +237,7 @@ public class ApiConnection {
 
                     idList = idList.stream().map((String id) -> id = "\"" + id + "\"").collect(Collectors.toList());
 
-                    cursor = handler.getCollection("aspeeches").aggregate(Arrays.asList(
+                    cursor = handler.getCollection("speeches").aggregate(Arrays.asList(
                             Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}}}"),
                             group, project)).cursor();
                 } else {
@@ -271,10 +276,10 @@ public class ApiConnection {
         if (! request.queryMap().hasKeys() || (request.queryMap().get("entities").value() != null && speakerID == null && party == null)) {
             // Alle pos
             Document project = Document.parse("{$project: {\"" + attribute + "\": \"$" + attribute + "\"}}");
-            cursor = handler.getCollection("aspeeches").aggregate(Arrays.asList(project)).cursor();
+            cursor = handler.getCollection("speeches").aggregate(Arrays.asList(project)).cursor();
         } else if (speakerID != null && party == null) {
             // pos pro Speaker
-            if (handler.getDBDocument(speakerID, "amembers") != null) {
+            if (handler.getDBDocument(speakerID, "members") != null) {
                 cursor = getSpeechAttributeSpeaker(attribute, speakerID, beginDate, endDate);
             } else {
                 response.body(errorMessage(response, String.format("No user with id '%s' found", speakerID)));
@@ -338,7 +343,7 @@ public class ApiConnection {
                 "initialValue: [ ]," +
                 "in: { $concatArrays: [ \"$$value\", \"$$this\" ] }" +
                 "}}}}");
-        return handler.getCollection("aspeeches").aggregate(Arrays.asList(match, group, project)).cursor();
+        return handler.getCollection("speeches").aggregate(Arrays.asList(match, group, project)).cursor();
     }
 
     /**
@@ -349,7 +354,7 @@ public class ApiConnection {
      * @return
      */
     private static MongoCursor getSpeechAttributeParty(String attribute, String party, String beginDate, String endDate) {
-        Document doc = (Document) handler.getCollection("amembers").aggregate(Arrays.asList(
+        Document doc = (Document) handler.getCollection("members").aggregate(Arrays.asList(
                         Document.parse("{$match: {\"party\" : \"" + party + "\"}}"),
                         Document.parse("{$group:{_id: \"$party\", ids: { $push:  \"$_id\" }}}"))).first();
 
@@ -357,7 +362,7 @@ public class ApiConnection {
 
         idList = idList.stream().map((String id) -> id = "\"" + id + "\"").collect(Collectors.toList());
 
-        return handler.getCollection("aspeeches").aggregate(Arrays.asList(
+        return handler.getCollection("speeches").aggregate(Arrays.asList(
                         Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}, \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
                         Document.parse("{$project : {_id: \"all\", " + attribute + " : \"$" + attribute + "\"}}"))).cursor();
     }
