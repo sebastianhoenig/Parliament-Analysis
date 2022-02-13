@@ -25,7 +25,7 @@ public class ApiConnection {
         get("/speeches", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
             String id = request.queryMap().get("id").value();
-            Document doc = handler.getDBDocument(request.params(id), "aspeeches");
+            Document doc = handler.getDBDocument(id, "aspeeches");
             String json = com.mongodb.util.JSON.serialize(doc);
             return json;
         });
@@ -48,7 +48,7 @@ public class ApiConnection {
         get("/speaker", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
             String id = request.queryMap().get("id").value();
-            Document doc = handler.getDBDocument(request.params(id), "amembers");
+            Document doc = handler.getDBDocument(id, "amembers");
             String json = com.mongodb.util.JSON.serialize(doc);
             return json;
         });
