@@ -199,6 +199,7 @@ public class ApiConnection {
 
 
         get("/sentiment", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
 
             String speakerID = request.queryMap().get("speakerID").value();
@@ -230,7 +231,7 @@ public class ApiConnection {
                 // pos pro Party
                 if (allParties.contains(party)) {
                     Document doc = (Document) handler.getCollection("members").aggregate(Arrays.asList(
-                            Document.parse("{$match: {\"party\" : \"" + party + "\", \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
+                            Document.parse("{$match: {\"party\" : \"" + party + "\"}}"),
                             Document.parse("{$group:{_id: \"$party\", ids: { $push:  \"$_id\" }}}"))).first();
 
                     List<String> idList = (ArrayList<String>) doc.get("ids");
@@ -238,8 +239,10 @@ public class ApiConnection {
                     idList = idList.stream().map((String id) -> id = "\"" + id + "\"").collect(Collectors.toList());
 
                     cursor = handler.getCollection("speeches").aggregate(Arrays.asList(
-                            Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}}}"),
-                            group, project)).cursor();
+                            Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}, \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
+                            Document.parse("{$project: {_id:\""+party+"\", sentiment:\"$sentiment\"}}"),
+                            Document.parse("{$group: {_id:\"$_id\", sentiment: {$push: \"$sentiment\"}}}"),
+                            project)).cursor();
                 } else {
                     return errorMessage(response, String.format("No party with name '%s' found", party));
                 }
