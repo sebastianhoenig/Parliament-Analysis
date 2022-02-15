@@ -130,8 +130,8 @@ function createLineChart(labelsInput, dataInpput){
             datasets: [{
                 fill: false,
                 data: dataInpput,
-                borderColor: "#1cc88a",
-                pointBorderColor: "#1cc88a",
+                borderColor: "#36b9cc",
+                pointBorderColor: "#36b9cc",
 
             }]
         },
