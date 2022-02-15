@@ -121,7 +121,6 @@ function createBarChart(labelsInput, dataInput){
         data: {
             labels: labelsInput,
             datasets: [{
-                axis: 'x',
                 barThickness: 6,
                 data: dataInput,
                 backgroundColor: "#36b9cc",
@@ -133,19 +132,19 @@ function createBarChart(labelsInput, dataInput){
                 legend: false // Hide legend
             },
             scales: {
-                xAxes: [{
+                x: {
                     gridLines: {
                         color: "rgba(0, 0, 0, 0)",
                     }
-                }],
-                yAxes: [{
+                },
+                y: {
                     gridLines: {
                         color: "rgba(0, 0, 0, 0)",
                     },
                     ticks:{
                         beginAtZero: true
                     }
-                }]
+                }
             }
         }
     });

@@ -121,7 +121,7 @@ function getTokenByParty(party){
 
 
 
-function createLineChart(labelsInput, dataInpput){
+function createLineChart(labelsInput, dataInput){
     var ctx = document.getElementById("myLineChartAllToken");
     var myBarChart = new Chart(ctx, {
         type: 'line',
@@ -129,7 +129,7 @@ function createLineChart(labelsInput, dataInpput){
             labels: labelsInput,
             datasets: [{
                 fill: false,
-                data: dataInpput,
+                data: dataInput,
                 borderColor: "#36b9cc",
                 pointBorderColor: "#36b9cc",
 
@@ -140,19 +140,19 @@ function createLineChart(labelsInput, dataInpput){
                 legend: false // Hide legend
             },
             scales: {
-                xAxes: [{
+                x: {
                     gridLines: {
                         color: "rgba(0, 0, 0, 0)",
                     }
-                }],
-                yAxes: [{
+                },
+                y: {
                     gridLines: {
                         color: "rgba(0, 0, 0, 0)",
                     },
                     ticks:{
                         beginAtZero: true
                     }
-                }]
+                }
             }
             }
     });

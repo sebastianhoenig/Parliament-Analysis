@@ -160,14 +160,14 @@
                                 <!-- Card Body -->
                                 <div class="card-body">
                                     <div class=" text-info text-center w-100" id="SpeakerNameInSentiment">Laden...</div>
-                                    <div class="chart-pie pt-4 pb-2">
+                                    <div class="fa-chart">
                                         <canvas id="myLineChartAllToken"></canvas>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Pie Chart Fraktionen -->
+                        <!-- Bar Chart POS -->
                         <div class="col-xl-6 col-lg-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - Searchbar and datalist for all others Charts -->
@@ -227,10 +227,10 @@
                         </div>
                     </div>
 
-                    <!-- Content Row Token -->
+                    <!-- Content Row NamedEntities -->
                     <div class="row">
 
-                        <!-- Area Chart Token Speaker -->
+                        <!-- Multiple Axes Line Chart NamedEntities -->
                         <div class="col-12 col-12">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - with Searchbar -->
@@ -243,7 +243,7 @@
                                 <div class="card-body">
                                     <div class=" text-primary text-center w-100" id="Token Speaker Name">Laden...</div>
                                     <div class="fa-chart-area">
-                                        <canvas id="myAreaChart Token Speaker"></canvas>
+                                        <canvas id="myLineChartNamedEntities"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -320,8 +320,8 @@
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-    <script src="vendor/chart.js/Chart.min.js"></script>
-
+  <!--  <script src="vendor/chart.js/Chart.min.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 
 
@@ -352,6 +352,7 @@
 <!--    <script src="scripts/3b4PerFraction.js"></script>-->
         <script src="scripts/TokenLineChart.js"></script>
         <script src="scripts/PosVerticalBarChart.js"></script>
+        <script src="scripts/NamedEntitiesLineChart.js"></script>
 
 
 </body>
