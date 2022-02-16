@@ -1,19 +1,17 @@
 package database;
+
 import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
-import database.MongoDBConnectionHandler;
-
 import org.bson.Document;
 import org.json.simple.JSONObject;
-import org.texttechnologylab.uimadb.databases.mongo.Mongo;
 import spark.Request;
 import spark.Response;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-import static com.mongodb.client.model.Filters.eq;
-import static spark.Spark.*;
+import static spark.Spark.get;
+import static spark.Spark.stop;
 
 
 public class ApiConnection {
@@ -53,9 +51,19 @@ public class ApiConnection {
         get("/speaker", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
+
             String id = request.queryMap().get("id").value();
-            Document doc = handler.getDBDocument(id, "members");
-            String json = JSON.serialize(doc);
+            Document doc;
+            if (! request.queryMap().hasKeys()) {
+                doc = (Document) handler.getCollection("members").aggregate(Arrays.asList(
+                        Document.parse("{$project : {_id : \"all\", id : \"$_id\", name: \"$name\", surname : \"$surname\", picture : \"$picture\", allSpeeches : {$size : \"$allSpeeches\"}}}"),
+                        Document.parse("{$group : {_id:\"$_id\", speakers : {$push : {id : \"$id\", name: \"$name\", surname : \"$surname\", picture : \"$picture\", allSpeeches : \"$allSpeeches\"}}}}")
+                )).first();
+                doc.remove("_id");
+            } else {
+                doc = handler.getDBDocument(id, "members");
+            }
+            String json = com.mongodb.util.JSON.serialize(doc);
             return json;
         });
 
@@ -200,7 +208,6 @@ public class ApiConnection {
             if (entities == null) {
                 return errorMessage(response, "Use Attribute entities");
             } else if (entities.equals("persons")) {
-                System.out.println("test");
                 resultList = prozessQuery("persons", speakerID, party, request, response, beginDate, endDate);
             } else if (entities.equals("locations")) {
                 resultList = prozessQuery("locations", speakerID, party, request, response, beginDate, endDate);
@@ -381,16 +388,16 @@ public class ApiConnection {
      */
     private static MongoCursor getSpeechAttributeParty(String attribute, String party, String beginDate, String endDate) {
         Document doc = (Document) handler.getCollection("members").aggregate(Arrays.asList(
-                        Document.parse("{$match: {\"party\" : \"" + party + "\"}}"),
-                        Document.parse("{$group:{_id: \"$party\", ids: { $push:  \"$_id\" }}}"))).first();
+                Document.parse("{$match: {\"party\" : \"" + party + "\"}}"),
+                Document.parse("{$group:{_id: \"$party\", ids: { $push:  \"$_id\" }}}"))).first();
 
         List<String> idList = (ArrayList<String>) doc.get("ids");
 
         idList = idList.stream().map((String id) -> id = "\"" + id + "\"").collect(Collectors.toList());
 
         return handler.getCollection("speeches").aggregate(Arrays.asList(
-                        Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}, \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
-                        Document.parse("{$project : {_id: \"all\", " + attribute + " : \"$" + attribute + "\"}}"))).cursor();
+                Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}, \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
+                Document.parse("{$project : {_id: \"all\", " + attribute + " : \"$" + attribute + "\"}}"))).cursor();
     }
 
 

@@ -64,8 +64,6 @@
         <div class="text-center d-none d-md-inline">
           <button class="rounded-circle border-0" id="sidebarToggle"></button>
         </div>
-
-        <div id="dashboards"></div>
       </ul>
       <!-- End of Sidebar -->
 
@@ -74,11 +72,7 @@
         <!-- Main Content -->
         <div id="content">
           <!-- Topbar -->
-          <nav
-            id="top-navbar"
-            class="topbar bg-white mb-5"
-            style="height: 200px"
-          >
+          <nav class="topbar bg-white mb-5" style="height: 200px">
             <!-- Sidebar Toggle (Topbar) -->
             <button
               id="sidebarToggleTop"
@@ -103,7 +97,6 @@
                   >
                     <div class="input-group">
                       <input
-                        id="speakerInput"
                         type="text"
                         class="form-control bg-light border-0 small"
                         placeholder="Search for Speaker..."
@@ -135,7 +128,6 @@
                   >
                     <div class="input-group">
                       <input
-                        id="partyInput"
                         type="text"
                         class="form-control bg-light border-0 small"
                         placeholder="Search for Party..."
@@ -207,6 +199,7 @@
                 Übersicht
               </h1>
             </div>
+
             <!-- Content Row Tokens -->
             <div class="row">
               <!-- Line Chart Token -->
@@ -226,12 +219,13 @@
                     >
                       Laden...
                     </div>
-                    <div class="fa-chart">
+                    <div class="fa-chart pt-4 pb-2">
                       <canvas id="myLineChartAllToken"></canvas>
                     </div>
                   </div>
                 </div>
               </div>
+
               <!-- Bar Chart POS -->
               <div class="col-xl-6 col-lg-6">
                 <div class="card shadow mb-4">
@@ -249,39 +243,18 @@
                     >
                       Laden...
                     </div>
-                    <div class="fa-chart">
+                    <div class="fa-chart pt-4 pb-2">
                       <canvas id="myBarChartAllPos"></canvas>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- Content Row POS -->
-            <div class="row">
-              <!-- Area Chart POS Speaker -->
-              <div class="col-6 col-6">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - with Searchbar -->
-                  <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                  >
-                    <h6 class="m-0 font-weight-bold text-danger">Sentiment</h6>
-                    <div class="form-inline"></div>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div
-                      class="text-danger text-center w-100"
-                      id="POS Speaker Name"
-                    >
-                      Laden...
-                    </div>
-                  </div>
-                </div>
-              </div>
 
-              <!-- Area Chart POS Fraction -->
-              <div class="col-6 col-6">
+            <!-- Content Row Sentiment and Speaker -->
+            <div class="row">
+              <!-- Bar-Chart Speaker -->
+              <div class="col-8 col-8">
                 <div class="card shadow mb-4">
                   <!-- Card Header - with Searchbar -->
                   <div
@@ -296,20 +269,46 @@
                   <div class="card-body">
                     <div
                       class="text-danger text-center w-100"
-                      id="POS Fraction Name"
+                      id="SpeakerDistributionNameField"
                     >
                       Laden...
                     </div>
-                    <div class="fa-chart-area">
-                      <canvas id="myAreaChart POS Fraction"></canvas>
+                    <div class="fa-chart pt-4 pb-2">
+                      <canvas id="myBarChartSpeakerDistribution"></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Radar-Chart Sentiment -->
+              <div class="col-4 col-4">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - with Searchbar -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-danger">Sentiment</h6>
+                    <div class="form-inline"></div>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <div
+                      class="text-danger text-center w-100"
+                      id="SentimentNameField"
+                    >
+                      Laden...
+                    </div>
+                    <div class="fa-chart pt-4 pb-2">
+                      <canvas id="myRadarChartSentiment"></canvas>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-            <!-- Content Row Token -->
+
+            <!-- Content Row NamedEntities -->
             <div class="row">
-              <!-- Area Chart Token Speaker -->
+              <!-- Multiple Axes Line Chart NamedEntities -->
               <div class="col-12 col-12">
                 <div class="card shadow mb-4">
                   <!-- Card Header - with Searchbar -->
@@ -329,7 +328,7 @@
                     >
                       Laden...
                     </div>
-                    <div class="fa-chart-area">
+                    <div class="fa-chart pt-4 pb-2">
                       <canvas id="myLineChartNamedEntities"></canvas>
                     </div>
                   </div>
@@ -370,8 +369,8 @@
                     >
                       Laden...
                     </div>
-                    <div class="fa-chart-area">
-                      <canvas id="myLineChartNamedEntities"></canvas>
+                    <div class="fa-chart pt-4 pb-2">
+                      <canvas id="myAreaChart NamedEntities Speaker"></canvas>
                     </div>
                   </div>
                 </div>
@@ -413,18 +412,13 @@
 
     <!-- Page level plugins -->
     <script src="vendor/chart.js/Chart.min.js"></script>
-
-    <!-- My own -->
-    <script src="scripts/subdashboard_creation/fillDataList.js"></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"
-      integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    ></script>
     <script src="scripts/TokenLineChart.js"></script>
     <script src="scripts/PosVerticalBarChart.js"></script>
+    <script src="scripts/SentimentRadarChart.js"></script>
+    <script src="scripts/SpeakerDistributionBarChart.js"></script>
     <script src="scripts/NamedEntitiesLineChart.js"></script>
+
+    <script src="scripts/subdashboard_creation/fillDataList.js"></script>
     <script
       type="module"
       src="scripts/subdashboard_creation/renderMultiDashboards.js"
