@@ -207,7 +207,6 @@ public class ApiConnection {
             if (entities == null) {
                 return errorMessage(response, "Use Attribute entities");
             } else if (entities.equals("persons")) {
-                System.out.println("test");
                 resultList = prozessQuery("persons", speakerID, party, request, response, beginDate, endDate);
             } else if (entities.equals("locations")) {
                 resultList = prozessQuery("locations", speakerID, party, request, response, beginDate, endDate);
