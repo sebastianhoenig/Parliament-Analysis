@@ -5,9 +5,9 @@ function getParties() {
     method: "GET",
     dataType: "json",
     contentType: "text/plain",
-    url: "http://api.prg2021.texttechnologylab.org/parties",
+    url: "http://localhost:4567/party",
     success: function (data) {
-      let targetDataList = document.getElementById("parties");
+      let targetDataList = document.getElementById("PartyName");
       data["result"].forEach((element) => {
         let newOption = document.createElement("option");
         newOption.value = element.id;
@@ -28,11 +28,11 @@ function getIndividuals() {
     contentType: "text/plain",
     url: "http://localhost:4567/speakers",
     success: function (data) {
-      let targetDataList = document.getElementById("persons");
+      let targetDataList = document.getElementById("SpeakerName");
       data["result"].forEach((element) => {
         let newOption = document.createElement("option");
-        let firstname = element.firstname;
-        let name = element.name;
+        let firstname = element.name;
+        let name = element.surname;
         let party = "";
         if (element.party !== null) {
           party = "(" + element.party + ")".replace(/\./g, "");

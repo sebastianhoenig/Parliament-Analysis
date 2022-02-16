@@ -74,7 +74,8 @@ public class ApiConnection {
                     cursor.next();
                 }
                 JSONObject json = new JSONObject();
-                json.put(currentParty, counter);
+                json.put("members", counter);
+                json.put("id", currentParty);
                 partyList.add(json);
             }
             JSONObject result = new JSONObject();
