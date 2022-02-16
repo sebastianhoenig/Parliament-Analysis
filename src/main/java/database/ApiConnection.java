@@ -1,5 +1,6 @@
 package database;
 import com.mongodb.client.MongoCursor;
+import com.mongodb.util.JSON;
 import database.MongoDBConnectionHandler;
 
 import org.bson.Document;
@@ -28,7 +29,7 @@ public class ApiConnection {
             String id = request.queryMap().get("id").value();
             Document doc = handler.getDBDocument(id, "speeches");
             doc.remove("uima");
-            String json = com.mongodb.util.JSON.serialize(doc);
+            String json = JSON.serialize(doc);
             return json;
         });
 
@@ -43,7 +44,7 @@ public class ApiConnection {
             while (cursor.hasNext()) {
                 Document doc = (Document) cursor.next();
                 doc.remove("uima");
-                json = com.mongodb.util.JSON.serialize(doc);
+                json = JSON.serialize(doc);
                 finalJson.append(json);
             }
             return finalJson.toString();
@@ -54,9 +55,10 @@ public class ApiConnection {
             response.type("application/json;charset=UTF-8");
             String id = request.queryMap().get("id").value();
             Document doc = handler.getDBDocument(id, "members");
-            String json = com.mongodb.util.JSON.serialize(doc);
+            String json = JSON.serialize(doc);
             return json;
         });
+
 
         get("/party", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
@@ -78,12 +80,30 @@ public class ApiConnection {
             return json.toJSONString();
         });
 
+        get("/speakers", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
+            response.type("application/json;charset=UTF-8");
+            MongoCursor cursor = handler.getCollection("members").find().cursor();
+            ArrayList<JSONObject> speakerList = new ArrayList<>();
+            while (cursor.hasNext()) {
+                JSONObject json = new JSONObject();
+                Document doc = (Document) cursor.next();
+                json.put("id", (String) doc.get("_id"));
+                json.put("name", (String) doc.get("name"));
+                json.put("surname", (String) doc.get("surname"));
+                json.put("party", (String) doc.get("party"));
+                speakerList.add(json);
+            }
+            JSONObject result = new JSONObject();
+            result.put("result", speakerList);
+            return result.toJSONString();
+        });
+
         get("/api/close", (request, response) -> {
             stop();
             return "Shutdown Server";
         });
 
-        // TODO: beginDaten and endDate
         get("/token", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
@@ -199,6 +219,7 @@ public class ApiConnection {
 
 
         get("/sentiment", (request, response) -> {
+            response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
 
             String speakerID = request.queryMap().get("speakerID").value();
@@ -230,7 +251,7 @@ public class ApiConnection {
                 // pos pro Party
                 if (allParties.contains(party)) {
                     Document doc = (Document) handler.getCollection("members").aggregate(Arrays.asList(
-                            Document.parse("{$match: {\"party\" : \"" + party + "\", \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
+                            Document.parse("{$match: {\"party\" : \"" + party + "\"}}"),
                             Document.parse("{$group:{_id: \"$party\", ids: { $push:  \"$_id\" }}}"))).first();
 
                     List<String> idList = (ArrayList<String>) doc.get("ids");
@@ -238,8 +259,10 @@ public class ApiConnection {
                     idList = idList.stream().map((String id) -> id = "\"" + id + "\"").collect(Collectors.toList());
 
                     cursor = handler.getCollection("speeches").aggregate(Arrays.asList(
-                            Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}}}"),
-                            group, project)).cursor();
+                            Document.parse("{$match: {\"speaker\" : {$in : " + idList + "}, \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
+                            Document.parse("{$project: {_id:\""+party+"\", sentiment:\"$sentiment\"}}"),
+                            Document.parse("{$group: {_id:\"$_id\", sentiment: {$push: \"$sentiment\"}}}"),
+                            project)).cursor();
                 } else {
                     return errorMessage(response, String.format("No party with name '%s' found", party));
                 }
