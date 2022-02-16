@@ -32,7 +32,7 @@ function getAllToken(){
     });
 }
 
-// getTokenSpeaker();
+getTokenSpeaker();
 
 function getTokenSpeaker(){
     document.querySelector("#btnSpeaker").addEventListener("click", function(){
@@ -81,7 +81,7 @@ function getTokenBySpeaker(id){
     });
 }
 
-// getTokenParty();
+getTokenParty();
 
 function getTokenParty(){
     document.querySelector("#btnParty").addEventListener("click", function(){
@@ -121,7 +121,7 @@ function getTokenByParty(party){
 
 
 
-function createLineChart(labelsInput, dataInpput){
+function createLineChart(labelsInput, dataInput){
     var ctx = document.getElementById("myLineChartAllToken");
     var myBarChart = new Chart(ctx, {
         type: 'line',
@@ -129,14 +129,13 @@ function createLineChart(labelsInput, dataInpput){
             labels: labelsInput,
             datasets: [{
                 fill: false,
-                data: dataInpput,
+                data: dataInput,
                 borderColor: "#36b9cc",
                 pointBorderColor: "#36b9cc",
 
             }]
         },
         options: {
-            responsive: true,
             plugins: {
                 legend: false // Hide legend
             },
