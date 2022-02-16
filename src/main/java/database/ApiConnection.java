@@ -63,7 +63,7 @@ public class ApiConnection {
         get("/party", (request, response) -> {
             response.header("Access-Control-Allow-Origin", "*");
             response.type("application/json;charset=UTF-8");
-            HashMap<String, String> partyMembers = new HashMap<>();
+            ArrayList<JSONObject> partyList = new ArrayList<>();
             for (int i = 0; i < allParties.size(); i++) {
                 String currentParty = allParties.get(i);
                 Document match = Document.parse("{$match:{party: \"" + currentParty + "\"}}");
@@ -73,11 +73,13 @@ public class ApiConnection {
                     counter += 1;
                     cursor.next();
                 }
-                String stringCounter = String.valueOf(counter);
-                partyMembers.put(currentParty, stringCounter);
+                JSONObject json = new JSONObject();
+                json.put(currentParty, counter);
+                partyList.add(json);
             }
-            JSONObject json = new JSONObject(partyMembers);
-            return json.toJSONString();
+            JSONObject result = new JSONObject();
+            result.put("result", partyList);
+            return result.toJSONString();
         });
 
         get("/speakers", (request, response) -> {
