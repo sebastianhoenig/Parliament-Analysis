@@ -2,8 +2,6 @@ package database;
 
 import com.mongodb.client.MongoCursor;
 import com.mongodb.util.JSON;
-import database.MongoDBConnectionHandler;
-
 import org.bson.Document;
 import org.json.simple.JSONObject;
 import spark.Request;
