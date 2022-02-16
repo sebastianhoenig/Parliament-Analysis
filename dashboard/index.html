@@ -207,10 +207,9 @@
                 Übersicht
               </h1>
             </div>
-
             <!-- Content Row Tokens -->
             <div class="row">
-              <!-- Pie Chart Sprecher*innen -->
+              <!-- Line Chart Token -->
               <div class="col-xl-6 col-lg-6">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Searchbar and datalist for all others Charts-->
@@ -227,14 +226,13 @@
                     >
                       Laden...
                     </div>
-                    <div class="chart-pie pt-4 pb-2">
-                      <canvas id="myPieChart Speaker"></canvas>
+                    <div class="fa-chart">
+                      <canvas id="myLineChartAllToken"></canvas>
                     </div>
                   </div>
                 </div>
               </div>
-
-              <!-- Pie Chart Fraktionen -->
+              <!-- Bar Chart POS -->
               <div class="col-xl-6 col-lg-6">
                 <div class="card shadow mb-4">
                   <!-- Card Header - Searchbar and datalist for all others Charts -->
@@ -251,14 +249,13 @@
                     >
                       Laden...
                     </div>
-                    <div class="chart-pie pt-4 pb-2">
-                      <canvas id="myPieChart Fraction"></canvas>
+                    <div class="fa-chart">
+                      <canvas id="myBarChartAllPos"></canvas>
                     </div>
                   </div>
                 </div>
               </div>
             </div>
-
             <!-- Content Row POS -->
             <div class="row">
               <!-- Area Chart POS Speaker -->
@@ -278,9 +275,6 @@
                       id="POS Speaker Name"
                     >
                       Laden...
-                    </div>
-                    <div class="fa-chart-area">
-                      <canvas id="myAreaChart POS Speaker"></canvas>
                     </div>
                   </div>
                 </div>
@@ -313,7 +307,6 @@
                 </div>
               </div>
             </div>
-
             <!-- Content Row Token -->
             <div class="row">
               <!-- Area Chart Token Speaker -->
@@ -337,7 +330,7 @@
                       Laden...
                     </div>
                     <div class="fa-chart-area">
-                      <canvas id="myAreaChart Token Speaker"></canvas>
+                      <canvas id="myLineChartNamedEntities"></canvas>
                     </div>
                   </div>
                 </div>
@@ -378,7 +371,7 @@
                       Laden...
                     </div>
                     <div class="fa-chart-area">
-                      <canvas id="myAreaChart NamedEntities Speaker"></canvas>
+                      <canvas id="myLineChartNamedEntities"></canvas>
                     </div>
                   </div>
                 </div>
@@ -424,34 +417,17 @@
     <!-- My own -->
     <script src="scripts/subdashboard_creation/fillDataList.js"></script>
     <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"
+      integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+    <script src="scripts/TokenLineChart.js"></script>
+    <script src="scripts/PosVerticalBarChart.js"></script>
+    <script src="scripts/NamedEntitiesLineChart.js"></script>
+    <script
       type="module"
       src="scripts/subdashboard_creation/renderMultiDashboards.js"
     ></script>
-
-    <!--    &lt;!&ndash; Eigene Scripts&ndash;&gt;-->
-    <!--    &lt;!&ndash;main&ndash;&gt;-->
-    <!--    <script src="scripts/main.js"></script>-->
-
-    <!--    &lt;!&ndash;3a&ndash;&gt;-->
-    <!--    <script src="scripts/3a.js"></script>-->
-
-    <!--    &lt;!&ndash;3b1&ndash;&gt;-->
-    <!--    <script src="scripts/3b1PerSpeaker.js"></script>-->
-    <!--    <script src="scripts/3b1PerFraction.js"></script>-->
-    <!--    <script src="scripts/3b1All.js"></script>-->
-
-    <!--    &lt;!&ndash;3b2&ndash;&gt;-->
-    <!--    <script src="scripts/3b2PerSpeaker.js"></script>-->
-    <!--    <script src="scripts/3b2PerFraction.js"></script>-->
-    <!--    <script src="scripts/3b2All.js"></script>-->
-
-    <!--    &lt;!&ndash;3b3&ndash;&gt;-->
-    <!--    <script src="scripts/3b3PerSpeaker.js"></script>-->
-    <!--    <script src="scripts/3b3PerFraction.js"></script>-->
-    <!--    <script src="scripts/3b3All.js"></script>-->
-
-    <!--    &lt;!&ndash;3b4&ndash;&gt;-->
-    <!--    <script src="scripts/3b4PerSpeaker.js"></script>-->
-    <!--    <script src="scripts/3b4PerFraction.js"></script>-->
   </body>
 </html>

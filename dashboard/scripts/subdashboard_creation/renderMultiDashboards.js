@@ -2,9 +2,11 @@ const searchSpeacherButton = document.getElementById("searchSpeaker");
 const searchPartyButton = document.getElementById("searchParty");
 
 searchSpeacherButton.addEventListener("click", () => {
-  console.log("HEY");
   let targetDataList = document.getElementById("SpeakerName");
   let currInput = document.getElementById("speakerInput");
+  let currId = document.querySelector(
+    '#SpeakerName [value="' + currInput.value + '"]'
+  ).dataset.value;
   let check = false;
   for (let i = 0; i < targetDataList.childNodes.length; i++) {
     if (currInput.value == targetDataList.childNodes[i].value) {
@@ -12,19 +14,17 @@ searchSpeacherButton.addEventListener("click", () => {
     }
   }
   if (check) {
-    console.log(currInput.value);
     let dashboards = document.getElementById("dashboards");
-    let newDashboard = new Dashboard(currInput.value, 0);
-    console.log(dashboardList);
+    let newDashboard = new Dashboard(currInput.value.replace(/\s/g, ""), 0);
     dashboardList.addToDashboardList(newDashboard);
     dashboardList.setIds();
-    createDashboard(newDashboard, dashboards);
+    createDashboard(newDashboard, dashboards, currId);
   } else {
     console.log("Entered value not in dropdown");
   }
 });
 
-function createDashboard(element, dashboards) {
+function createDashboard(element, dashboards, speakerID) {
   let dashboard = document.createElement("div");
   dashboard.classList.add("project-nav");
   dashboard.id = element.getId();
@@ -32,7 +32,7 @@ function createDashboard(element, dashboards) {
   dashboardTextDiv.classList.add("project-text");
   dashboardTextDiv.textContent = element.getName();
   dashboardTextDiv.addEventListener("click", (e) => {
-    changeActiveDashboard(e, dashboards);
+    changeActiveDashboard(e, dashboards, element, speakerID);
   });
   let dashboardDeleteDiv = document.createElement("div");
   dashboardDeleteDiv.classList.add("project-del");
@@ -76,7 +76,6 @@ function addProject(
     projectList.addToProjectList(newProject);
     projectList.setIds();
     createProject(newProject, projects);
-    setData(projectList);
     addProjectButton.classList.remove("deactivated");
     addProjectInput.classList.add("deactivated");
     addProjectInputButton.classList.add("deactivated");
@@ -85,170 +84,184 @@ function addProject(
   }
 }
 
-function changeActiveDashboard(e, dashboards) {
-  console.log("changeActiveDashboards");
+function changeActiveDashboard(e, dashboards, element, speakerID) {
   for (let item of dashboards.children) {
     item.classList.remove("active");
   }
   let dashboardID = e.target.parentElement.id;
-  console.log(dashboardID);
   e.target.parentElement.classList.add("active");
-  console.log(dashboardList);
-  console.log(dashboardList.getDashboardList);
-  renderPageContent(dashboardList.getDashboardList[dashboardID]);
+  let name = element.getName();
+  renderPageContent(
+    dashboardList.getDashboardList[dashboardID],
+    name,
+    speakerID
+  );
 }
 
-function renderPageContent(id) {
+function renderPageContent(id, name, speakerID) {
   const topbar = document.getElementById("top-navbar");
   topbar.innerHTML = "";
   const container = document.getElementById("content");
-  container.innerHTML = `
+  container.innerHTML =
+    `
   <div class="container-fluid">
-  <!-- Page Divider (Übersicht) -->
-  <hr class="my-3 border" />
-  <div
-  class="d-sm-flex align-items-center justify-content-between mb-3"
->
-  <h1 class="h2 mb-0 text-info mb-2 text-center w-100">
-    Übersicht
-  </h1>
-</div>
+            <!-- Page Divider (Übersicht) -->
+            <hr class="my-3 border" />
 
-<!-- Content Row Tokens -->
-<div class="row">
-  <!-- Pie Chart Sprecher*innen -->
-  <div class="col-xl-6 col-lg-6">
-    <div class="card shadow mb-4">
-      <!-- Card Header - Searchbar and datalist for all others Charts-->
-      <div
-        class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-      >
-        <h6 class="m-3 font-weight-bold text-info">Token</h6>
-      </div>
-      <!-- Card Body -->
-      <div class="card-body">
-        <div
-          class="text-info text-center w-100"
-          id="SpeakerNameInSentiment"
-        >
-          Laden...
-        </div>
-        <div class="chart-pie pt-4 pb-2">
-          <canvas id="myPieChart Speaker"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
+            <div
+              class="d-sm-flex align-items-center justify-content-between mb-3"
+            >
+              <h1 class="h2 mb-0 text-info mb-2 text-center w-100">
+                Übersicht
+              </h1>
+            </div>
+            <!-- Content Row Tokens -->
+            <div class="row">
+              <!-- Line Chart Token -->
+              <div class="col-xl-6 col-lg-6">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Searchbar and datalist for all others Charts-->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-3 font-weight-bold text-info">Token</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class=" text-info text-center w-100" >` +
+    name +
+    `</div>
+                        <div class="fa-chart">
+                            <canvas id=` +
+    "myLineChartToken" +
+    name +
+    "" +
+    `></canvas>
+                        </div>
+                    </div>
+                </div>
+              </div>
+              <!-- Bar Chart POS -->
+              <div class="col-xl-6 col-lg-6">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Searchbar and datalist for all others Charts -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-3 font-weight-bold text-info">POS</h6>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class=" text-info text-center w-100" >` +
+    name +
+    `</div>
+                        <div class="fa-chart">
+                            <canvas id=` +
+    "myBarChartPos" +
+    name +
+    "" +
+    `></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          </div>
+            <!-- Content Row POS -->
+            <div class="row">
+              <!-- Area Chart POS Speaker -->
+              <div class="col-6 col-6">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - with Searchbar -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-danger">Sentiment</h6>
+                    <div class="form-inline"></div>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <div
+                      class="text-danger text-center w-100"
+                    >
+                      ` +
+    name +
+    `
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-  <!-- Pie Chart Fraktionen -->
-  <div class="col-xl-6 col-lg-6">
-    <div class="card shadow mb-4">
-      <!-- Card Header - Searchbar and datalist for all others Charts -->
-      <div
-        class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-      >
-        <h6 class="m-3 font-weight-bold text-info">POS</h6>
-      </div>
-      <!-- Card Body -->
-      <div class="card-body">
-        <div
-          class="text-info text-center w-100"
-          id="FractionNameInSentiment"
-        >
-          Laden...
-        </div>
-        <div class="chart-pie pt-4 pb-2">
-          <canvas id="myPieChart Fraction"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Content Row POS -->
-<div class="row">
-  <!-- Area Chart POS Speaker -->
-  <div class="col-6 col-6">
-    <div class="card shadow mb-4">
-      <!-- Card Header - with Searchbar -->
-      <div
-        class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-      >
-        <h6 class="m-0 font-weight-bold text-danger">Sentiment</h6>
-        <div class="form-inline"></div>
-      </div>
-      <!-- Card Body -->
-      <div class="card-body">
-        <div
-          class="text-danger text-center w-100"
-          id="POS Speaker Name"
-        >
-          Laden...
-        </div>
-        <div class="fa-chart-area">
-          <canvas id="myAreaChart POS Speaker"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Area Chart POS Fraction -->
-  <div class="col-6 col-6">
-    <div class="card shadow mb-4">
-      <!-- Card Header - with Searchbar -->
-      <div
-        class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-      >
-        <h6 class="m-0 font-weight-bold text-danger">
-          Speaker Verteilung
-        </h6>
-        <div class="form-inline"></div>
-      </div>
-      <!-- Card Body -->
-      <div class="card-body">
-        <div
-          class="text-danger text-center w-100"
-          id="POS Fraction Name"
-        >
-          Laden...
-        </div>
-        <div class="fa-chart-area">
-          <canvas id="myAreaChart POS Fraction"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- Content Row Token -->
-<div class="row">
-  <!-- Area Chart Token Speaker -->
-  <div class="col-12 col-12">
-    <div class="card shadow mb-4">
-      <!-- Card Header - with Searchbar -->
-      <div
-        class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-      >
-        <h6 class="m-0 font-weight-bold text-primary">
-          NamedEntities
-        </h6>
-        <div class="form-inline"></div>
-      </div>
-      <!-- Card Body -->
-      <div class="card-body">
-        <div
-          class="text-primary text-center w-100"
-          id="Token Speaker Name"
-        >
-          Laden...
-        </div>
-        <div class="fa-chart-area">
-          <canvas id="myAreaChart Token Speaker"></canvas>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>`;
+              <!-- Area Chart POS Fraction -->
+              <div class="col-6 col-6">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - with Searchbar -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-danger">
+                      Speaker Verteilung
+                    </h6>
+                    <div class="form-inline"></div>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <div
+                      class="text-danger text-center w-100"
+                    >
+                      ` +
+    name +
+    `
+                    </div>
+                    <div class="fa-chart-area">
+                      <canvas id=` +
+    "myAreaChart" +
+    name +
+    "" +
+    `></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Content Row Token -->
+            <div class="row">
+              <!-- Area Chart Token Speaker -->
+              <div class="col-12 col-12">
+                <div class="card shadow mb-4">
+                  <!-- Card Header - with Searchbar -->
+                  <div
+                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
+                  >
+                    <h6 class="m-0 font-weight-bold text-primary">
+                      NamedEntities
+                    </h6>
+                    <div class="form-inline"></div>
+                  </div>
+                  <!-- Card Body -->
+                  <div class="card-body">
+                    <div
+                      class="text-primary text-center w-100"
+                    >
+                      ` +
+    name +
+    `
+                    </div>
+                    <div class="fa-chart-area">
+                      <canvas id=` +
+    "myLineChart" +
+    name +
+    "" +
+    `></canvas>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+  let tokenID = "myLineChartToken" + name;
+  let posID = "myBarChartPos" + name;
+  let namedEntitiesID = "myLineChart" + name;
+  const tokenChart = document.getElementById(tokenID);
+  const posChart = document.getElementById(posID);
+  const namedEntities = document.getElementById(namedEntitiesID);
+  getTokenBySpeaker(speakerID, tokenID);
+  getPosBySpeaker(speakerID, posID);
+  getAllNamedEntitiesPerson(speakerID, namedEntitiesID);
 }
 
 const dashboardList = (() => {
