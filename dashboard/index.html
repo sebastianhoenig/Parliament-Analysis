@@ -185,29 +185,10 @@
                         </div>
                     </div>
 
-                    <!-- Content Row POS -->
+                    <!-- Content Row Sentiment and Speaker -->
                     <div class="row">
 
-                        <!-- Area Chart POS Speaker -->
-                        <div class="col-6 col-6">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - with Searchbar -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-danger">Sentiment</h6>
-                                    <div class="form-inline">
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class=" text-danger text-center w-100" id="POS Speaker Name">Laden...</div>
-                                    <div class="fa-chart-area">
-                                        <canvas id="myAreaChart POS Speaker"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Area Chart POS Fraction -->
+                        <!-- Bar-Chart Speaker -->
                         <div class="col-6 col-6">
                             <div class="card shadow mb-4">
                                 <!-- Card Header - with Searchbar -->
@@ -218,9 +199,28 @@
                                 </div>
                                 <!-- Card Body -->
                                 <div class="card-body">
-                                    <div class=" text-danger text-center w-100" id="POS Fraction Name">Laden...</div>
-                                    <div class="fa-chart-area">
-                                        <canvas id="myAreaChart POS Fraction"></canvas>
+                                    <div class=" text-danger text-center w-100" id="SpeakerDistributionNameField">Laden...</div>
+                                    <div class="fa-chart">
+                                        <canvas id="myBarChartSpeakerDistribution"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Radar-Chart Sentiment -->
+                        <div class="col-6 col-6">
+                            <div class="card shadow mb-4">
+                                <!-- Card Header - with Searchbar -->
+                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                                    <h6 class="m-0 font-weight-bold text-danger">Sentiment</h6>
+                                    <div class="form-inline">
+                                    </div>
+                                </div>
+                                <!-- Card Body -->
+                                <div class="card-body">
+                                    <div class=" text-danger text-center w-100" id="SentimentNameField">Laden...</div>
+                                    <div class="fa-chart">
+                                        <canvas id="myRadarChartSentiment"></canvas>
                                     </div>
                                 </div>
                             </div>
@@ -320,8 +320,8 @@
     <script src="js/sb-admin-2.min.js"></script>
 
     <!-- Page level plugins -->
-  <!--  <script src="vendor/chart.js/Chart.min.js"></script>-->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="vendor/chart.js/Chart.min.js"></script>
+<!--    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js" integrity="sha512-TW5s0IT/IppJtu76UbysrBH9Hy/5X41OTAbQuffZFU6lQ1rdcLHzpU5BzVvr/YFykoiMYZVWlr/PX1mDcfM9Qg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>-->
 
 
 
@@ -350,9 +350,11 @@
 <!--    &lt;!&ndash;3b4&ndash;&gt;-->
 <!--    <script src="scripts/3b4PerSpeaker.js"></script>-->
 <!--    <script src="scripts/3b4PerFraction.js"></script>-->
-        <script src="scripts/TokenLineChart.js"></script>
-        <script src="scripts/PosVerticalBarChart.js"></script>
-        <script src="scripts/NamedEntitiesLineChart.js"></script>
+    <script src="scripts/TokenLineChart.js"></script>
+    <script src="scripts/PosVerticalBarChart.js"></script>
+    <script src="scripts/SentimentRadarChart.js"></script>
+    <script src="scripts/SpeakerDistributionBarChart.js"></script>
+    <script src="scripts/NamedEntitiesLineChart.js"></script>
 
 
 </body>
