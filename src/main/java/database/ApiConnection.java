@@ -56,8 +56,8 @@ public class ApiConnection {
             Document doc;
             if (! request.queryMap().hasKeys()) {
                 doc = (Document) handler.getCollection("members").aggregate(Arrays.asList(
-                        Document.parse("{$project : {_id : \"all\", id : \"$_id\", name: \"$name\", surname : \"$surname\", picture : \"$picture\", allSpeeches : {$size : \"$allSpeeches\"}}}"),
-                        Document.parse("{$group : {_id:\"$_id\", speakers : {$push : {id : \"$id\", name: \"$name\", surname : \"$surname\", picture : \"$picture\", allSpeeches : \"$allSpeeches\"}}}}")
+                        Document.parse("{$project : {_id : \"all\", id : \"$_id\", name: \"$name\", surname : \"$surname\", party : \"$party\", picture : \"$picture\", allSpeeches : {$size : \"$allSpeeches\"}}}"),
+                        Document.parse("{$group : {_id:\"$_id\", speakers : {$push : {id : \"$id\", name: \"$name\", surname : \"$surname\", party : \"$party\", picture : \"$picture\", allSpeeches : \"$allSpeeches\"}}}}")
                 )).first();
                 doc.remove("_id");
             } else {

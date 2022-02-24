@@ -51,14 +51,7 @@ function getTokenBySpeaker(id, tokenID) {
   });
 }
 
-function getTokenParty() {
-  document.querySelector("#btnParty").addEventListener("click", function () {
-    const input = document.getElementById("inputParty");
-    getTokenByParty(input.value);
-  });
-}
-
-function getTokenByParty(party) {
+function getTokenByParty(party, tokenID) {
   $.ajax({
     url: "http://localhost:4567/token?party=" + party,
     method: "GET",
@@ -74,7 +67,7 @@ function getTokenByParty(party) {
         }
       }
 
-      createLineChart(allToken, tokenCount);
+      createLineChartPerson(allToken, tokenCount, tokenID);
     },
     error: function () {
       console.log("Geht nicht... :");
@@ -83,7 +76,6 @@ function getTokenByParty(party) {
 }
 
 function createLineChartPerson(labelsInput, dataInput, tokenID) {
-  console.log("HEY WTF");
   var ctx = document.getElementById(tokenID);
   var myBarChart = new Chart(ctx, {
     type: "line",
@@ -158,5 +150,3 @@ function createLineChart(labelsInput, dataInput) {
     },
   });
 }
-
-getAllToken();

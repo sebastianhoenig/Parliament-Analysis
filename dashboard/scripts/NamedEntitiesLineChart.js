@@ -132,6 +132,76 @@ function getAllNamedEntitiesPerson(id, neID) {
   });
 }
 
+function getAllNamedEntitiesParty(id, neID) {
+  $.ajax({
+    url:
+      "http://localhost:4567/namedEntities?party=" + id + "&entities=persons",
+    method: "GET",
+    dataType: "json",
+    success: function (data) {
+      const dataPersons = [];
+      const labelPersons = [];
+      for (let i = 0; i < 40; i++) {
+        dataPersons.push(data.result[i].count);
+        labelPersons.push(data.result[i].persons);
+      }
+
+      $.ajax({
+        url:
+          "http://localhost:4567/namedEntities?party=" +
+          id +
+          "&entities=locations",
+        method: "GET",
+        dataType: "json",
+        success: function (data) {
+          const dataLocations = [];
+          const labelLocations = [];
+          for (let j = 0; j < 40; j++) {
+            dataLocations.push(data.result[j].count);
+            labelLocations.push(data.result[j].locations);
+          }
+
+          $.ajax({
+            url:
+              "http://localhost:4567/namedEntities?party=" +
+              id +
+              "&entities=organisations",
+            method: "GET",
+            dataType: "json",
+            success: function (data) {
+              const dataOrganisations = [];
+              const labelOrganisations = [];
+              for (let k = 0; k < 40; k++) {
+                dataOrganisations.push(data.result[k].count);
+                labelOrganisations.push(data.result[k].organisations);
+              }
+
+              createMultipleLineChartPerson(
+                dataPersons,
+                dataLocations,
+                dataOrganisations,
+                labelPersons,
+                labelLocations,
+                labelOrganisations,
+                neID
+              );
+            },
+            error: function () {
+              console.log("Geht nicht... :");
+            },
+          });
+        },
+        error: function () {
+          console.log("Geht nicht... :");
+        },
+      });
+    },
+    error: function () {
+      console.log("Geht nicht... :");
+    },
+  });
+}
+
 function createMultipleLineChartPerson(
   dataPersons,
   dataLocations,
@@ -262,5 +332,3 @@ function createMultipleLineChart(
     },
   });
 }
-
-getAllNamedEntities();

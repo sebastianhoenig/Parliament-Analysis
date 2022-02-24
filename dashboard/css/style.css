@@ -1,0 +1,72 @@
+.dashboard-nav {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 10px;
+  font-size: large;
+}
+
+.dashboard-nav-item {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  color: rgb(255, 228, 196);
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  text-align: center;
+}
+
+.dashboard-nav-item:hover {
+  text-shadow: 0 0 10px #fff;
+  cursor: pointer;
+}
+
+.dashboard-nav-item:hover .dashboard-del button {
+  visibility: visible;
+}
+
+.dashboard-del button {
+  visibility: hidden;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  overflow: hidden;
+  outline: none;
+}
+
+.start-text {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  margin-left: 10px;
+  margin-right: 10px;
+  font-size: large;
+  color: bisque;
+}
+
+.project-nav:hover {
+  background-color: rgba(146, 155, 152, 0.4);
+}
+
+.headline {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(0, 238, 255);
+  font-size: 1.2em;
+  text-align: center;
+}
+
+#main-dashboard {
+  font-size: x-large;
+}
+
+#speaker-dashboards {
+  display: flex;
+  flex-direction: column;
+}
+
+#party-dashboards {
+  display: flex;
+  flex-direction: column;
+}

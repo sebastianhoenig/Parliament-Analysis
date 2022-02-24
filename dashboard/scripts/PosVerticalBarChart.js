@@ -1,5 +1,3 @@
-getAllPos();
-
 function getAllPos() {
   $.ajax({
     url: "http://localhost:4567/pos",
@@ -51,7 +49,7 @@ function getPosParty() {
   });
 }
 
-function getPosByParty(party) {
+function getPosByParty(party, posID) {
   $.ajax({
     url: "http://localhost:4567/pos?party=" + party,
     method: "GET",
@@ -65,7 +63,7 @@ function getPosByParty(party) {
         posCount.push(data.result[i].count);
       }
 
-      createBarChart(allPos, posCount);
+      createBarChartPerson(allPos, posCount, posID);
     },
     error: function () {
       console.log("Geht nicht... :");

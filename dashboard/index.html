@@ -22,6 +22,7 @@
       href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
       rel="stylesheet"
     />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
 
     <!-- Custom styles for this template-->
     <link href="css/sb-admin-2.min.css" rel="stylesheet" />
@@ -35,34 +36,16 @@
         class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion"
         id="accordionSidebar"
       >
-        <!-- Sidebar - Brand -->
-        <a
-          class="sidebar-brand d-flex align-items-center justify-content-center"
-          href="index.html"
-        >
-          <div class="sidebar-brand-icon rotate-n-15">
-            <i class="fas fa-laugh-wink"></i>
-          </div>
-          <div class="sidebar-brand-text mx-3">Übersicht</div>
-        </a>
-
-        <!-- Divider -->
+        <div id="main-dashboard"></div>
         <hr class="sidebar-divider my-0" />
-
-        <!-- Nav Item - Dashboard -->
-        <li class="nav-item active">
-          <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Übersicht</span></a
-          >
-        </li>
-
-        <!-- Divider -->
-        <hr class="sidebar-divider d-none d-md-block" />
-
-        <!-- Sidebar Toggler (Sidebar) -->
-        <div class="text-center d-none d-md-inline">
-          <button class="rounded-circle border-0" id="sidebarToggle"></button>
+        <div class="dashboard-nav" id="dashboards">
+          <div id="speaker-dashboards" class="start-text">
+            <div class="headline">Speaker Analysis</div>
+          </div>
+          <hr class="sidebar-divider my-0" />
+          <div id="party-dashboards" class="start-text">
+            <div class="headline">Party Analysis</div>
+          </div>
         </div>
       </ul>
       <!-- End of Sidebar -->
@@ -70,7 +53,7 @@
       <!-- Content Wrapper -->
       <div id="content-wrapper" class="d-flex flex-column">
         <!-- Main Content -->
-        <div id="content">
+        <div>
           <!-- Topbar -->
           <nav class="topbar bg-white mb-5" style="height: 200px">
             <!-- Sidebar Toggle (Topbar) -->
@@ -97,6 +80,7 @@
                   >
                     <div class="input-group">
                       <input
+                        id="speakerInput"
                         type="text"
                         class="form-control bg-light border-0 small"
                         placeholder="Search for Speaker..."
@@ -128,6 +112,7 @@
                   >
                     <div class="input-group">
                       <input
+                        id="partyInput"
                         type="text"
                         class="form-control bg-light border-0 small"
                         placeholder="Search for Party..."
@@ -188,195 +173,7 @@
           <!-- End of Topbar -->
 
           <!-- Begin Page Content -->
-          <div class="container-fluid">
-            <!-- Page Divider (Übersicht) -->
-            <hr class="my-3 border" />
-
-            <div
-              class="d-sm-flex align-items-center justify-content-between mb-3"
-            >
-              <h1 class="h2 mb-0 text-info mb-2 text-center w-100">
-                Übersicht
-              </h1>
-            </div>
-
-            <!-- Content Row Tokens -->
-            <div class="row">
-              <!-- Line Chart Token -->
-              <div class="col-xl-6 col-lg-6">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - Searchbar and datalist for all others Charts-->
-                  <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                  >
-                    <h6 class="m-3 font-weight-bold text-info">Token</h6>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div
-                      class="text-info text-center w-100"
-                      id="SpeakerNameInSentiment"
-                    >
-                      Laden...
-                    </div>
-                    <div class="fa-chart pt-4 pb-2">
-                      <canvas id="myLineChartAllToken"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Bar Chart POS -->
-              <div class="col-xl-6 col-lg-6">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - Searchbar and datalist for all others Charts -->
-                  <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                  >
-                    <h6 class="m-3 font-weight-bold text-info">POS</h6>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div
-                      class="text-info text-center w-100"
-                      id="FractionNameInSentiment"
-                    >
-                      Laden...
-                    </div>
-                    <div class="fa-chart pt-4 pb-2">
-                      <canvas id="myBarChartAllPos"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Content Row Sentiment and Speaker -->
-            <div class="row">
-              <!-- Bar-Chart Speaker -->
-              <div class="col-8 col-8">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - with Searchbar -->
-                  <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                  >
-                    <h6 class="m-0 font-weight-bold text-danger">
-                      Speaker Verteilung
-                    </h6>
-                    <div class="form-inline"></div>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div
-                      class="text-danger text-center w-100"
-                      id="SpeakerDistributionNameField"
-                    >
-                      Laden...
-                    </div>
-                    <div class="fa-chart pt-4 pb-2">
-                      <canvas id="myBarChartSpeakerDistribution"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Radar-Chart Sentiment -->
-              <div class="col-4 col-4">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - with Searchbar -->
-                  <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                  >
-                    <h6 class="m-0 font-weight-bold text-danger">Sentiment</h6>
-                    <div class="form-inline"></div>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div
-                      class="text-danger text-center w-100"
-                      id="SentimentNameField"
-                    >
-                      Laden...
-                    </div>
-                    <div class="fa-chart pt-4 pb-2">
-                      <canvas id="myRadarChartSentiment"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Content Row NamedEntities -->
-            <div class="row">
-              <!-- Multiple Axes Line Chart NamedEntities -->
-              <div class="col-12 col-12">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - with Searchbar -->
-                  <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                  >
-                    <h6 class="m-0 font-weight-bold text-primary">
-                      NamedEntities
-                    </h6>
-                    <div class="form-inline"></div>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div
-                      class="text-primary text-center w-100"
-                      id="Token Speaker Name"
-                    >
-                      Laden...
-                    </div>
-                    <div class="fa-chart pt-4 pb-2">
-                      <canvas id="myLineChartNamedEntities"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Page Divider (Named Entities) -->
-            <hr class="my-5 border" />
-
-            <div
-              class="d-sm-flex align-items-center justify-content-between mb-3"
-            >
-              <h1 class="h2 mb-0 text-warning mb-2 text-center w-100">
-                Volltext Suche
-              </h1>
-            </div>
-
-            <!-- Content Row Named Entities -->
-            <div class="row">
-              <!-- Area Chart Named Entities Speaker -->
-              <div class="col-12 col-12">
-                <div class="card shadow mb-4">
-                  <!-- Card Header - with Searchbar -->
-                  <div
-                    class="card-header py-3 d-flex flex-row align-items-center justify-content-between"
-                  >
-                    <h6 class="m-0 font-weight-bold text-warning">
-                      Häufigkeitsverteilung der Named Entities pro Sprecher*in
-                    </h6>
-                    <div class="form-inline"></div>
-                  </div>
-                  <!-- Card Body -->
-                  <div class="card-body">
-                    <div
-                      class="text-warning text-center w-100"
-                      id="NamedEntities Speaker Name"
-                    >
-                      Laden...
-                    </div>
-                    <div class="fa-chart pt-4 pb-2">
-                      <canvas id="myAreaChart NamedEntities Speaker"></canvas>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <div id="content" class="container-fluid"></div>
           <!-- /.container-fluid -->
         </div>
         <!-- End of Main Content -->
