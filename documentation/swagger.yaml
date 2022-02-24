@@ -1,0 +1,322 @@
+swagger: '2.0'
+info:
+  description: This is the API for the Practical programming course winter semester 2021 / 2022
+  version: v0.0.1
+  title: Parliament Sentiment Radar
+host: localhost:4567
+
+tags:
+  - name: Parliament Sentiment Radar - Task 4
+schemes:
+  - http
+
+paths:
+  /speeches/:
+    get:
+      tags:
+          - Parliament Sentiment Radar - Task 4
+      summary: Returns a speech
+      operationId: speeches
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: ID of the speech
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+          
+        '400':
+          description: Failure
+          
+      
+    
+  /comments:
+    get:
+      tags:
+        - Parliament Sentiment Radar - Task 4
+      summary: Returns all comments of a speech
+      operationId: comments
+      consumes:
+        - application/string
+      parameters:
+        - name: id
+          in: query
+          description: ID of the comment
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+          
+        '400':
+          description: Failure
+          
+  /speaker:
+    get:
+      tags:
+          - Parliament Sentiment Radar - Task 4
+      summary: Returns a speaker
+      operationId: speaker
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: ID of a speaker
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+          
+        '400':
+          description: Failure
+          
+  /party:
+    get:
+      tags:
+        - Parliament Sentiment Radar - Task 4
+      summary: Returns all parties
+      operationId: party
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+          
+        '400':
+          description: Failure
+  
+  /token:
+    get:
+      tags:
+        - Parliament Sentiment Radar - Task 4
+      summary: Returns all tokens
+      description: Returns all tokens by party, member id or over a certain period of time.
+      operationId: token
+      consumes:
+        - application/json
+      parameters:
+        - name: speakerID
+          in: query
+          description: ID of a speaker
+          required: false
+          type: string
+        - name: party
+          in: query
+          description: Party of speakers
+          required: false
+          type: string
+        - name: beginDate
+          in: query
+          description: Begin Date of selected period
+          required: false
+          type: string
+        - name: endDate
+          in: query
+          description: End Date of selected period
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+        '400':
+          description: Failure
+  
+  
+  
+  /pos:
+    get:
+      tags:
+        - Parliament Sentiment Radar - Task 4
+      summary: Returns all pos
+      description: Returns all pos by party, member id or over a certain period of time.
+      operationId: pos
+      consumes:
+        - application/json
+      parameters:
+        - name: speakerID
+          in: query
+          description: ID of a speaker
+          required: false
+          type: string
+        - name: party
+          in: query
+          description: Party of speakers
+          required: false
+          type: string
+        - name: beginDate
+          in: query
+          description: Begin Date of selected period
+          required: false
+          type: string
+        - name: endDate
+          in: query
+          description: End Date of selected period
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+        '400':
+          description: Failure
+  
+  /lemma:
+    get:
+      tags:
+        - Parliament Sentiment Radar - Task 4
+      summary: Returns all lemmas
+      description: Returns all lemmas by party, member id or over a certain period of time.
+      operationId: lemma
+      consumes:
+        - application/json
+      parameters:
+        - name: speakerID
+          in: query
+          description: ID of a speaker
+          required: false
+          type: string
+        - name: party
+          in: query
+          description: Party of speakers
+          required: false
+          type: string
+        - name: beginDate
+          in: query
+          description: Begin Date of selected period
+          required: false
+          type: string
+        - name: endDate
+          in: query
+          description: End Date of selected period
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+        '400':
+          description: Failure
+          
+  /namedEntities:
+    get:
+      tags:
+        - Parliament Sentiment Radar - Task 4
+      summary: Returns all namedEntities
+      description: Returns all namedEntities by party, member id or over a certain period of time.
+      operationId: namedEntities
+      consumes:
+        - application/json
+      parameters:
+        - name: entities
+          in: query
+          description: choice of persons, locations or organisations
+          required: true
+          type: string
+        - name: speakerID
+          in: query
+          description: ID of a speaker
+          required: false
+          type: string
+        - name: party
+          in: query
+          description: Party of speakers
+          required: false
+          type: string
+        - name: beginDate
+          in: query
+          description: Begin Date of selected period
+          required: false
+          type: string
+        - name: endDate
+          in: query
+          description: End Date of selected period
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+        '400':
+          description: Failure
+  
+  /sentiment:
+    get:
+      tags:
+        - Parliament Sentiment Radar - Task 4
+      summary: Returns all sentiments
+      description: Returns all sentiments by party, member id or over a certain period of time.
+      operationId: sentiment
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: query
+          description: ID of a speaker
+          required: false
+          type: string
+        - name: party
+          in: query
+          description: Party of speakers
+          required: false
+          type: string
+        - name: beginDate
+          in: query
+          description: Begin Date of selected period
+          required: false
+          type: string
+        - name: endDate
+          in: query
+          description: End Date of selected period
+          required: false
+          type: string
+      responses:
+        '200':
+          description: Success
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/JSONObject'
+        '400':
+          description: Failure
+
+definitions:
+  JSONObject:
+    type: object
+    properties:
+      empty:
+        type: boolean
