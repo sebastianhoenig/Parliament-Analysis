@@ -4,6 +4,9 @@ import DownloadData.UnzipFile;
 import data.helper.InitializeProtocols;
 import database.MongoDBConnectionHandler;
 
+/**
+ * Main class to download xml's, create datastructures, analyse and upload the parlament data.
+ */
 public class ParliamentSentimentRadar{
 
     public static void main(String[] args) {

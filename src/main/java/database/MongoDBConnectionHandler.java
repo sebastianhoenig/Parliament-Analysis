@@ -147,6 +147,11 @@ public class MongoDBConnectionHandler {
         return resultDoc;
     }
 
+    /**
+     * This function is to upload all Protocol and Members.
+     * @param protocolList
+     * @param memberList
+     */
     public void uploadAll(ArrayList<Protocol> protocolList, ArrayList<Member> memberList) {
         BTObjectToMongoDocument.createDCCMap();
         BTObjectToMongoDocument.createPOSMap();
@@ -199,6 +204,9 @@ public class MongoDBConnectionHandler {
         commentP.close();
     }
 
+    /**
+     * This function initialize the Status on the DB.
+     */
     public void initializeStatus() {
         Document statusSpeech = getDBDocument("speech", "status");
         statusSpeech.put("protocolNumber", 0);
@@ -222,6 +230,11 @@ public class MongoDBConnectionHandler {
         }
     }
 
+    /**
+     * This function is updating the Status for Speeches on the DB.
+     * @param protocol
+     * @param speech
+     */
     public void updateStatus(Protocol protocol, Speech speech) {
         Document statusSpeech = getDBDocument("speech", "status");
         statusSpeech.put("protocolNumber", protocol.getSessionID());
@@ -236,6 +249,11 @@ public class MongoDBConnectionHandler {
         }
     }
 
+    /**
+     * This function is updating the Status for Comments on the DB.
+     * @param protocol
+     * @param comment
+     */
     public void updateStatus(Protocol protocol, Comment comment) {
         Document statusComment = getDBDocument("comment", "status");
         statusComment.put("protocolNumber", protocol.getSessionID());
@@ -250,8 +268,10 @@ public class MongoDBConnectionHandler {
         }
     }
 
-
-
+    /**
+     * This function is to insert one Member into the DB.
+     * @param member
+     */
     public void insertMember(Member member) {
 
         Document memberDoc = getDBDocument(member.getId(), "members");
@@ -268,6 +288,10 @@ public class MongoDBConnectionHandler {
         }
     }
 
+    /**
+     * This function is to insert one Speech into the DB.
+     * @param speech
+     */
     public void insertSpeech(Speech speech) {
         Document speechDoc = getDBDocument(speech.getSpeechID(), "speeches");
 
@@ -293,6 +317,10 @@ public class MongoDBConnectionHandler {
         }
     }
 
+    /**
+     * This function is to insert one Comment into the DB.
+     * @param comment
+     */
     public void insertComment(Comment comment) {
         Document commentDoc = getDBDocument(comment.getCommentID(), "comments");
 
@@ -318,6 +346,10 @@ public class MongoDBConnectionHandler {
         }
     }
 
+    /**
+     * This function is to update one Member on the DB.
+     * @param member
+     */
     public void updateSpeaker(Member member) {
         Document where = new Document().append("_id", member.getId());
 
@@ -329,6 +361,10 @@ public class MongoDBConnectionHandler {
         }
     }
 
+    /**
+     * This function is to update one Speech on the DB.
+     * @param speech
+     */
     public void updateSpeech(Speech speech) {
         Document where = new Document().append("_id", speech.getSpeechID());
 
@@ -341,6 +377,10 @@ public class MongoDBConnectionHandler {
 
     }
 
+    /**
+     * This function is to update one Comment on the DB.
+     * @param comment
+     */
     public void updateComment(Comment comment) {
         Document where = new Document().append("_id", comment.getCommentID());
 
@@ -352,11 +392,23 @@ public class MongoDBConnectionHandler {
         }
     }
 
+    /**
+     * This function is to delete one document on the DB.
+     * @param id
+     * @param collectionName
+     */
     public void deleteDocumentOnDB(String id, String collectionName) {
         Document where = new Document().append("_id", id);
         this.getCollection(collectionName).deleteOne(where);
     }
 
+    /**
+     * This function is to count the Document after a query.
+     * @param fieldName
+     * @param value
+     * @param collectionName
+     * @return
+     */
     public int countQuery(String fieldName, int value, String collectionName) {
         Document result = (Document) this.getCollection(collectionName).aggregate(Arrays.asList(
                 match(Filters.eq(fieldName, value)),
@@ -365,6 +417,13 @@ public class MongoDBConnectionHandler {
         return (int) result.get("count");
     }
 
+    /**
+     * This function is to count the Document after a query.
+     * @param fieldName
+     * @param value
+     * @param collectionName
+     * @return
+     */
     public int countQuery(String fieldName, String value, String collectionName) {
         Document result = (Document) this.getCollection(collectionName).aggregate(Arrays.asList(
                 match(Filters.eq(fieldName, value)),
@@ -373,6 +432,17 @@ public class MongoDBConnectionHandler {
         return (int) result.get("count");
     }
 
+    /**
+     * This function is to join two collections.
+     * @param collectionName
+     * @param from
+     * @param localField
+     * @param foreignField
+     * @param as
+     * @param fieldName
+     * @param value
+     * @return
+     */
     public MongoCursor joinQuery(String collectionName, String from, String localField, String foreignField, String as, String fieldName, String value) {
         MongoCursor result = this.getCollection(collectionName).aggregate(Arrays.asList(
                 limit(1000),
@@ -383,6 +453,17 @@ public class MongoDBConnectionHandler {
         return  result;
     }
 
+    /**
+     * This function is to join two collections.
+     * @param collectionName
+     * @param from
+     * @param localField
+     * @param foreignField
+     * @param as
+     * @param fieldName
+     * @param value
+     * @return
+     */
     public MongoCursor joinQuery(String collectionName, String from, String localField, String foreignField, String as, String fieldName, int value) {
         MongoCursor result = this.getCollection(collectionName).aggregate(Arrays.asList(
                 limit(1000),
@@ -393,6 +474,15 @@ public class MongoDBConnectionHandler {
         return  result;
     }
 
+    /**
+     * This function is to join two collections.
+     * @param collectionName
+     * @param from
+     * @param localField
+     * @param foreignField
+     * @param as
+     * @return
+     */
     public MongoCursor joinQuery(String collectionName, String from, String localField, String foreignField, String as) {
         MongoCursor result = this.getCollection(collectionName).aggregate(Arrays.asList(
                 limit(10),
@@ -400,10 +490,6 @@ public class MongoDBConnectionHandler {
         ).cursor();
 
         return  result;
-    }
-
-    public void aggregate(String collectionName, String query) {
-        this.getCollection(collectionName).aggregate(Arrays.asList(query));
     }
 
 }

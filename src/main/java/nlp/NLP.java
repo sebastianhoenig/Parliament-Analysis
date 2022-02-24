@@ -23,11 +23,16 @@ import static org.apache.uima.fit.factory.AnalysisEngineFactory.createEngineDesc
  * @author benwerner
  * @date
  */
-
 public class NLP {
 
+    /**
+     * This param is saving the Pipeline.
+     */
     private AnalysisEngine pAE = null;
 
+    /**
+     * This constructor is to initialise the Pipline.
+     */
     public NLP() {
         //  creating a Pipeline
         AggregateBuilder pipeline = new AggregateBuilder();
@@ -62,10 +67,19 @@ public class NLP {
         }
     }
 
+    /**
+     * This methode returns the saved pipeline.
+     * @return Pipeline
+     */
     public AnalysisEngine getPipeline() {
         return pAE;
     }
 
+    /**
+     * The methode analyse is running the pipeline with a given text.
+     * @param text
+     * @return JCas
+     */
     public JCas analyse(String text) {
         JCas jCas = null;
         try {
@@ -78,7 +92,7 @@ public class NLP {
     }
 
     /**
-     * Methode that convert an jCas to an xml.
+     * Methode that convert an jCas to a xml.
      * @param jCas
      * @return xml
      */

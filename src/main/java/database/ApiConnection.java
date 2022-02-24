@@ -14,11 +14,27 @@ import static spark.Spark.get;
 import static spark.Spark.stop;
 
 
+/**
+ * Main class to run Api separated.
+ * @author benwerner, sebastian
+ * @date
+ */
 public class ApiConnection {
 
+    /**
+     * The handler param is saving the connection object to the DB.
+     */
     private static MongoDBConnectionHandler handler = new MongoDBConnectionHandler();
+
+    /**
+     * The allParties param is saving the party name list to compare with given names.
+     */
     private static List<String> allParties = Arrays.asList(new String[] {"BÜNDNIS 90/DIE GRÜNEN", "AfD", "CDU", "CSU", "FDP", "SPD", "Plos", "LKR", "DIE LINKE.", "Die PARTEI", "SSW"});
 
+    /**
+     * The main methode is running all Api Routes.
+     * @param args
+     */
     public static void main (String[] args) {
 
         get("/speeches", (request, response) -> {
@@ -416,7 +432,7 @@ public class ApiConnection {
 
 
     /**
-     * sorting a HashMap<String, Integer>
+     * Sorting a HashMap<String, Integer>
      * @param hashMap
      * @return
      */

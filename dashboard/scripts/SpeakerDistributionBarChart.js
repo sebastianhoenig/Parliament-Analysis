@@ -1,8 +1,10 @@
-// Speichert den Graphen zu Sentiment (Fraktionen).
 let myBarChartSpeakerDistribution = undefined;
 
 let speakerPicture = undefined;
 
+/**
+ * This is to map the picture array just ones.
+ */
 $.ajax({
   method: "GET",
   dataType: "json",
@@ -22,7 +24,7 @@ $.ajax({
 });
 
 /**
- * API Abfrage zu Sentiment pro Sprecher*in.
+ * API requests for speakerDistribution for all speaker.
  * @param id
  * @returns {Promise<unknown>}
  */
@@ -53,7 +55,7 @@ function getSpeakerDistributionAll() {
 }
 
 /**
- * API Abfrage zu Sentiment pro Sprecher*in.
+ * API requests for speakerDistribution per speaker.
  * @param id
  * @returns {Promise<unknown>}
  */
@@ -80,7 +82,7 @@ function getSpeakerDistributionSpeaker(id) {
 }
 
 /**
- * API Abfrage zu Sentiment pro Sprecher*in.
+ * API requests for speakerDistribution per party.
  * @param id
  * @returns {Promise<unknown>}
  */
@@ -110,6 +112,12 @@ function getSpeakerDistributionParty(id) {
   });
 }
 
+/**
+ * This methode is for switch through the right data.
+ * @param type
+ * @param id
+ * @returns {Promise<*>}
+ */
 async function getSpeakerDistributionData(type, id) {
   switch (type) {
     case 0:
@@ -126,6 +134,13 @@ async function getSpeakerDistributionData(type, id) {
   }
 }
 
+/**
+ * The Methode is plotting for a given canvasID or speakerID a Chart.
+ * @param id
+ * @param canvasID
+ * @param type
+ * @returns {Promise<void>}
+ */
 async function plotSpeakerDistribution(
   id = "all",
   canvasID = "myBarChartSpeakerDistribution",
@@ -170,6 +185,11 @@ async function plotSpeakerDistribution(
   });
 }
 
+/**
+ * The methode is to create the tooltip for the Chart.
+ * @param chart
+ * @returns {HTMLDivElement}
+ */
 const getOrCreateTooltip = (chart) => {
   let tooltipEl = chart.canvas.parentNode.querySelector("div");
 
@@ -195,6 +215,10 @@ const getOrCreateTooltip = (chart) => {
   return tooltipEl;
 };
 
+/**
+ * This param is creating the html stuff for the tooltip.
+ * @param context
+ */
 const externalTooltipHandler = (context) => {
   // Tooltip Element
   const { chart, tooltip } = context;

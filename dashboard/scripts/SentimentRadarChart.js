@@ -1,6 +1,5 @@
 /**
- * API Abfrage zu Sentiment pro Sprecher*in.
- * @param id
+ * API requests for Sentiment for all speeches.
  * @returns {Promise<unknown>}
  */
 function getSentimentAll() {
@@ -36,7 +35,7 @@ function getSentimentAll() {
 }
 
 /**
- * API Abfrage zu Sentiment pro Sprecher*in.
+ * API requests for Sentiment per speaker.
  * @param id
  * @returns {Promise<unknown>}
  */
@@ -69,7 +68,7 @@ function getSentimentSpeaker(id) {
 }
 
 /**
- * API Abfrage zu Sentiment pro Sprecher*in.
+ * API requests for Sentiment per party.
  * @param id
  * @returns {Promise<unknown>}
  */
@@ -105,6 +104,12 @@ function getSentimentParty(id) {
   });
 }
 
+/**
+ * This methode is for switch through the right data.
+ * @param type
+ * @param id
+ * @returns {Promise<*>}
+ */
 async function getSentimentData(type, id) {
   switch (type) {
     case 0:
@@ -121,8 +126,12 @@ async function getSentimentData(type, id) {
   }
 }
 
-/*
-Plottet den Graphen zu Sentiment (Sprecher*in).
+/**
+ * The Methode is plotting for a given canvasID or speakerID a Chart.
+ * @param id
+ * @param canvasID
+ * @param type
+ * @returns {Promise<void>}
  */
 async function plotSentimentAll(
   id = "all",

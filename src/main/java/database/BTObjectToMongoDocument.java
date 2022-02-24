@@ -32,10 +32,24 @@ import java.util.stream.Collectors;
  */
 public class BTObjectToMongoDocument {
 
+    /**
+     * The nlp param is saving one pipeline.
+     */
     private static NLP nlp = new NLP();
+
+    /**
+     * The dcc param is to map the old dcc's to the new one from the given file.
+     */
     private static HashMap<String, String> dcc = new HashMap();
+
+    /**
+     * The posMap param is to map the old posMap's to the new one from the given file.
+     */
     private static HashMap<String, String> posMap = new HashMap();
 
+    /**
+     * This function creates the DCC HashMap from the given file.
+     */
     public static void createDCCMap() {
         String file = "src/main/resources/ddc3-names-de.csv";
         Scanner scanner = null;
@@ -54,6 +68,9 @@ public class BTObjectToMongoDocument {
         scanner.close();
     }
 
+    /**
+     * This function creates the POS HashMap from the given file.
+     */
     public static void createPOSMap() {
         String file = "src/main/resources/am_posmap.txt";
         Scanner scanner = null;
@@ -72,6 +89,11 @@ public class BTObjectToMongoDocument {
         scanner.close();
     }
 
+    /**
+     * This methode is converting a Member Object to a DB document.
+     * @param member
+     * @return document
+     */
     public static Document createMongoDocument(Member member) {
         Document memberDoc = new Document();
         memberDoc.append("_id", member.getId());
@@ -93,6 +115,11 @@ public class BTObjectToMongoDocument {
         return memberDoc;
     }
 
+    /**
+     * This methode running the pipeline and is converting a Speech Object to a DB document.
+     * @param speech
+     * @return
+     */
     public static Document createMongoDocument(Speech speech) {
         Document speechDoc = new Document();
         speechDoc.append("_id", speech.getSpeechID());
@@ -200,13 +227,16 @@ public class BTObjectToMongoDocument {
         return speechDoc;
     }
 
+    /**
+     * This methode running the pipeline and is converting a Comment Object to a DB document.
+     * @param comment
+     * @return document
+     */
     public static Document createMongoDocument(Comment comment) {
         Document commentDoc = new Document();
         commentDoc.append("_id", comment.getCommentID());
         commentDoc.append("text", comment.getText());
-        // @Todo: Speaker und NLP (und gegebenenfalls Speech??)
 
-        // @Todo: NLP
         // NLP größten teils aus der Musterlösung aus Aufgabe 2.
         JCas jCas = nlp.analyse(comment.getText());
 
