@@ -152,7 +152,12 @@ function renderDashboards(dashboardListSpeaker) {
 }
 
 function changeActiveDashboard(e, dashboards, element, speakerID) {
-  for (let item of dashboards.children) {
+  let speakerDashboard = document.getElementById("speaker-dashboards");
+  let partyDashboard = document.getElementById("party-dashboards");
+  for (let item of speakerDashboard.children) {
+    item.classList.remove("active");
+  }
+  for (let item of partyDashboard.children) {
     item.classList.remove("active");
   }
   let dashboardID = e.target.parentElement.id;
@@ -173,7 +178,12 @@ function changeActiveDashboard(e, dashboards, element, speakerID) {
 }
 
 function changeActivePartyDashboard(e, dashboards, element) {
-  for (let item of dashboards.children) {
+  let speakerDashboard = document.getElementById("speaker-dashboards");
+  let partyDashboard = document.getElementById("party-dashboards");
+  for (let item of speakerDashboard.children) {
+    item.classList.remove("active");
+  }
+  for (let item of partyDashboard.children) {
     item.classList.remove("active");
   }
   let dashboardID = e.target.parentElement.id;
