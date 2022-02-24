@@ -512,7 +512,7 @@ function renderPageContent(id, name, speakerID, finalName) {
     finalName +
     `
                     </div>
-                    <div class="fa-chart-area">
+                    <div class="fa-chart">
                       <canvas id=` +
     "myAreaChart" +
     name +
@@ -546,7 +546,7 @@ function renderPageContent(id, name, speakerID, finalName) {
     finalName +
     `
                     </div>
-                    <div class="fa-chart-area">
+                    <div class="fa-chart">
                       <canvas id=` +
     "myLineChart" +
     name +
@@ -686,7 +686,7 @@ function renderPartyPageContent(id, name, finalName) {
     finalName +
     `
                     </div>
-                    <div class="fa-chart-area">
+                    <div class="fa-chart">
                       <canvas id=` +
     "myAreaChart" +
     name +
@@ -720,7 +720,7 @@ function renderPartyPageContent(id, name, finalName) {
     finalName +
     `
                     </div>
-                    <div class="fa-chart-area">
+                    <div class="fa-chart">
                       <canvas id=` +
     "myLineChart" +
     name +

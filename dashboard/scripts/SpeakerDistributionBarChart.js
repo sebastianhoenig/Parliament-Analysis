@@ -69,7 +69,7 @@ function getSpeakerDistributionSpeaker(id) {
       success: function (data) {
         let speaker = data;
         speaker.allSpeeches = speaker.allSpeeches.length;
-        resolve(speaker);
+        resolve([speaker]);
       },
       error: function (error) {
         console.log(error);
