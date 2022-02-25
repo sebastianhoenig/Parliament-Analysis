@@ -1,3 +1,9 @@
+/**
+ * API requests for Token for all speeches.
+ * @author vanessa
+ *
+ */
+
 function getAllToken() {
   $.ajax({
     url: "http://localhost:4567/token",
@@ -27,6 +33,14 @@ function getAllToken() {
   });
 }
 
+/**
+ * API requests for Sentiment by speaker.
+ * modified by Ben, Sebastian
+ * @param id
+ * @param tokenID
+ * @param beginDate
+ * @param endDate
+ */
 function getTokenBySpeaker(id, tokenID, beginDate = "2017-10-20",endDate = "2022-02-11") {
   $.ajax({
     url: "http://localhost:4567/token?speakerID=" + id + "&beginDate=" + beginDate + "&endDate=" + endDate,
@@ -51,6 +65,14 @@ function getTokenBySpeaker(id, tokenID, beginDate = "2017-10-20",endDate = "2022
   });
 }
 
+/**
+ * API requests for Sentiment by party.
+ * modified by Ben, Sebastian
+ * @param party
+ * @param tokenID
+ * @param beginDate
+ * @param endDate
+ */
 function getTokenByParty(party, tokenID, beginDate = "2017-10-20",endDate = "2022-02-11") {
   $.ajax({
     url: "http://localhost:4567/token?party=" + party + "&beginDate=" + beginDate + "&endDate=" + endDate,
@@ -75,6 +97,13 @@ function getTokenByParty(party, tokenID, beginDate = "2017-10-20",endDate = "202
   });
 }
 
+/**
+ * creates line chart with flexible element id
+ * modified by Sebastian
+ * @param labelsInput
+ * @param dataInput
+ * @param tokenID
+ */
 function createLineChartPerson(labelsInput, dataInput, tokenID) {
   var ctx = document.getElementById(tokenID);
   var myBarChart = new Chart(ctx, {
@@ -113,6 +142,9 @@ function createLineChartPerson(labelsInput, dataInput, tokenID) {
   });
 }
 
+/**
+ * creates line chart for all token
+ */
 function createLineChart(labelsInput, dataInput) {
   var ctx = document.getElementById("myLineChartAllToken");
   var myBarChart = new Chart(ctx, {

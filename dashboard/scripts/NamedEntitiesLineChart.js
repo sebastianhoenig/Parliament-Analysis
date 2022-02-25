@@ -1,3 +1,9 @@
+/**
+ * API requests for Named Entities for all speeches.
+ * @author vanessa, Sebastian
+ *
+ */
+
 function getAllNamedEntities() {
   $.ajax({
     url: "http://localhost:4567/namedEntities?entities=persons",
@@ -60,6 +66,14 @@ function getAllNamedEntities() {
   });
 }
 
+/**
+ * API requests for Named Entities by person
+ * @param id
+ * @param neID
+ * @param beginDate
+ * @param endDate
+ *
+ */
 function getAllNamedEntitiesPerson(id, neID, beginDate = "2017-10-20",endDate = "2022-02-11") {
   $.ajax({
     url:
@@ -132,6 +146,14 @@ function getAllNamedEntitiesPerson(id, neID, beginDate = "2017-10-20",endDate = 
   });
 }
 
+/**
+ * API requests for Named Entities by party
+ * @param id
+ * @param neID
+ * @param beginDate
+ * @param endDate
+ *
+ */
 function getAllNamedEntitiesParty(id, neID, beginDate = "2017-10-20",endDate = "2022-02-11") {
   $.ajax({
     url:
@@ -202,6 +224,17 @@ function getAllNamedEntitiesParty(id, neID, beginDate = "2017-10-20",endDate = "
   });
 }
 
+/**
+ * creates multiplelinechart per person
+ * @param dataPersons
+ * @param dataLocations
+ * @param dataOrganisations
+ * @param labelPersons
+ * @param labelLocations
+ * @param labelOrganisations
+ * @param neID
+ *
+ */
 function createMultipleLineChartPerson(
   dataPersons,
   dataLocations,
@@ -268,6 +301,17 @@ function createMultipleLineChartPerson(
   });
 }
 
+/**
+ * creates multiplelinechart for all named entities
+ * @param dataPersons
+ * @param dataLocations
+ * @param dataOrganisations
+ * @param labelPersons
+ * @param labelLocations
+ * @param labelOrganisations
+ * @param neID
+ *
+ */
 function createMultipleLineChart(
   dataPersons,
   dataLocations,

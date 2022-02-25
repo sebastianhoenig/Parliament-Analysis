@@ -1,3 +1,9 @@
+/**
+ * API requests for POS for all speeches.
+ * @author vanessa
+ *
+ */
+
 function getAllPos() {
   $.ajax({
     url: "http://localhost:4567/pos",
@@ -20,6 +26,14 @@ function getAllPos() {
   });
 }
 
+/**
+ * API requests for POS by Speaker.
+ * @param speakerID
+ * @param posID
+ * @param beginDate
+ * @param endDate
+ * modified by Ben
+ */
 function getPosBySpeaker(speakerID, posID, beginDate = "2017-10-20",endDate = "2022-02-11") {
   $.ajax({
     url: "http://localhost:4567/pos?speakerID=" + speakerID + "&beginDate=" + beginDate + "&endDate=" + endDate,
@@ -49,6 +63,14 @@ function getPosParty() {
   });
 }
 
+/**
+ * API requests for POS by Party.
+ * @param party
+ * @param posID
+ * @param beginDate
+ * @param endDate
+ * modified by Ben
+ */
 function getPosByParty(party, posID, beginDate = "2017-10-20",endDate = "2022-02-11") {
   $.ajax({
     url: "http://localhost:4567/pos?party=" + party + "&beginDate=" + beginDate + "&endDate=" + endDate,
@@ -71,6 +93,13 @@ function getPosByParty(party, posID, beginDate = "2017-10-20",endDate = "2022-02
   });
 }
 
+/**
+ * creates bar chart with flexible element id.
+ * @param labelsInput
+ * @param dataInput
+ * @param posID
+ * modified by Sebastian
+ */
 function createBarChartPerson(labelsInput, dataInput, posID) {
   var ctx = document.getElementById(posID);
   var myBarChart = new Chart(ctx, {
@@ -108,6 +137,12 @@ function createBarChartPerson(labelsInput, dataInput, posID) {
   });
 }
 
+/**
+ * creates bar chart for all pos.
+ * @param labelsInput
+ * @param dataInput
+ *
+ */
 function createBarChart(labelsInput, dataInput) {
   var ctx = document.getElementById("myBarChartAllPos");
   var myBarChart = new Chart(ctx, {
