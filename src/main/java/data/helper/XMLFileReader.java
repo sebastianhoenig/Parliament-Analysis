@@ -16,8 +16,10 @@ import java.util.Comparator;
 public class XMLFileReader {
 
     /**
-     * Die Funktion getAllFiles() benötigt den genauen Adresspfad des Ordners, in welchem die xml-Dateien liegen.
-     * @return Arrayliste mit den geparsten xml Dateien
+     * The function getAllFiles() reads the xml files and shows a progressbar.
+     * @param link
+     * @return Arraylist with all xml files
+     * @author Vanessa
      */
     public static ArrayList<Document> getAllFiles(String link) {
         ArrayList<Document> allXmlArrayList = new ArrayList<Document>();
@@ -55,6 +57,10 @@ public class XMLFileReader {
         return allXmlArrayList;
     }
 
+    /**
+     * @author Sebastian
+     * @return processed file
+     */
     static public Document getMetadataXml() {
         File dir = new File("src/main/resources");
         File[] files = dir.listFiles();
@@ -67,8 +73,9 @@ public class XMLFileReader {
     }
 
     /**
-     * @param file unverarbeitete xml Datei
-     * @return verarbeitete/geparste xml Datei
+     * @author Vanessa
+     * @param file unprocessed xml file
+     * @return doc of the xml file
      */
     static Document ProcessFile(File file) {
         DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

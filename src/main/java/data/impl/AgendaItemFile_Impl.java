@@ -11,23 +11,37 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author Vanessa Rosenbaum
+ * this class implements an agenda item. An agenda item has an id and an arraylist with all speeches
+ */
 public class AgendaItemFile_Impl implements AgendaItem {
     String agendaItemID;
     ArrayList<Speech> allSpeeches;
 
+    /**
+     * @param nummer
+     * @param nNode
+     * @param protocol
+     * @param allMembers
+     */
     public AgendaItemFile_Impl(String nummer, Node nNode, ProtocolFile_Impl protocol, HashMap<String, Member> allMembers) {
         this.agendaItemID = setAgendaItemID(nummer);
         this.allSpeeches = setAllSpeeches(nNode, protocol, allMembers);
     }
 
 
+    /**
+     * @param id
+     * @return id of an agenda item
+     */
     public String setAgendaItemID(String id) {
         return id;
 //        System.out.println("TAGESORDNUNGSPUNKT ID: "+agendaItemID);
     }
 
     /**
-     * @return Nummer des tagesordnungspunktes
+     * @return if of the agenda item
      */
     public String getAgendaItemID(){
         return this.agendaItemID;
@@ -35,8 +49,9 @@ public class AgendaItemFile_Impl implements AgendaItem {
 
 
     /**
-     * Die Funktion initialisiert alle Reden und Redner des Tagesordnungspunktes und fügt diese jeweils einer Arrayliste zu.
-     * @param nNode Knotenpunkt des jeweiligen Protokolls
+     * this function initializes all speeches and speakers
+     * @param nNode node of the protocol
+     * @return Arraylist with all speeches
      */
     public ArrayList<Speech> setAllSpeeches(Node nNode, Protocol protocol, HashMap<String, Member> allMembers) {
         ArrayList<Speech> allSpeeches = new ArrayList<>();
@@ -60,7 +75,7 @@ public class AgendaItemFile_Impl implements AgendaItem {
     }
 
     /**
-     * @return Arrayliste aller Reden eines Tagesordnungspunktes.
+     * @return Arraylist of all speeches.
      */
     public ArrayList<Speech> getSpeeches(){
         return this.allSpeeches;
