@@ -14,6 +14,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * @author Vanessa Rosenbaum
+ * this class implements a protocol of a Bundestag parliament session. A protocol has a date, an election period,
+ * a session id, a title, a startpage, agendaitems and leaders
+ */
 public class ProtocolFile_Impl implements Protocol {
     Date pDate;
     Integer electionPeriod;
@@ -35,14 +40,26 @@ public class ProtocolFile_Impl implements Protocol {
         this.leaders = setLeaders(doc);
     }
 
+    /**
+     * @return start page number
+     */
     public int getStartPageNr() {
         return startPageNr;
     }
 
+    /**
+     * @param startPageNr
+     * @return start page number
+     */
     public int setStartPageNr(Integer startPageNr){
         return startPageNr;
     }
 
+    /**
+     * modified by @author Ben
+     * @param pDate
+     * @return date
+     */
     public Date setDate(String pDate) {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         try {
@@ -56,15 +73,18 @@ public class ProtocolFile_Impl implements Protocol {
     }
 
     /**
-     * @return Datum des Protokolls
+     * @return date of the protocol
      */
     public Date getDate(){
         return this.pDate;
     }
 
+
     /**
-     * Diese Funktion initialisiert die Tagesordnungspunkte eines Plenarprotokolls und fügt diese einer Arrayliste hinzu.
-     * @param doc geparste xml Datei eines Plenarprotokolls.
+     * this function intitializes all agenda items of a protocol
+     * @param doc
+     * @param allMembers
+     * @return all agenda items
      */
     public ArrayList<AgendaItem> setAgendaItem(Document doc, HashMap<String, Member> allMembers) {
         ArrayList<AgendaItem> allAgendaItems = new ArrayList<>();
@@ -82,27 +102,32 @@ public class ProtocolFile_Impl implements Protocol {
     }
 
     /**
-     * @return Arrayliste aller Tagesordnungspunkte eines Protokolls.
+     * @return arraylist of all agenda items
      */
     public ArrayList<AgendaItem> getAllAgendaItems(){
         return this.allAgendaItems;
     }
 
 
+    /**
+     * @param sessionID
+     * @return sessionID
+     */
     public int setSessionID(Integer sessionID) {
         return sessionID;
     }
 
     /**
-     * @return Sitzungsnummer des Protokolls
+     * @return session id of a protocol
      */
     public Integer getSessionID(){
         return this.sessionID;
     }
 
     /**
-     * Diese Funktion setzt die Sitzungsleiter einer Plenarsitzung.
-     * @param doc geparste xml Datei eines Plenarprotokolls.
+     * this function sets the leaders of a protocol
+     * @param doc
+     * @return leaders
      */
     public ArrayList<String> setLeaders (Document doc){
         ArrayList<String> leaders = new ArrayList<>();
@@ -126,14 +151,15 @@ public class ProtocolFile_Impl implements Protocol {
     }
 
     /**
-     * @return Sitzungsleiter einer PLenarsitzung
+     * @return session leaders
      */
     public ArrayList<String> getLeaders(){
         return leaders;
     }
 
     /**
-     * @param doc geparste xml Datei eines Plenarprotokolls.
+     * this function sets the election period of a protocol
+     * @param doc
      */
     public int setElectionPeriod (Document doc) {
         NodeList plenarprotokoll_nummer = doc.getElementsByTagName("plenarprotokoll-nummer");
@@ -149,19 +175,23 @@ public class ProtocolFile_Impl implements Protocol {
 
 
     /**
-     * @return Wahlperiode der PLenarsitzung.
+     * @return election period
      */
     public Integer getElectionPeriod(){
         return this.electionPeriod;
     }
 
 
+    /**
+     * @param title
+     * @return title
+     */
     public String setTitle(String title) {
         return title;
     }
 
     /**
-     * @return Sitzungstitel der Plenarsitzung.
+     * @return title
      */
     public String getTitle(){
         return this.title;

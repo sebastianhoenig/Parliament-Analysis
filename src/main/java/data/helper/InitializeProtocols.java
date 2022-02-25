@@ -13,6 +13,10 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author Vanessa Rosenbaum
+ * This class initializes protocols of the Bundestag.
+ */
 public class InitializeProtocols {
     ArrayList<Protocol> allProtocols = new ArrayList<>();
     HashMap<String, Member> hashedMembers = new HashMap<>();
@@ -23,6 +27,10 @@ public class InitializeProtocols {
         this.allProtocols = setProtocols();
     }
 
+    /**
+     * @return Arraylist with all protocols from the 19th and 20s electoral period
+     * modified by @Sebastian
+     */
     private ArrayList<Protocol> setProtocols() {
         ArrayList<Protocol> myProtocols = new ArrayList<>();
         ArrayList<Document> allXmlArrayList = XMLFileReader.getAllFiles("src/main/resources/19");
@@ -39,6 +47,10 @@ public class InitializeProtocols {
         return myProtocols;
     }
 
+    /**
+     * @author Sebastian
+     * Reding member files and showing progress bar
+     */
     private void setMembers(){
         Document doc = XMLFileReader.getMetadataXml();
         assert doc != null;
@@ -70,10 +82,18 @@ public class InitializeProtocols {
         progressBar.close();
     }
 
+    /**
+     * @return Arraylist of all protocols
+     */
     public ArrayList<Protocol> getAllProtocols() {
         return this.allProtocols;
     }
 
+    /**
+     * @author Sebastian
+     * @param Mdb MongoDB Node
+     * @return Boolean True if the electoral period of the protocol is 19 or 20, False otherwise
+     */
     private static boolean checkCorrect(Node Mdb) {
         Element MdbElement = (Element) Mdb;
         NodeList periodList = MdbElement.getElementsByTagName("WAHLPERIODEN").item(0).getChildNodes();
