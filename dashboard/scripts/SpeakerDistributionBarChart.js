@@ -35,7 +35,7 @@ function getSpeakerDistributionAll() {
       dataType: "json",
       url: "http://localhost:4567/speaker",
       success: function (data) {
-        var speakers = data.speakers;
+        const speakers = data.speakers;
         speakers.sort(function (sp1, sp2) {
           if (sp1.allSpeeches > sp2.allSpeeches) {
             return -1;
@@ -44,6 +44,7 @@ function getSpeakerDistributionAll() {
           }
         });
         const result = speakers.filter((speaker) => speaker.allSpeeches > 50);
+        console.log(result);
         resolve(result);
       },
       error: function (error) {
@@ -59,7 +60,7 @@ function getSpeakerDistributionAll() {
  * @param id
  * @returns {Promise<unknown>}
  */
-function getSpeakerDistributionSpeaker(id) {
+function getSpeakerDistributionSpeaker(id, beginDate, endDate) {
   return new Promise((resolve) => {
     if (id == "all") {
       id = "11001478";
@@ -67,11 +68,11 @@ function getSpeakerDistributionSpeaker(id) {
     $.ajax({
       method: "GET",
       dataType: "json",
-      url: "http://localhost:4567/speaker?id=" + id,
+      url: "http://localhost:4567/speaker?id=" + id + "&beginDate=" + beginDate + "&endDate=" + endDate,
       success: function (data) {
-        let speaker = data;
-        speaker.allSpeeches = speaker.allSpeeches.length;
-        resolve([speaker]);
+        // let speaker = data;
+        // speaker.allSpeeches = speaker.allSpeeches.length;
+        resolve([data]);
       },
       error: function (error) {
         console.log(error);
@@ -118,13 +119,13 @@ function getSpeakerDistributionParty(id) {
  * @param id
  * @returns {Promise<*>}
  */
-async function getSpeakerDistributionData(type, id) {
+async function getSpeakerDistributionData(type, id, beginDate, endDate) {
   switch (type) {
     case 0:
       return await getSpeakerDistributionAll();
       break;
     case 1:
-      return await getSpeakerDistributionSpeaker(id);
+      return await getSpeakerDistributionSpeaker(id, beginDate, endDate);
       break;
     case 2:
       return await getSpeakerDistributionParty(id);
@@ -144,9 +145,11 @@ async function getSpeakerDistributionData(type, id) {
 async function plotSpeakerDistribution(
   id = "all",
   canvasID = "myBarChartSpeakerDistribution",
-  type = 0
+  type = 0,
+  beginDate = "2017-10-20",
+  endDate = "2022-02-11"
 ) {
-  const data = await getSpeakerDistributionData(type, id);
+  const data = await getSpeakerDistributionData(type, id, beginDate, endDate);
   const ctx = document.getElementById(canvasID);
   myBarChartSpeakerDistribution = new Chart(ctx, {
     type: "bar",

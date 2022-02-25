@@ -69,6 +69,12 @@ public class ApiConnection {
             response.type("application/json;charset=UTF-8");
 
             String id = request.queryMap().get("id").value();
+            String beginDate = request.queryMap().get("beginDate").value();
+            String endDate = request.queryMap().get("endDate").value();
+            if (beginDate == null || endDate == null) {
+                beginDate = "2017-10-20";
+                endDate = "2022-02-11";
+            }
             Document doc;
             if (! request.queryMap().hasKeys()) {
                 doc = (Document) handler.getCollection("members").aggregate(Arrays.asList(
@@ -78,6 +84,15 @@ public class ApiConnection {
                 doc.remove("_id");
             } else {
                 doc = handler.getDBDocument(id, "members");
+                Document countSpeeches = (Document) handler.getCollection("speeches").aggregate(Arrays.asList(
+                        Document.parse("{$match: {speaker : \"" + id + "\", \"protocol.date\": {$gte: ISODate(\""+beginDate+"\"), $lt: ISODate(\""+endDate+"\")}}}"),
+                        Document.parse("{$group : {_id : \"$speaker\", count: {$sum : 1}}}")
+                )).first();
+                if (countSpeeches != null) {
+                    doc.put("allSpeeches", countSpeeches.get("count"));
+                } else {
+                    doc.put("allSpeeches", 0);
+                }
             }
             String json = com.mongodb.util.JSON.serialize(doc);
             return json;

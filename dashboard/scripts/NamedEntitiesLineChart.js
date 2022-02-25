@@ -60,12 +60,12 @@ function getAllNamedEntities() {
   });
 }
 
-function getAllNamedEntitiesPerson(id, neID) {
+function getAllNamedEntitiesPerson(id, neID, beginDate = "2017-10-20",endDate = "2022-02-11") {
   $.ajax({
     url:
       "http://localhost:4567/namedEntities?speakerID=" +
       id +
-      "&entities=persons",
+      "&entities=persons" + "&beginDate=" + beginDate + "&endDate=" + endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {
@@ -80,7 +80,7 @@ function getAllNamedEntitiesPerson(id, neID) {
         url:
           "http://localhost:4567/namedEntities?speakerID=" +
           id +
-          "&entities=locations",
+          "&entities=locations" + "&beginDate=" + beginDate + "&endDate=" + endDate,
         method: "GET",
         dataType: "json",
         success: function (data) {
@@ -95,7 +95,7 @@ function getAllNamedEntitiesPerson(id, neID) {
             url:
               "http://localhost:4567/namedEntities?speakerID=" +
               id +
-              "&entities=organisations",
+              "&entities=organisations" + "&beginDate=" + beginDate + "&endDate=" + endDate,
             method: "GET",
             dataType: "json",
             success: function (data) {
@@ -132,10 +132,10 @@ function getAllNamedEntitiesPerson(id, neID) {
   });
 }
 
-function getAllNamedEntitiesParty(id, neID) {
+function getAllNamedEntitiesParty(id, neID, beginDate = "2017-10-20",endDate = "2022-02-11") {
   $.ajax({
     url:
-      "http://localhost:4567/namedEntities?party=" + id + "&entities=persons",
+      "http://localhost:4567/namedEntities?party=" + id + "&entities=persons" + "&beginDate=" + beginDate + "&endDate=" + endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {
@@ -150,7 +150,7 @@ function getAllNamedEntitiesParty(id, neID) {
         url:
           "http://localhost:4567/namedEntities?party=" +
           id +
-          "&entities=locations",
+          "&entities=locations" + "&beginDate=" + beginDate + "&endDate=" + endDate,
         method: "GET",
         dataType: "json",
         success: function (data) {
@@ -165,7 +165,7 @@ function getAllNamedEntitiesParty(id, neID) {
             url:
               "http://localhost:4567/namedEntities?party=" +
               id +
-              "&entities=organisations",
+              "&entities=organisations" + "&beginDate=" + beginDate + "&endDate=" + endDate,
             method: "GET",
             dataType: "json",
             success: function (data) {
