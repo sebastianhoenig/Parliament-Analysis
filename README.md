@@ -54,11 +54,6 @@ The original setup of this repository is by Emmelina Garde, Sebastian Hönig, Va
 
 For a full list and breakdown of all authors and contributors, see [the contributors page](https://gitlab.texttechnologylab.org/seb/gruppe_8_4_parliamentsentimentradar/-/graphs/master).
 
-## Security
-
-German parliament analysis follows good practices of security, but 100% security cannot be assured.
-German parliament is provided **"as is"** without any **warranty**. Use at your own risk.
-
 
 ## License
 
