@@ -137,7 +137,7 @@ function createDashboard(element, dashboards, startDate, endDate) {
     dashboard.id = 0;
     let dashboardTextDiv = document.createElement("div");
     dashboardTextDiv.classList.add("dashboard-text");
-    dashboardTextDiv.textContent = "German parliament";
+    dashboardTextDiv.textContent = "Übersicht";
     dashboardTextDiv.addEventListener("click", (e) => {
       changeActiveDashboard(e, dashboards, element, 0, startDate, endDate);
     });
