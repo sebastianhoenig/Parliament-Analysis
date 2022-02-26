@@ -6,6 +6,11 @@ import org.jsoup.nodes.Element;
 
 import java.io.IOException;
 
+/**
+ * @author Sebastian Hönig
+ * Class used for scraping picture of parliament members from the bundestag website
+ */
+
 public class ScrapePictures {
     String searchUrl;
     String[] pictureAndData;
@@ -17,12 +22,20 @@ public class ScrapePictures {
 
 
     String getSearchUrl(String name, String surname) {
+        /**
+         * @author Sebastian Hönig
+         * returns the url needed for the search
+         */
         String basicUrl = "https://bilddatenbank.bundestag.de/search/picture-result?query=";
         String specificPerson = String.format("%1s+%2s",name, surname);
         return String.format("%1s%2s", basicUrl, specificPerson);
     }
 
      String[] performSearch() {
+         /**
+          * @author Sebastian Hönig
+          * traversers the dom-tree to get the correct picture
+          */
         Document page = null;
         try {
             page = Jsoup.connect(this.searchUrl).get();
@@ -33,35 +46,16 @@ public class ScrapePictures {
             String src = String.format("https://bilddatenbank.bundestag.de%1s", pageElements.attr("src"));
             String metaData = pageElements.attr("title");
             return new String[]{src, metaData};
-
-            //String[] altContent = pageElements.attr("title").split(":");
-            /*String altContent = pageElements.attr("title"); //TODO: MAKE REGEX WORK
-            String description = null;
-            String photographer = null;
-            String matchDesc = "(?<=Beschreibung:)(.*)(?=Fotograf)";
-            Pattern patterOne = Pattern.compile(matchDesc);
-            Matcher matcherOne = patterOne.matcher(altContent);
-            while (matcherOne.find()) {
-                for (int j=0; j<matcherOne.groupCount(); j++) {
-                    description = matcherOne.group(j);
-                    System.out.println(description);
-                }
-            }
-            String matchPhotographer = "(?<=Fotograf/in:)(.*)";
-            Pattern patterTwo = Pattern.compile(matchPhotographer);
-            Matcher matcherTwo = patterTwo.matcher(altContent);
-            while (matcherTwo.find()) {
-                for (int j=0; j<matcherTwo.groupCount(); j++) {
-                    photographer = matcherTwo.group(1);
-                    System.out.println(photographer);
-                }
-            };*/
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
+    /**
+     * @author Sebastian Hönig
+     * @return the picture and picture subtext of the parliament member
+     */
     public String[] getMetaData() {
         return this.pictureAndData;
     }

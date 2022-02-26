@@ -1,4 +1,8 @@
-/* Fills the datalists for the selection process */
+/**
+ * Fills the datalists of parties for the selection process
+ * @author Sebastian Hönig
+ *
+ */
 
 function getParties() {
   $.ajax({
@@ -20,6 +24,12 @@ function getParties() {
     },
   });
 }
+
+/**
+ * Fills the datalists of individuals for the selection process
+ * @author Sebastian Hönig
+ *
+ */
 
 function getIndividuals() {
   $.ajax({

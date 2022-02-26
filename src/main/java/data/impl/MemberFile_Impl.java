@@ -11,6 +11,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * @author Sebastian Hönig
+ * this class implements a member of the Bundestag parliament. A member has a name, a surname, a party, a birth and
+ * death date, a place and country of birth, a gender, a religion, an occupation, a martial status, and an id aswell
+ * as meta data, more specifically a picture and a picture subtext
+ */
 public class MemberFile_Impl implements Member {
     String name;
     String surname;

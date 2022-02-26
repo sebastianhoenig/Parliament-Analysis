@@ -10,9 +10,18 @@ import java.nio.file.StandardCopyOption;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+/**
+ * @author Sebastian Hönig
+ * This static class helps unzip zip folders for our project
+ */
+
 public class UnzipFile {
 
     public static void unzip(String source, String target) {
+        /**
+         * @author Sebastian Hönig
+         * unzips zip folder
+         */
         Path mySource = Paths.get(source);
         Path myTarget = Paths.get(target);
         try (ZipInputStream zis = new ZipInputStream(new FileInputStream(mySource.toFile()))) {

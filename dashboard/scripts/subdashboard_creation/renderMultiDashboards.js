@@ -1,5 +1,17 @@
+/**
+ * Renders the dashboards and creates the multi-tab view
+ * @author Sebastian Hönig
+ *
+ */
+
 const searchSpeakerButton = document.getElementById("searchSpeaker");
 const searchPartyButton = document.getElementById("searchParty");
+
+/**
+ * Event Listener for search speaker button
+ * @author Sebastian Hönig
+ *
+ */
 
 searchSpeakerButton.addEventListener("click", () => {
   let targetDataList = document.getElementById("SpeakerName");
@@ -45,6 +57,12 @@ searchSpeakerButton.addEventListener("click", () => {
   }
 });
 
+/**
+ * Event Listener for search party button
+ * @author Sebastian Hönig
+ *
+ */
+
 searchPartyButton.addEventListener("click", () => {
   let party = document.getElementById("partyInput").value;
 
@@ -72,6 +90,12 @@ searchPartyButton.addEventListener("click", () => {
   createPartyDashboard(newDashboard, dashboards, startDate, endDate);
 });
 
+/**
+ * Creates the dashboard on the sidebar
+ * @author Sebastian Hönig
+ *
+ */
+
 function createPartyDashboard(element, dashboards, startDate, endDate) {
   let dashboard = document.createElement("div");
   dashboard.classList.add("dashboard-nav-item");
@@ -98,6 +122,12 @@ function createPartyDashboard(element, dashboards, startDate, endDate) {
   hr.classList.add("my-0");
   dashboards.append(hr, dashboard);
 }
+
+/**
+ * Creates the dashboard on the sidebar
+ * @author Sebastian Hönig
+ *
+ */
 
 function createDashboard(element, dashboards, startDate, endDate) {
   if (element.getName() == "all") {
@@ -155,6 +185,12 @@ function createDashboard(element, dashboards, startDate, endDate) {
   }
 }
 
+/**
+ * Deletes dashboard
+ * @author Sebastian Hönig
+ *
+ */
+
 function deleteDashboard(e, dashboardListSpeaker, startDate, endDate) {
   let index = e.target.parentElement.parentElement.parentElement.id;
   dashboardListSpeaker.deleteDashboard(index);
@@ -172,6 +208,12 @@ function deleteDashboard(e, dashboardListSpeaker, startDate, endDate) {
     item.classList.remove("active");
   }
 }
+
+/**
+ * Deletes party dashboard
+ * @author Sebastian Hönig
+ *
+ */
 
 function deletePartyDashboard(e, dashboardListParty) {
   let index = e.target.parentElement.parentElement.parentElement.id;
@@ -191,6 +233,12 @@ function deletePartyDashboard(e, dashboardListParty) {
   }
 }
 
+/**
+ * Re-renders the party dashboards after one has been deleted or created
+ * @author Sebastian Hönig
+ *
+ */
+
 function renderPartyDashboards(dashboardListParty) {
   dashboardListParty.setIds();
   let currDashboards = dashboardListParty.getDashboardList();
@@ -201,6 +249,12 @@ function renderPartyDashboards(dashboardListParty) {
   });
 }
 
+/**
+ * Re-renders the dashboards after one has been deleted or created
+ * @author Sebastian Hönig
+ *
+ */
+
 function renderDashboards(dashboardListSpeaker, startDate, endDate) {
   dashboardListSpeaker.setIds();
   let currDashboards = dashboardListSpeaker.getDashboardList();
@@ -210,6 +264,12 @@ function renderDashboards(dashboardListSpeaker, startDate, endDate) {
     createDashboard(element, dashboards, startDate, endDate);
   });
 }
+
+/**
+ * Changes the dashboard after clicking on one
+ * @author Sebastian Hönig
+ *
+ */
 
 function changeActiveDashboard(
   e,
@@ -250,6 +310,12 @@ function changeActiveDashboard(
   }
 }
 
+/**
+ * Changes the party dashboard after clicking on one
+ * @author Sebastian Hönig
+ *
+ */
+
 function changeActivePartyDashboard(
   e,
   dashboards,
@@ -282,6 +348,12 @@ function changeActivePartyDashboard(
   );
 }
 
+/**
+ * Sets up the start page, when first loaded
+ * @author Sebastian Hönig
+ *
+ */
+
 function setupPage() {
   let newDashboard = new SpeakerDashboard("all", 0, 0);
   dashboardListSpeaker.addToDashboardList(newDashboard);
@@ -290,6 +362,12 @@ function setupPage() {
   let endDate = "2022-27-02";
   createDashboard(newDashboard, dashboards, startDate, endDate);
 }
+
+/**
+ * Renders the default page for the whole german parliament
+ * @author Sebastian Hönig
+ *
+ */
 
 function renderDefaultPageContent() {
   const container = document.getElementById("content");
@@ -483,6 +561,12 @@ function renderDefaultPageContent() {
   getAllNamedEntities();
 }
 
+/**
+ * Renders the page for a specific speaker
+ * @author Sebastian Hönig
+ *
+ */
+
 function renderPageContent(id, name, speakerID, finalName, startDate, endDate) {
   const container = document.getElementById("content");
   container.innerHTML =
@@ -656,6 +740,12 @@ function renderPageContent(id, name, speakerID, finalName, startDate, endDate) {
   plotSentimentAll(speakerID, sentimentID, 1, startDate, endDate);
   plotSpeakerDistribution(speakerID, speakerGraphID, 1, startDate, endDate);
 }
+
+/**
+ * Renders the page when party dashboard is selected
+ * @author Sebastian Hönig
+ *
+ */
 
 function renderPartyPageContent(id, name, finalName, startDate, endDate) {
   const container = document.getElementById("content");
@@ -831,6 +921,12 @@ function renderPartyPageContent(id, name, finalName, startDate, endDate) {
   plotSpeakerDistribution(name, speakerGraphID, 2, startDate, endDate);
 }
 
+/**
+ * Module for speaker dashboards
+ * @author Sebastian Hönig
+ *
+ */
+
 const dashboardListSpeaker = (() => {
   let items = [];
 
@@ -855,6 +951,12 @@ const dashboardListSpeaker = (() => {
   return { getDashboardList, addToDashboardList, deleteDashboard, setIds };
 })();
 
+/**
+ * Module for party dashboards
+ * @author Sebastian Hönig
+ *
+ */
+
 const dashboardListParty = (() => {
   let items = [];
 
@@ -878,6 +980,12 @@ const dashboardListParty = (() => {
 
   return { getDashboardList, addToDashboardList, deleteDashboard, setIds };
 })();
+
+/**
+ * Class for speaker dashboards
+ * @author Sebastian Hönig
+ *
+ */
 
 class SpeakerDashboard {
   constructor(name, id, speakerID, startDate, endDate) {
@@ -908,6 +1016,12 @@ class SpeakerDashboard {
     return this.speakerID;
   }
 }
+
+/**
+ * Class for party dashboards
+ * @author Sebastian Hönig
+ *
+ */
 
 class PartyDashboard {
   constructor(name, id, startDate, endDate) {
