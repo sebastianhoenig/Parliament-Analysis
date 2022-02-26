@@ -26,6 +26,7 @@ function getAllPos() {
   });
 }
 
+
 /**
  * API requests for POS by Speaker.
  * @param speakerID
@@ -62,6 +63,7 @@ function getPosParty() {
     getPosByParty(input.value);
   });
 }
+
 
 /**
  * API requests for POS by Party.

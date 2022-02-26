@@ -60,7 +60,7 @@ function getSpeakerDistributionAll() {
  * @param id
  * @returns {Promise<unknown>}
  */
-function getSpeakerDistributionSpeaker(id, beginDate, endDate) {
+function getSpeakerDistributionSpeaker(id, startDate, endDate) {
   return new Promise((resolve) => {
     if (id == "all") {
       id = "11001478";
@@ -68,7 +68,7 @@ function getSpeakerDistributionSpeaker(id, beginDate, endDate) {
     $.ajax({
       method: "GET",
       dataType: "json",
-      url: "http://localhost:4567/speaker?id=" + id + "&beginDate=" + beginDate + "&endDate=" + endDate,
+      url: "http://localhost:4567/speaker?id=" + id + "&beginDate=" + startDate + "&endDate=" + endDate,
       success: function (data) {
         // let speaker = data;
         // speaker.allSpeeches = speaker.allSpeeches.length;
@@ -119,13 +119,13 @@ function getSpeakerDistributionParty(id) {
  * @param id
  * @returns {Promise<*>}
  */
-async function getSpeakerDistributionData(type, id, beginDate, endDate) {
+async function getSpeakerDistributionData(type, id, startDate, endDate) {
   switch (type) {
     case 0:
       return await getSpeakerDistributionAll();
       break;
     case 1:
-      return await getSpeakerDistributionSpeaker(id, beginDate, endDate);
+      return await getSpeakerDistributionSpeaker(id, startDate, endDate);
       break;
     case 2:
       return await getSpeakerDistributionParty(id);
@@ -146,10 +146,10 @@ async function plotSpeakerDistribution(
   id = "all",
   canvasID = "myBarChartSpeakerDistribution",
   type = 0,
-  beginDate = "2017-10-20",
+  startDate = "2017-10-20",
   endDate = "2022-02-11"
 ) {
-  const data = await getSpeakerDistributionData(type, id, beginDate, endDate);
+  const data = await getSpeakerDistributionData(type, id, startDate, endDate);
   const ctx = document.getElementById(canvasID);
   myBarChartSpeakerDistribution = new Chart(ctx, {
     type: "bar",
