@@ -8,7 +8,20 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 
+/**
+ * The class Parse runs the parsing process
+ * @author Emmelina und Sebastian
+ * @return int nameOfFile
+ * @return int period
+ * @return String linkToLoad
+ */
+
 public class Parse {
+
+    /**
+     * Calls up the respective subpage of the election period, changing the URL in places.
+     * All XMLs from the 19/20 election periods are passed on to the DownloadXml.java class with the identifier 19 or 20.
+     */
 
     public static void pars() {
         String[] periods = new String[]{"543410-543410", "866354-866354"};

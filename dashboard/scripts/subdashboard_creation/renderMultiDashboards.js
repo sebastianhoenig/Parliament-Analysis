@@ -4,6 +4,10 @@ const searchPartyButton = document.getElementById("searchParty");
 searchSpeakerButton.addEventListener("click", () => {
   let targetDataList = document.getElementById("SpeakerName");
   let currInput = document.getElementById("speakerInput");
+
+  let startDate = document.getElementById("fromDate");                        //TODO
+  let endDate = document.getElementById("toDate");
+
   let currId = document.querySelector(
     '#SpeakerName [value="' + currInput.value + '"]'
   ).dataset.value;
@@ -22,7 +26,7 @@ searchSpeakerButton.addEventListener("click", () => {
     );
     dashboardListSpeaker.addToDashboardList(newDashboard);
     dashboardListSpeaker.setIds();
-    createDashboard(newDashboard, dashboards);
+    createDashboard(newDashboard, dashboards, startDate, endDate);                         //TODO
   } else {
     console.log("Entered value not in dropdown");
   }
@@ -30,14 +34,18 @@ searchSpeakerButton.addEventListener("click", () => {
 
 searchPartyButton.addEventListener("click", () => {
   let party = document.getElementById("partyInput").value;
+
+  let startDate = document.getElementById("fromDate");                         //TODO
+  let endDate = document.getElementById("toDate");
+
   let dashboards = document.getElementById("party-dashboards");
-  let newDashboard = new PartyDashboard(party, 0);
+  let newDashboard = new PartyDashboard(party, 0, fromDate, toDate);              //TODO
   dashboardListParty.addToDashboardList(newDashboard);
   dashboardListParty.setIds();
-  createPartyDashboard(newDashboard, dashboards);
+  createPartyDashboard(newDashboard, dashboards, startDate, endDate);                         //TODO
 });
 
-function createPartyDashboard(element, dashboards) {
+function createPartyDashboard(element, dashboards, startDate, endDate) {                         //TODO
   let dashboard = document.createElement("div");
   dashboard.classList.add("dashboard-nav-item");
   dashboard.id = element.getId();
@@ -46,7 +54,7 @@ function createPartyDashboard(element, dashboards) {
   let idName = element.getName();
   dashboardTextDiv.textContent = idName;
   dashboardTextDiv.addEventListener("click", (e) => {
-    changeActivePartyDashboard(e, dashboards, element);
+    changeActivePartyDashboard(e, dashboards, element, startDate, endDate);                         //TODO
   });
   let dashboardDeleteDiv = document.createElement("div");
   dashboardDeleteDiv.classList.add("dashboard-del");
@@ -64,7 +72,7 @@ function createPartyDashboard(element, dashboards) {
   dashboards.append(hr, dashboard);
 }
 
-function createDashboard(element, dashboards) {
+function createDashboard(element, dashboards, startDate, endDate) {                         //TODO
   if (element.getName() == "all") {
     let dashboard = document.createElement("div");
     dashboard.classList.add("dashboard-nav-item");
@@ -73,7 +81,7 @@ function createDashboard(element, dashboards) {
     dashboardTextDiv.classList.add("dashboard-text");
     dashboardTextDiv.textContent = "German parliament";
     dashboardTextDiv.addEventListener("click", (e) => {
-      changeActiveDashboard(e, dashboards, element, 0);
+      changeActiveDashboard(e, dashboards, element, 0, startDate, endDate);                        //TODO
     });
     dashboard.appendChild(dashboardTextDiv);
     let hr = document.createElement("hr");
@@ -93,14 +101,14 @@ function createDashboard(element, dashboards) {
     let final = modified.replace(/ *\([^)]*\) */g, "");
     dashboardTextDiv.textContent = final;
     dashboardTextDiv.addEventListener("click", (e) => {
-      changeActiveDashboard(e, dashboards, element, speakerID);
+      changeActiveDashboard(e, dashboards, element, speakerID, startDate, endDate);     //TODO
     });
     let dashboardDeleteDiv = document.createElement("div");
     dashboardDeleteDiv.classList.add("dashboard-del");
     let dashboardDeleteButton = document.createElement("button");
     dashboardDeleteButton.innerHTML = '<i class="fas fa-times"></i>';
     dashboardDeleteButton.addEventListener("click", (e) => {
-      deleteDashboard(e, dashboardListSpeaker);
+      deleteDashboard(e, dashboardListSpeaker, startDate, endDate);
     });
     dashboardDeleteDiv.appendChild(dashboardDeleteButton);
     dashboard.append(dashboardTextDiv, dashboardDeleteDiv);
@@ -112,13 +120,13 @@ function createDashboard(element, dashboards) {
   }
 }
 
-function deleteDashboard(e, dashboardListSpeaker) {
+function deleteDashboard(e, dashboardListSpeaker, startDate, endDate) {         //TODO
   let index = e.target.parentElement.parentElement.parentElement.id;
   console.log(index);
   console.log(dashboardListSpeaker.getDashboardList());
   dashboardListSpeaker.deleteDashboard(index);
   console.log(dashboardListSpeaker.getDashboardList());
-  renderDashboards(dashboardListSpeaker);
+  renderDashboards(dashboardListSpeaker, startDate, endDate);             //TODO
   e.preventDefault();
   renderDefaultPageContent();
 }
@@ -141,17 +149,17 @@ function renderPartyDashboards(dashboardListParty) {
   });
 }
 
-function renderDashboards(dashboardListSpeaker) {
+function renderDashboards(dashboardListSpeaker, startDate, endDate) {               //TODO
   dashboardListSpeaker.setIds();
   let currDashboards = dashboardListSpeaker.getDashboardList();
   let dashboards = document.getElementById("speaker-dashboards");
   dashboards.innerHTML = '<div class="headline">Speaker Analysis</div>';
   currDashboards.slice(1).forEach((element) => {
-    createDashboard(element, dashboards);
+    createDashboard(element, dashboards, startDate, endDate);
   });
 }
 
-function changeActiveDashboard(e, dashboards, element, speakerID) {
+function changeActiveDashboard(e, dashboards, element, speakerID, startDate, endDate) {       //TODO
   let speakerDashboard = document.getElementById("speaker-dashboards");
   let partyDashboard = document.getElementById("party-dashboards");
   for (let item of speakerDashboard.children) {
@@ -172,12 +180,14 @@ function changeActiveDashboard(e, dashboards, element, speakerID) {
       dashboardListSpeaker.getDashboardList[dashboardID],
       name,
       speakerID,
-      final
+      final,
+      startDate,
+      endDate
     );
   }
 }
 
-function changeActivePartyDashboard(e, dashboards, element) {
+function changeActivePartyDashboard(e, dashboards, element, startDate, endDate) {
   let speakerDashboard = document.getElementById("speaker-dashboards");
   let partyDashboard = document.getElementById("party-dashboards");
   for (let item of speakerDashboard.children) {
@@ -193,7 +203,9 @@ function changeActivePartyDashboard(e, dashboards, element) {
   renderPartyPageContent(
     dashboardListSpeaker.getDashboardList[dashboardID],
     name,
-    modified
+    modified,
+    startDate,
+    endDate
   );
 }
 
@@ -201,7 +213,7 @@ function setupPage() {
   let newDashboard = new SpeakerDashboard("all", 0, 0);
   dashboardListSpeaker.addToDashboardList(newDashboard);
   let dashboards = document.getElementById("main-dashboard");
-  createDashboard(newDashboard, dashboards);
+  createDashboard(newDashboard, dashboards, startDate, endDate);
 }
 
 function renderDefaultPageContent() {
@@ -398,7 +410,7 @@ function renderDefaultPageContent() {
   getAllNamedEntities();
 }
 
-function renderPageContent(id, name, speakerID, finalName) {
+function renderPageContent(id, name, speakerID, finalName, startDate, endDate) {
   const container = document.getElementById("content");
   container.innerHTML =
     `
@@ -565,14 +577,14 @@ function renderPageContent(id, name, speakerID, finalName) {
   const tokenChart = document.getElementById(tokenID);
   const posChart = document.getElementById(posID);
   const namedEntities = document.getElementById(namedEntitiesID);
-  getTokenBySpeaker(speakerID, tokenID);
-  getPosBySpeaker(speakerID, posID);
+  getTokenBySpeaker(speakerID, tokenID, startDate, endDate);                          //TODO
+  getPosBySpeaker(speakerID, posID, startDate, endDate);
   getAllNamedEntitiesPerson(speakerID, namedEntitiesID);
   plotSentimentAll(speakerID, sentimentID, 1);
   plotSpeakerDistribution(speakerID, speakerGraphID, 1);
 }
 
-function renderPartyPageContent(id, name, finalName) {
+function renderPartyPageContent(id, name, finalName, startDate, endDate) {
   const container = document.getElementById("content");
   container.innerHTML =
     `
@@ -739,8 +751,8 @@ function renderPartyPageContent(id, name, finalName) {
   const tokenChart = document.getElementById(tokenID);
   const posChart = document.getElementById(posID);
   const namedEntities = document.getElementById(namedEntitiesID);
-  getTokenByParty(name, tokenID);
-  getPosByParty(name, posID);
+  getTokenByParty(name, tokenID, startDate, endDate);
+  getPosByParty(name, posID, startDate, endDate);
   getAllNamedEntitiesParty(name, namedEntitiesID);
   plotSentimentAll(name, sentimentID, 2);
   plotSpeakerDistribution(name, speakerGraphID, 2);
@@ -795,10 +807,12 @@ const dashboardListParty = (() => {
 })();
 
 class SpeakerDashboard {
-  constructor(name, id, speakerID) {
+  constructor(name, id, speakerID, startDate, endDate) {
     this.name = name;
     this.id = id;
     this.speakerID = speakerID;
+    this.startDate = fromDate;
+    this.endDate = toDate;
   }
 
   setName(name) {
@@ -823,9 +837,11 @@ class SpeakerDashboard {
 }
 
 class PartyDashboard {
-  constructor(name, id) {
+  constructor(name, id, startDate, endDate) {
     this.name = name;
     this.id = id;
+    this.startDate = fromDate;
+    this.endDate = toDate;
   }
 
   setName(name) {

@@ -60,12 +60,10 @@ function getAllNamedEntities() {
   });
 }
 
-function getAllNamedEntitiesPerson(id, neID, beginDate = "2017-10-20",endDate = "2022-02-11") {
+function getAllNamedEntitiesPerson(id, neID, startDate, endDate) {
   $.ajax({
     url:
-      "http://localhost:4567/namedEntities?speakerID=" +
-      id +
-      "&entities=persons" + "&beginDate=" + beginDate + "&endDate=" + endDate,
+      "http://localhost:4567/namedEntities?speakerID=" + id + "&entities=persons" + "&beginDate=" + startDate + "&endDate=" + endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {
@@ -78,9 +76,7 @@ function getAllNamedEntitiesPerson(id, neID, beginDate = "2017-10-20",endDate = 
 
       $.ajax({
         url:
-          "http://localhost:4567/namedEntities?speakerID=" +
-          id +
-          "&entities=locations" + "&beginDate=" + beginDate + "&endDate=" + endDate,
+          "http://localhost:4567/namedEntities?speakerID=" + id + "&entities=locations" + "&beginDate=" + startDate + "&endDate=" + endDate,
         method: "GET",
         dataType: "json",
         success: function (data) {
@@ -93,9 +89,7 @@ function getAllNamedEntitiesPerson(id, neID, beginDate = "2017-10-20",endDate = 
 
           $.ajax({
             url:
-              "http://localhost:4567/namedEntities?speakerID=" +
-              id +
-              "&entities=organisations" + "&beginDate=" + beginDate + "&endDate=" + endDate,
+              "http://localhost:4567/namedEntities?speakerID=" + id + "&entities=organisations" + "&beginDate=" + startDate + "&endDate=" + endDate,
             method: "GET",
             dataType: "json",
             success: function (data) {
@@ -132,10 +126,10 @@ function getAllNamedEntitiesPerson(id, neID, beginDate = "2017-10-20",endDate = 
   });
 }
 
-function getAllNamedEntitiesParty(id, neID, beginDate = "2017-10-20",endDate = "2022-02-11") {
+function getAllNamedEntitiesParty(id, neID, startDate, endDate) {
   $.ajax({
     url:
-      "http://localhost:4567/namedEntities?party=" + id + "&entities=persons" + "&beginDate=" + beginDate + "&endDate=" + endDate,
+      "http://localhost:4567/namedEntities?party=" + id + "&entities=persons" + "&beginDate=" + startDate + "&endDate=" + endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {
@@ -148,9 +142,7 @@ function getAllNamedEntitiesParty(id, neID, beginDate = "2017-10-20",endDate = "
 
       $.ajax({
         url:
-          "http://localhost:4567/namedEntities?party=" +
-          id +
-          "&entities=locations" + "&beginDate=" + beginDate + "&endDate=" + endDate,
+          "http://localhost:4567/namedEntities?party=" + id + "&entities=locations" + "&beginDate=" + startDate + "&endDate=" + endDate,
         method: "GET",
         dataType: "json",
         success: function (data) {
@@ -163,9 +155,7 @@ function getAllNamedEntitiesParty(id, neID, beginDate = "2017-10-20",endDate = "
 
           $.ajax({
             url:
-              "http://localhost:4567/namedEntities?party=" +
-              id +
-              "&entities=organisations" + "&beginDate=" + beginDate + "&endDate=" + endDate,
+              "http://localhost:4567/namedEntities?party=" + id + "&entities=organisations" + "&beginDate=" + startDate + "&endDate=" + endDate,
             method: "GET",
             dataType: "json",
             success: function (data) {

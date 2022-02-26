@@ -39,12 +39,12 @@ function getSentimentAll() {
  * @param id
  * @returns {Promise<unknown>}
  */
-function getSentimentSpeaker(id, beginDate, endDate) {
+function getSentimentSpeaker(id, startDate, endDate) {
   return new Promise((resolve) => {
     $.ajax({
       method: "GET",
       dataType: "json",
-      url: "http://localhost:4567/sentiment?speakerID=" + id + "&beginDate=" + beginDate + "&endDate=" + endDate,
+      url: "http://localhost:4567/sentiment?speakerID=" + id + "&beginDate=" + startDate + "&endDate=" + endDate,
       success: function (data) {
         const sentimentResult = data.result.map(
           (element) => element.sentiment
@@ -72,12 +72,12 @@ function getSentimentSpeaker(id, beginDate, endDate) {
  * @param id
  * @returns {Promise<unknown>}
  */
-function getSentimentParty(id, beginDate, endDate) {
+function getSentimentParty(id, startDate, endDate) {
   return new Promise((resolve) => {
     $.ajax({
       method: "GET",
       dataType: "json",
-      url: "http://localhost:4567/sentiment?party=" + id + "&beginDate=" + beginDate + "&endDate=" + endDate,
+      url: "http://localhost:4567/sentiment?party=" + id + "&beginDate=" + startDate + "&endDate=" + endDate,
       success: function (data) {
         const sentimentResult = data.result.map((element) => element.sentiment);
         const sentimentData = { neg: 0, neu: 0, pos: 0 };
@@ -110,16 +110,16 @@ function getSentimentParty(id, beginDate, endDate) {
  * @param id
  * @returns {Promise<*>}
  */
-async function getSentimentData(type, id, beginDate, endDate) {
+async function getSentimentData(type, id, startDate, endDate) {
   switch (type) {
     case 0:
       return await getSentimentAll();
       break;
     case 1:
-      return await getSentimentSpeaker(id, beginDate, endDate);
+      return await getSentimentSpeaker(id, startDate, endDate);
       break;
     case 2:
-      return await getSentimentParty(id, beginDate, endDate);
+      return await getSentimentParty(id, startDate, endDate);
       break;
     default:
       return undefined;
@@ -137,10 +137,10 @@ async function plotSentimentAll(
   id = "all",
   canvasID = "myRadarChartSentiment",
   type = 0,
-  beginDate = "2017-10-26",
+  startDate = "2017-10-26",
   endDate = "2022-02-11"
 ) {
-  const data = await getSentimentData(type, id, beginDate, endDate);
+  const data = await getSentimentData(type, id, startDate, endDate);
   const ctx = document.getElementById(canvasID);
   const myRadarChartSentiment = new Chart(ctx, {
     type: "radar",
