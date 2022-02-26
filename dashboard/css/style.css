@@ -74,3 +74,20 @@
 .active {
   border: 2px solid red;
 }
+
+#topbar {
+  display: flex;
+  justify-content: center;
+}
+
+#searchPersonDiv {
+  margin-right: 10px;
+}
+
+#searchDateDiv {
+  margin-left: 10px;
+}
+
+#fromDate {
+  margin-bottom: 25px;
+}

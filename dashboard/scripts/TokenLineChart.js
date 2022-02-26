@@ -29,7 +29,13 @@ function getAllToken() {
 
 function getTokenBySpeaker(id, tokenID, startDate, endDate) {
   $.ajax({
-    url: "http://localhost:4567/token?speakerID=" + id + "&beginDate=" + beginDate + "&endDate=" + endDate,
+    url:
+      "http://localhost:4567/token?speakerID=" +
+      id +
+      "&beginDate=" +
+      startDate +
+      "&endDate=" +
+      endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {
@@ -53,7 +59,13 @@ function getTokenBySpeaker(id, tokenID, startDate, endDate) {
 
 function getTokenByParty(party, tokenID, startDate, endDate) {
   $.ajax({
-    url: "http://localhost:4567/token?party=" + party + "&beginDate=" + startDate + "&endDate=" + endDate,
+    url:
+      "http://localhost:4567/token?party=" +
+      party +
+      "&beginDate=" +
+      startDate +
+      "&endDate=" +
+      endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {

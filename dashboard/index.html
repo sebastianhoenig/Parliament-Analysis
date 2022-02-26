@@ -72,9 +72,9 @@
                 <h1 class="h2 mb-0 text-info mb-2 text-center w-100">Suche</h1>
               </div>
             </div>
-            <div class="row" style="height: 150px">
-              <div class="col-6 col-6">
-                <div class="col-12">
+            <div id="topbar" class="row" style="height: 150px">
+              <div>
+                <div id="searchPersonDiv">
                   <form
                     class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
                   >
@@ -106,7 +106,7 @@
                   </form>
                 </div>
                 <br />
-                <div class="col-12">
+                <div>
                   <form
                     class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search"
                   >
@@ -138,36 +138,32 @@
                   </form>
                 </div>
               </div>
-              <div class="col-6 col-6">
+              <div id="searchDateDiv">
                 <div id="pickerContainer">
                   <div class="inputsWrapper">
-
                     <!-- <input id="startDate" autocomplete="off" class="inputEl" type="text" value="" placeholder="Check in"/> -->
-                    <input type="date"
-                           name=""
-                           max=""
-                           id="fromDate"
-                           class="form-control"
-                           autocomplete="off"
-                           style="width:150px;" />
+                    <input
+                      type="date"
+                      name=""
+                      max=""
+                      id="fromDate"
+                      class="form-control"
+                      autocomplete="off"
+                      style="width: 150px"
+                    />
 
                     <h5></h5>
 
                     <!-- <input id="endDate" autocomplete="off" class="inputEl" style="margin-left: 10px" type="text" value="" placeholder="Check out"/> -->
-                    <input type="date"
-                           name=""
-                           min=""
-                           id="toDate"
-                           class="form-control"
-                           autocomplete="off"
-                           style="width:150px;" />
-
-                    <div class="input-group-append">
-                      <button type="button" id="button_pop" >Filter by a time period!</button>
-                      <!-- <input type="button" id="button_ppop" value="Reload!" href="http://index.html" onclick = "updateDiv();"> -->
-                    </div>
-
-
+                    <input
+                      type="date"
+                      name=""
+                      min=""
+                      id="toDate"
+                      class="form-control"
+                      autocomplete="off"
+                      style="width: 150px"
+                    />
                   </div>
                   <div id="picker">
                     <div
@@ -231,59 +227,78 @@
       src="scripts/subdashboard_creation/renderMultiDashboards.js"
     ></script>
 
-    <script type = "text/javascript"src = "https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-    <script type = "text/javascript">
+    <script
+      type="text/javascript"
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
+    ></script>
+    <script type="text/javascript">
       var fromDate;
-      $("#fromDate").on("change", function()  {
+      $("#fromDate").on("change", function () {
         fromDate = $(this).val();
-        $("#toDate").prop("min", function() {
+        $("#toDate").prop("min", function () {
           return fromDate;
-        })
+        });
       });
 
       var toDate;
-      $("#toDate").on("change", function()  {
+      $("#toDate").on("change", function () {
         toDate = $(this).val();
-        $("#fromDate").prop("max", function() {
+        $("#fromDate").prop("max", function () {
           return toDate;
-        })
+        });
       });
     </script>
 
-
     <script>
-      window.addEventListener("load", function() {
-
+      window.addEventListener("load", function () {
         if (document.getElementById("searchSpeaker")) {
-          document.getElementById("searchSpeaker").addEventListener("click", datefilter);
+          document
+            .getElementById("searchSpeaker")
+            .addEventListener("click", datefilter);
         }
 
         if (document.getElementById("searchParty")) {
-          document.getElementById("searchParty").addEventListener("click", datefilter);
+          document
+            .getElementById("searchParty")
+            .addEventListener("click", datefilter);
         }
       });
 
       function datefilter() {
-
-        if ( fromDate === undefined && toDate === undefined ) {
+        if (fromDate === undefined && toDate === undefined) {
           var defaultfromDate = "2017-10-24";
-          var defaulttoDate = "2022-01-28";
-          alert("Keine User Eingabe für den Zeitraum! " + '\n' + "Default Zeitraum wird genutzt : " + '\n' + defaultfromDate + " bis " + defaulttoDate);
+          var defaulttoDate = "2022-02-27";
+          alert(
+            "Keine User Eingabe für den Zeitraum! " +
+              "\n" +
+              "Default Zeitraum wird genutzt : " +
+              "\n" +
+              defaultfromDate +
+              " bis " +
+              defaulttoDate
+          );
         }
-        if ( fromDate === undefined && toDate !== undefined) {
+        if (fromDate === undefined && toDate !== undefined) {
           var defaultfromDate = "2017-10-24";
-          alert("Default Startdatum wird genutzt : " + '\n' + defaultfromDate + " bis " + toDate);
+          alert(
+            "Default Startdatum wird genutzt : " +
+              "\n" +
+              defaultfromDate +
+              " bis " +
+              toDate
+          );
         }
-        if ( toDate === undefined  && fromDate !== undefined) {
-          var defaulttoDate = "2022-01-28";
-          alert("Default Enddatum wird genutzt : " + '\n' + fromDate + " bis " + defaulttoDate);
-        }
-        if ( toDate !== undefined  && fromDate !== undefined ) {
-          alert('Du hast den Zeitraum von  ' + fromDate + "  nach  " + toDate + "  ausgewählt!");
+        if (toDate === undefined && fromDate !== undefined) {
+          var defaulttoDate = "2022-02-27";
+          alert(
+            "Default Enddatum wird genutzt : " +
+              "\n" +
+              fromDate +
+              " bis " +
+              defaulttoDate
+          );
         }
       }
     </script>
-
-
   </body>
 </html>

@@ -5,8 +5,26 @@ searchSpeakerButton.addEventListener("click", () => {
   let targetDataList = document.getElementById("SpeakerName");
   let currInput = document.getElementById("speakerInput");
 
-  let startDate = document.getElementById("fromDate");                        //TODO
-  let endDate = document.getElementById("toDate");
+  let startDate = document.getElementById("fromDate").value;
+  let endDate = document.getElementById("toDate").value;
+  console.log(startDate);
+  console.log(endDate);
+  if (!endDate) {
+    endDate = "2022-27-02";
+  } else {
+    let endDateSplit = endDate.split("-");
+    endDate = endDateSplit[0] + "-" + endDateSplit[2] + "-" + endDateSplit[1];
+  }
+  if (!startDate) {
+    startDate = "2017-01-01";
+  } else {
+    let startDateSplit = startDate.split("-");
+    startDate =
+      startDateSplit[0] + "-" + startDateSplit[2] + "-" + startDateSplit[1];
+  }
+
+  console.log(startDate);
+  console.log(endDate);
 
   let currId = document.querySelector(
     '#SpeakerName [value="' + currInput.value + '"]'
@@ -26,7 +44,7 @@ searchSpeakerButton.addEventListener("click", () => {
     );
     dashboardListSpeaker.addToDashboardList(newDashboard);
     dashboardListSpeaker.setIds();
-    createDashboard(newDashboard, dashboards, startDate, endDate);                         //TODO
+    createDashboard(newDashboard, dashboards, startDate, endDate);
   } else {
     console.log("Entered value not in dropdown");
   }
@@ -35,17 +53,31 @@ searchSpeakerButton.addEventListener("click", () => {
 searchPartyButton.addEventListener("click", () => {
   let party = document.getElementById("partyInput").value;
 
-  let startDate = document.getElementById("fromDate");                         //TODO
-  let endDate = document.getElementById("toDate");
+  let startDate = document.getElementById("fromDate").value;
+  let endDate = document.getElementById("toDate").value;
+
+  if (!endDate) {
+    endDate = "2022-27-02";
+  } else {
+    let endDateSplit = endDate.split("-");
+    endDate = endDateSplit[0] + "-" + endDateSplit[2] + "-" + endDateSplit[1];
+  }
+  if (!startDate) {
+    startDate = "2017-01-01";
+  } else {
+    let startDateSplit = startDate.split("-");
+    startDate =
+      startDateSplit[0] + "-" + startDateSplit[2] + "-" + startDateSplit[1];
+  }
 
   let dashboards = document.getElementById("party-dashboards");
-  let newDashboard = new PartyDashboard(party, 0, fromDate, toDate);              //TODO
+  let newDashboard = new PartyDashboard(party, 0);
   dashboardListParty.addToDashboardList(newDashboard);
   dashboardListParty.setIds();
-  createPartyDashboard(newDashboard, dashboards, startDate, endDate);                         //TODO
+  createPartyDashboard(newDashboard, dashboards, startDate, endDate);
 });
 
-function createPartyDashboard(element, dashboards, startDate, endDate) {                         //TODO
+function createPartyDashboard(element, dashboards, startDate, endDate) {
   let dashboard = document.createElement("div");
   dashboard.classList.add("dashboard-nav-item");
   dashboard.id = element.getId();
@@ -54,7 +86,7 @@ function createPartyDashboard(element, dashboards, startDate, endDate) {        
   let idName = element.getName();
   dashboardTextDiv.textContent = idName;
   dashboardTextDiv.addEventListener("click", (e) => {
-    changeActivePartyDashboard(e, dashboards, element, startDate, endDate);                         //TODO
+    changeActivePartyDashboard(e, dashboards, element, startDate, endDate);
   });
   let dashboardDeleteDiv = document.createElement("div");
   dashboardDeleteDiv.classList.add("dashboard-del");
@@ -72,7 +104,7 @@ function createPartyDashboard(element, dashboards, startDate, endDate) {        
   dashboards.append(hr, dashboard);
 }
 
-function createDashboard(element, dashboards, startDate, endDate) {                         //TODO
+function createDashboard(element, dashboards, startDate, endDate) {
   if (element.getName() == "all") {
     let dashboard = document.createElement("div");
     dashboard.classList.add("dashboard-nav-item");
@@ -81,7 +113,7 @@ function createDashboard(element, dashboards, startDate, endDate) {             
     dashboardTextDiv.classList.add("dashboard-text");
     dashboardTextDiv.textContent = "German parliament";
     dashboardTextDiv.addEventListener("click", (e) => {
-      changeActiveDashboard(e, dashboards, element, 0, startDate, endDate);                        //TODO
+      changeActiveDashboard(e, dashboards, element, 0, startDate, endDate);
     });
     dashboard.appendChild(dashboardTextDiv);
     let hr = document.createElement("hr");
@@ -101,7 +133,14 @@ function createDashboard(element, dashboards, startDate, endDate) {             
     let final = modified.replace(/ *\([^)]*\) */g, "");
     dashboardTextDiv.textContent = final;
     dashboardTextDiv.addEventListener("click", (e) => {
-      changeActiveDashboard(e, dashboards, element, speakerID, startDate, endDate);     //TODO
+      changeActiveDashboard(
+        e,
+        dashboards,
+        element,
+        speakerID,
+        startDate,
+        endDate
+      );
     });
     let dashboardDeleteDiv = document.createElement("div");
     dashboardDeleteDiv.classList.add("dashboard-del");
@@ -120,13 +159,13 @@ function createDashboard(element, dashboards, startDate, endDate) {             
   }
 }
 
-function deleteDashboard(e, dashboardListSpeaker, startDate, endDate) {         //TODO
+function deleteDashboard(e, dashboardListSpeaker, startDate, endDate) {
   let index = e.target.parentElement.parentElement.parentElement.id;
   console.log(index);
   console.log(dashboardListSpeaker.getDashboardList());
   dashboardListSpeaker.deleteDashboard(index);
   console.log(dashboardListSpeaker.getDashboardList());
-  renderDashboards(dashboardListSpeaker, startDate, endDate);             //TODO
+  renderDashboards(dashboardListSpeaker, startDate, endDate);
   e.preventDefault();
   renderDefaultPageContent();
 }
@@ -149,7 +188,7 @@ function renderPartyDashboards(dashboardListParty) {
   });
 }
 
-function renderDashboards(dashboardListSpeaker, startDate, endDate) {               //TODO
+function renderDashboards(dashboardListSpeaker, startDate, endDate) {
   dashboardListSpeaker.setIds();
   let currDashboards = dashboardListSpeaker.getDashboardList();
   let dashboards = document.getElementById("speaker-dashboards");
@@ -159,7 +198,14 @@ function renderDashboards(dashboardListSpeaker, startDate, endDate) {           
   });
 }
 
-function changeActiveDashboard(e, dashboards, element, speakerID, startDate, endDate) {       //TODO
+function changeActiveDashboard(
+  e,
+  dashboards,
+  element,
+  speakerID,
+  startDate,
+  endDate
+) {
   let speakerDashboard = document.getElementById("speaker-dashboards");
   let partyDashboard = document.getElementById("party-dashboards");
   for (let item of speakerDashboard.children) {
@@ -187,7 +233,13 @@ function changeActiveDashboard(e, dashboards, element, speakerID, startDate, end
   }
 }
 
-function changeActivePartyDashboard(e, dashboards, element, startDate, endDate) {
+function changeActivePartyDashboard(
+  e,
+  dashboards,
+  element,
+  startDate,
+  endDate
+) {
   let speakerDashboard = document.getElementById("speaker-dashboards");
   let partyDashboard = document.getElementById("party-dashboards");
   for (let item of speakerDashboard.children) {
@@ -213,6 +265,8 @@ function setupPage() {
   let newDashboard = new SpeakerDashboard("all", 0, 0);
   dashboardListSpeaker.addToDashboardList(newDashboard);
   let dashboards = document.getElementById("main-dashboard");
+  let startDate = "2017-01-01";
+  let endDate = "2022-27-02";
   createDashboard(newDashboard, dashboards, startDate, endDate);
 }
 
@@ -577,11 +631,11 @@ function renderPageContent(id, name, speakerID, finalName, startDate, endDate) {
   const tokenChart = document.getElementById(tokenID);
   const posChart = document.getElementById(posID);
   const namedEntities = document.getElementById(namedEntitiesID);
-  getTokenBySpeaker(speakerID, tokenID, startDate, endDate);                          //TODO
+  getTokenBySpeaker(speakerID, tokenID, startDate, endDate);
   getPosBySpeaker(speakerID, posID, startDate, endDate);
-  getAllNamedEntitiesPerson(speakerID, namedEntitiesID);
-  plotSentimentAll(speakerID, sentimentID, 1);
-  plotSpeakerDistribution(speakerID, speakerGraphID, 1);
+  getAllNamedEntitiesPerson(speakerID, namedEntitiesID, startDate, endDate);
+  plotSentimentAll(speakerID, sentimentID, 1, startDate, endDate);
+  plotSpeakerDistribution(speakerID, speakerGraphID, 1, startDate, endDate);
 }
 
 function renderPartyPageContent(id, name, finalName, startDate, endDate) {
@@ -753,9 +807,9 @@ function renderPartyPageContent(id, name, finalName, startDate, endDate) {
   const namedEntities = document.getElementById(namedEntitiesID);
   getTokenByParty(name, tokenID, startDate, endDate);
   getPosByParty(name, posID, startDate, endDate);
-  getAllNamedEntitiesParty(name, namedEntitiesID);
-  plotSentimentAll(name, sentimentID, 2);
-  plotSpeakerDistribution(name, speakerGraphID, 2);
+  getAllNamedEntitiesParty(name, namedEntitiesID, startDate, endDate);
+  plotSentimentAll(name, sentimentID, 2, startDate, endDate);
+  plotSpeakerDistribution(name, speakerGraphID, 2, startDate, endDate);
 }
 
 const dashboardListSpeaker = (() => {
