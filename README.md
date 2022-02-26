@@ -1,7 +1,7 @@
 <div align="center">
   <h1>German parliament analysis</h1>
   <br />
-  A group project from Frankfurt University's practial programming course
+  A group project from Goethe-University's practial programming course
   <br />
 </div>
 
