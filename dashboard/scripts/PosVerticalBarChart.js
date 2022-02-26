@@ -20,9 +20,10 @@ function getAllPos() {
   });
 }
 
-function getPosBySpeaker(speakerID, posID, beginDate = "2017-10-20",endDate = "2022-02-11") {
+function getPosBySpeaker(speakerID, posID, startDate, endDate) {
+
   $.ajax({
-    url: "http://localhost:4567/pos?speakerID=" + speakerID + "&beginDate=" + beginDate + "&endDate=" + endDate,
+    url: "http://localhost:4567/pos?speakerID=" + speakerID + "&beginDate=" + startDate + "&endDate=" + endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {
@@ -49,9 +50,9 @@ function getPosParty() {
   });
 }
 
-function getPosByParty(party, posID, beginDate = "2017-10-20",endDate = "2022-02-11") {
+function getPosByParty(party, posID, startDate, endDate) {
   $.ajax({
-    url: "http://localhost:4567/pos?party=" + party + "&beginDate=" + beginDate + "&endDate=" + endDate,
+    url: "http://localhost:4567/pos?party=" + party + "&beginDate=" + startDate + "&endDate=" + endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {

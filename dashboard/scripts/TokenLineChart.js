@@ -27,9 +27,15 @@ function getAllToken() {
   });
 }
 
-function getTokenBySpeaker(id, tokenID, beginDate = "2017-10-20",endDate = "2022-02-11") {
+function getTokenBySpeaker(id, tokenID, startDate, endDate) {
   $.ajax({
-    url: "http://localhost:4567/token?speakerID=" + id + "&beginDate=" + beginDate + "&endDate=" + endDate,
+    url:
+      "http://localhost:4567/token?speakerID=" +
+      id +
+      "&beginDate=" +
+      startDate +
+      "&endDate=" +
+      endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {
@@ -51,9 +57,15 @@ function getTokenBySpeaker(id, tokenID, beginDate = "2017-10-20",endDate = "2022
   });
 }
 
-function getTokenByParty(party, tokenID, beginDate = "2017-10-20",endDate = "2022-02-11") {
+function getTokenByParty(party, tokenID, startDate, endDate) {
   $.ajax({
-    url: "http://localhost:4567/token?party=" + party + "&beginDate=" + beginDate + "&endDate=" + endDate,
+    url:
+      "http://localhost:4567/token?party=" +
+      party +
+      "&beginDate=" +
+      startDate +
+      "&endDate=" +
+      endDate,
     method: "GET",
     dataType: "json",
     success: function (data) {

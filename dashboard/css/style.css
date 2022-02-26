@@ -74,5 +74,23 @@
 }
 
 .active {
-  border: 4px solid bisque;
+  border: 2px solid bisque;
+  box-shadow: 2px 2px 2px 1px rgba(75, 2, 2, 0.2);
+}
+
+#topbar {
+  display: flex;
+  justify-content: center;
+}
+
+#searchPersonDiv {
+  margin-right: 10px;
+}
+
+#searchDateDiv {
+  margin-left: 10px;
+}
+
+#fromDate {
+  margin-bottom: 25px;
 }

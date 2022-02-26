@@ -8,14 +8,21 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
+/**
+ * The class DownloadXml runs the downloading process.
+ * @author Emmelina und Sebastian
+ */
+
 public class DownloadXml {
 
-    // Checks if Folder/File already exists, otherwise it will be created.
+    /**
+     * Checks if Folder/File already exists, otherwise it will be created.
+     */
 
     public static void load(int nameOfFile, int period, String linkToLoad) {
         String link = linkToLoad;
-
         File folder = new File("src/main/resources/" + period);
+
         if (!folder.exists()) {
             if (folder.mkdir()) {
             }
@@ -33,6 +40,11 @@ public class DownloadXml {
             }
         }
     }
+
+    /**
+     * Calls up the respective sub-pages of the electoral periods (19 and 20).
+     * If not present, creates an InputStream for the createNewFile() function above.
+     */
 
     public static void loadDTD() {
         String link = "https://www.bundestag.de/resource/blob/575720/70d7f2af6e4bebd9a550d9dc4bc03900/dbtplenarprotokoll-data.dtd";
