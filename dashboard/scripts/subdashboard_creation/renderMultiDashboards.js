@@ -121,6 +121,16 @@ function deleteDashboard(e, dashboardListSpeaker) {
   renderDashboards(dashboardListSpeaker);
   e.preventDefault();
   renderDefaultPageContent();
+  let speakerDashboard = document.getElementById("speaker-dashboards");
+  let partyDashboard = document.getElementById("party-dashboards");
+  let mainDashboard = document.getElementById("main-dashboard");
+  mainDashboard.classList.add("active");
+  for (let item of speakerDashboard.children) {
+    item.classList.remove("active");
+  }
+  for (let item of partyDashboard.children) {
+    item.classList.remove("active");
+  }
 }
 
 function deletePartyDashboard(e, dashboardListParty) {
@@ -129,6 +139,16 @@ function deletePartyDashboard(e, dashboardListParty) {
   renderPartyDashboards(dashboardListParty);
   e.preventDefault();
   renderDefaultPageContent();
+  let speakerDashboard = document.getElementById("speaker-dashboards");
+  let partyDashboard = document.getElementById("party-dashboards");
+  let mainDashboard = document.getElementById("main-dashboard");
+  mainDashboard.classList.add("active");
+  for (let item of speakerDashboard.children) {
+    item.classList.remove("active");
+  }
+  for (let item of partyDashboard.children) {
+    item.classList.remove("active");
+  }
 }
 
 function renderPartyDashboards(dashboardListParty) {
@@ -154,6 +174,8 @@ function renderDashboards(dashboardListSpeaker) {
 function changeActiveDashboard(e, dashboards, element, speakerID) {
   let speakerDashboard = document.getElementById("speaker-dashboards");
   let partyDashboard = document.getElementById("party-dashboards");
+  let mainDashboard = document.getElementById("main-dashboard");
+  mainDashboard.classList.remove("active");
   for (let item of speakerDashboard.children) {
     item.classList.remove("active");
   }
@@ -180,6 +202,8 @@ function changeActiveDashboard(e, dashboards, element, speakerID) {
 function changeActivePartyDashboard(e, dashboards, element) {
   let speakerDashboard = document.getElementById("speaker-dashboards");
   let partyDashboard = document.getElementById("party-dashboards");
+  let mainDashboard = document.getElementById("main-dashboard");
+  mainDashboard.classList.remove("active");
   for (let item of speakerDashboard.children) {
     item.classList.remove("active");
   }
@@ -189,11 +213,13 @@ function changeActivePartyDashboard(e, dashboards, element) {
   let dashboardID = e.target.parentElement.id;
   e.target.parentElement.classList.add("active");
   let name = element.getName();
-  let modified = name.replace(/./g, " ");
+  console.log(name);
+  let modified = name.replace(/\s/g, "");
+  console.log(modified);
   renderPartyPageContent(
-    dashboardListSpeaker.getDashboardList[dashboardID],
-    name,
-    modified
+    dashboardListParty.getDashboardList[dashboardID],
+    modified,
+    name
   );
 }
 
@@ -201,6 +227,7 @@ function setupPage() {
   let newDashboard = new SpeakerDashboard("all", 0, 0);
   dashboardListSpeaker.addToDashboardList(newDashboard);
   let dashboards = document.getElementById("main-dashboard");
+  dashboards.classList.add("active");
   createDashboard(newDashboard, dashboards);
 }
 
@@ -391,8 +418,6 @@ function renderDefaultPageContent() {
   `;
   getAllToken();
   getAllPos();
-  getIndividuals();
-  getParties();
   plotSentimentAll();
   plotSpeakerDistribution();
   getAllNamedEntities();
@@ -573,6 +598,9 @@ function renderPageContent(id, name, speakerID, finalName) {
 }
 
 function renderPartyPageContent(id, name, finalName) {
+  console.log(name);
+  console.log("final name");
+  console.log(finalName);
   const container = document.getElementById("content");
   container.innerHTML =
     `
@@ -739,11 +767,11 @@ function renderPartyPageContent(id, name, finalName) {
   const tokenChart = document.getElementById(tokenID);
   const posChart = document.getElementById(posID);
   const namedEntities = document.getElementById(namedEntitiesID);
-  getTokenByParty(name, tokenID);
-  getPosByParty(name, posID);
-  getAllNamedEntitiesParty(name, namedEntitiesID);
-  plotSentimentAll(name, sentimentID, 2);
-  plotSpeakerDistribution(name, speakerGraphID, 2);
+  getTokenByParty(finalName, tokenID);
+  getPosByParty(finalName, posID);
+  getAllNamedEntitiesParty(finalName, namedEntitiesID);
+  plotSentimentAll(finalName, sentimentID, 2);
+  plotSpeakerDistribution(finalName, speakerGraphID, 2);
 }
 
 const dashboardListSpeaker = (() => {

@@ -49,3 +49,5 @@ function getIndividuals() {
     },
   });
 }
+getIndividuals();
+getParties();
