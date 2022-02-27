@@ -232,6 +232,13 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"
     ></script>
     <script type="text/javascript">
+
+      /**
+       * Checks that fromDate is not later than toDate
+       * @author Emmelina
+       * @return fromDate
+       */
+
       var fromDate;
       $("#fromDate").on("change", function () {
         fromDate = $(this).val();
@@ -239,6 +246,13 @@
           return fromDate;
         });
       });
+
+
+      /**
+       * Checks that toDate is no earlier than fromDate in chronological terms
+       * @author Emmelina
+       * @return toDate
+       */
 
       var toDate;
       $("#toDate").on("change", function () {
@@ -250,6 +264,12 @@
     </script>
 
     <script>
+
+      /**
+       * If a button with ID searchSpeaker or searchParty is pressed by the user, the datefilter function is called
+       * @author Emmelina
+       */
+
       window.addEventListener("load", function () {
         if (document.getElementById("searchSpeaker")) {
           document
@@ -263,6 +283,13 @@
             .addEventListener("click", datefilter);
         }
       });
+
+
+      /**
+       * Depending on whether the fromDate and toDate / only one of them / neither of these two is defined at all,
+       * a default date is taken for the undefined value and the user is notified.
+       * @author Emmelina
+       */
 
       function datefilter() {
         if (fromDate === undefined && toDate === undefined) {
